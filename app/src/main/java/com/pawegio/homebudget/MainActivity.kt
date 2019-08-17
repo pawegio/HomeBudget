@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         lifecycle.addObserver(CurrentActivityObserver)
         viewModel.appState.observe(this, Observer(::updateView))
-        signInButton.setOnClickListener { viewModel.mainEvents.offer(MainEvent.SelectSignIn) }
+        signInButton.setOnClickListener { viewModel.mainEvents.offer(MainAction.SelectSignIn) }
     }
 
     private fun updateView(state: AppState?) {

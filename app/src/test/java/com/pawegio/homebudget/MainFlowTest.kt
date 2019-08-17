@@ -12,13 +12,13 @@ import kotlinx.coroutines.launch
 @FlowPreview
 internal class MainFlowTest : FlowSpec({
     "On main flow" - {
-        val events = Channel<MainEvent>()
+        val actions = Channel<MainAction>()
         val state = MutableLiveData<AppState>()
         val sheetsService = mock<GoogleSheetsService>()
 
         val flow = launch(start = CoroutineStart.LAZY) {
             MainFlow(
-                events.consumeAsFlow(),
+                actions.consumeAsFlow(),
                 state,
                 sheetsService
             )
@@ -37,7 +37,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on select sign in" - {
-                events.offer(MainEvent.SelectSignIn)
+                actions.offer(MainAction.SelectSignIn)
 
                 "sign in" {
                     verifyBlocking(sheetsService) { signIn() }

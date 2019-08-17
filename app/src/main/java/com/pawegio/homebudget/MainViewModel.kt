@@ -17,7 +17,7 @@ class MainViewModel(
 
     val appState: LiveData<AppState> get() = _appState
 
-    val mainEvents = Channel<MainEvent>()
+    val mainEvents = Channel<MainAction>()
 
     private val _appState = MutableLiveData<AppState>()
 

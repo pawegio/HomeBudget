@@ -8,20 +8,20 @@ import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 
 suspend fun MainFlow(
-    events: Flow<MainEvent>,
+    actions: Flow<MainAction>,
     state: MutableLiveData<AppState>,
     sheetsService: GoogleSheetsService
 ) {
     while (!sheetsService.isSignedIn) {
         state.value = AppState.Unauthorized
-        events.filterIsInstance<MainEvent.SelectSignIn>().first()
+        actions.filterIsInstance<MainAction.SelectSignIn>().first()
         sheetsService.signIn()
     }
     state.value = AppState.Authorized
 }
 
-sealed class MainEvent {
-    object SelectSignIn : MainEvent()
+sealed class MainAction {
+    object SelectSignIn : MainAction()
 }
 
 sealed class AppState {
