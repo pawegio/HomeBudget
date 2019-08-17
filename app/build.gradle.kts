@@ -25,6 +25,11 @@ android {
     }
 }
 
+tasks.withType<Test> {
+    @Suppress("UnstableApiUsage")
+    useJUnitPlatform()
+}
+
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.41")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-RC")
@@ -42,4 +47,9 @@ dependencies {
         exclude("org.apache.httpcomponents")
     }
     implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
+
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
+    testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
+    testImplementation("com.jraska.livedata:testing-ktx:1.1.0")
+    testImplementation("com.github.langara:SMokK:0.0.3")
 }

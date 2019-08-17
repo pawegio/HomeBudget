@@ -12,8 +12,8 @@ suspend fun MainFlow(
     state: MutableLiveData<AppState>,
     sheetsService: GoogleSheetsService
 ) {
-    state.value = AppState.Unauthorized
     while (!sheetsService.isSignedIn) {
+        state.value = AppState.Unauthorized
         events.filterIsInstance<MainEvent.SelectSignIn>().first()
         sheetsService.signIn()
     }
