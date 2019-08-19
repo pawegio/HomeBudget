@@ -16,8 +16,10 @@ android {
         versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         val localProperties = Properties()
-        localProperties.load(project.rootProject.file("local.properties").inputStream())
-        buildConfigField("String", "SPREADSHEET_ID", localProperties["spreadsheetId"] as String)
+        if (project.rootProject.file("local.properties").exists()) {
+            localProperties.load(project.rootProject.file("local.properties").inputStream())
+        }
+        buildConfigField("String", "SPREADSHEET_ID", localProperties.getOrDefault("spreadsheetId", "") as String)
     }
     buildTypes {
         getByName("release") {
