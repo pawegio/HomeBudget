@@ -52,6 +52,10 @@ internal class MainFlowTest : FlowSpec({
             "set state to authorized" {
                 state.test().assertValue(AppState.Authorized)
             }
+
+            "get monthly budget" {
+                verifyBlocking(sheetsService) { getMonthlyBudget() }
+            }
         }
     }
 })

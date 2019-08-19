@@ -18,6 +18,7 @@ suspend fun MainFlow(
         sheetsService.signIn()
     }
     state.value = AppState.Authorized
+    sheetsService.getMonthlyBudget()
 }
 
 sealed class MainAction {

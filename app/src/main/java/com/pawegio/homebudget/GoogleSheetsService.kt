@@ -11,7 +11,9 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 
 interface GoogleSheetsService {
     val isSignedIn: Boolean
@@ -47,7 +49,7 @@ class GoogleSheetsServiceImpl(private val context: Context) : GoogleSheetsServic
         }
     }
 
-    override suspend fun getMonthlyBudget() {
+    override suspend fun getMonthlyBudget() = withContext(Dispatchers.IO) {
         credential.selectedAccount = account?.account
         val sheetsService = Sheets.Builder(
             AndroidHttp.newCompatibleTransport(),
