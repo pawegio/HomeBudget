@@ -18,10 +18,23 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.main_activity)
         lifecycle.addObserver(CurrentActivityObserver)
         viewModel.appState.observe(this, Observer(::updateView))
+        viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
         signInButton.setOnClickListener { viewModel.mainEvents.offer(MainAction.SelectSignIn) }
     }
 
     private fun updateView(state: AppState?) {
         signInButton.isVisible = state is AppState.Unauthorized
+    }
+
+    private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
+        monthlyBudgetTextView.text =
+            monthlyBudget?.let { (plannedIncomes, plannedExpenses, actualIncomes, actualExpenses) ->
+                listOf(
+                    "Planowane przychody: $plannedIncomes",
+                    "Planowane wydatki: $plannedExpenses",
+                    "Rzeczywiste przychody: $actualIncomes",
+                    "Rzeczywiste wydatki: $actualExpenses"
+                ).joinToString("\n")
+            }
     }
 }
