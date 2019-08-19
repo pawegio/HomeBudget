@@ -18,7 +18,7 @@ suspend fun MainFlow(
         api.signIn()
     }
     state.value = AppState.Authorized
-    api.getMonthlyBudget()
+    api.getMonthlyBudget().let(::println)
 }
 
 sealed class MainAction {

@@ -18,7 +18,7 @@ import kotlinx.coroutines.withContext
 interface HomeBudgetApi {
     val isSignedIn: Boolean
     suspend fun signIn()
-    suspend fun getMonthlyBudget()
+    suspend fun getMonthlyBudget(): MonthlyBudget
 }
 
 class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
@@ -60,10 +60,21 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
 
     override suspend fun getMonthlyBudget() = withContext(Dispatchers.IO) {
         val response = sheetsService.spreadsheets().values()
-            .get(BuildConfig.SPREADSHEET_ID, "'Lipiec'!D9:D10")
+            .batchGet(BuildConfig.SPREADSHEET_ID)
+            .setRanges(listOf(
+                "'Sierpień'!D9:D10",
+                "'Sierpień'!D16:D17"
+            ))
             .execute()
-        val values = response.getValues()
-        println("values: $values")
+        val ranges = response.valueRanges
+        val planned = ranges[0]["values"] as ArrayList<ArrayList<String>>
+        val actual = ranges[1]["values"] as ArrayList<ArrayList<String>>
+        MonthlyBudget(
+            plannedIncomes = planned[0][0],
+            plannedExpenses = planned[1][0],
+            actualIncomes = actual[0][0],
+            actualExpenses = actual[1][0]
+        )
     }
 
     companion object {
