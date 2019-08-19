@@ -3,7 +3,6 @@ package com.pawegio.homebudget
 import android.content.Context
 import com.github.florent37.inlineactivityresult.kotlin.coroutines.startForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
@@ -12,15 +11,12 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.lang.RuntimeException
 
 interface GoogleSheetsService {
     val isSignedIn: Boolean
     suspend fun signIn()
+    suspend fun getMonthlyBudget()
 }
 
 class GoogleSheetsServiceImpl(private val context: Context) : GoogleSheetsService {
@@ -51,21 +47,19 @@ class GoogleSheetsServiceImpl(private val context: Context) : GoogleSheetsServic
         }
     }
 
-    private fun accessSheets(account: GoogleSignInAccount) {
-        credential.selectedAccount = account.account
+    override suspend fun getMonthlyBudget() {
+        credential.selectedAccount = account?.account
         val sheetsService = Sheets.Builder(
             AndroidHttp.newCompatibleTransport(),
             JacksonFactory.getDefaultInstance(),
             credential
         ).setApplicationName("HomeBudget").build()
 
-        GlobalScope.launch(Dispatchers.IO) {
-            val response = sheetsService.spreadsheets().values()
-                .get("id", "'Lipiec'!D9:D10")
-                .execute()
-            val values = response.getValues()
-            println("values: $values")
-        }
+        val response = sheetsService.spreadsheets().values()
+            .get(BuildConfig.SPREADSHEET_ID, "'Lipiec'!D9:D10")
+            .execute()
+        val values = response.getValues()
+        println("values: $values")
     }
 }
 
