@@ -15,13 +15,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
-interface GoogleSheetsService {
+interface HomeBudgetApi {
     val isSignedIn: Boolean
     suspend fun signIn()
     suspend fun getMonthlyBudget()
 }
 
-class GoogleSheetsServiceImpl(private val context: Context) : GoogleSheetsService {
+class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
 
     override val isSignedIn: Boolean get() = account != null
 
@@ -38,31 +38,37 @@ class GoogleSheetsServiceImpl(private val context: Context) : GoogleSheetsServic
 
     private val account get() = GoogleSignIn.getLastSignedInAccount(context)
 
+    private val sheetsService by lazy {
+        credential.selectedAccount = account?.account
+        Sheets.Builder(
+            AndroidHttp.newCompatibleTransport(),
+            JacksonFactory.getDefaultInstance(),
+            credential
+        ).setApplicationName(USER_AGENT).build()
+    }
+
     override suspend fun signIn() {
         if (!isSignedIn) {
             val result = currentActivity?.startForResult(signInClient.signInIntent)
             try {
                 GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
             } catch (e: ApiException) {
-                throw GoogleSheetsException(e)
+                throw HomeBudgetApiException(e)
             }
         }
     }
 
     override suspend fun getMonthlyBudget() = withContext(Dispatchers.IO) {
-        credential.selectedAccount = account?.account
-        val sheetsService = Sheets.Builder(
-            AndroidHttp.newCompatibleTransport(),
-            JacksonFactory.getDefaultInstance(),
-            credential
-        ).setApplicationName("HomeBudget").build()
-
         val response = sheetsService.spreadsheets().values()
             .get(BuildConfig.SPREADSHEET_ID, "'Lipiec'!D9:D10")
             .execute()
         val values = response.getValues()
         println("values: $values")
     }
+
+    companion object {
+        private const val USER_AGENT = "HomeBudget"
+    }
 }
 
-class GoogleSheetsException(override val cause: Throwable?) : RuntimeException(cause)
+class HomeBudgetApiException(override val cause: Throwable?) : RuntimeException(cause)

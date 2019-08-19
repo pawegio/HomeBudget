@@ -14,18 +14,18 @@ internal class MainFlowTest : FlowSpec({
     "On main flow" - {
         val actions = Channel<MainAction>()
         val state = MutableLiveData<AppState>()
-        val sheetsService = mock<GoogleSheetsService>()
+        val api = mock<HomeBudgetApi>()
 
         val flow = launch(start = CoroutineStart.LAZY) {
             MainFlow(
                 actions.consumeAsFlow(),
                 state,
-                sheetsService
+                api
             )
         }
 
         "on user not signed in" - {
-            whenever(sheetsService.isSignedIn) doReturn false
+            whenever(api.isSignedIn) doReturn false
             flow.start()
 
             "set state to unauthorized" {
@@ -33,20 +33,20 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "do not sign in" {
-                verifyBlocking(sheetsService, never()) { signIn() }
+                verifyBlocking(api, never()) { signIn() }
             }
 
             "on select sign in" - {
                 actions.offer(MainAction.SelectSignIn)
 
                 "sign in" {
-                    verifyBlocking(sheetsService) { signIn() }
+                    verifyBlocking(api) { signIn() }
                 }
             }
         }
 
         "on user signed in" - {
-            whenever(sheetsService.isSignedIn) doReturn true
+            whenever(api.isSignedIn) doReturn true
             flow.start()
 
             "set state to authorized" {
@@ -54,7 +54,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "get monthly budget" {
-                verifyBlocking(sheetsService) { getMonthlyBudget() }
+                verifyBlocking(api) { getMonthlyBudget() }
             }
         }
     }

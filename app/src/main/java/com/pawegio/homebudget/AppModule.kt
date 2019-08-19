@@ -7,6 +7,6 @@ import org.koin.dsl.module
 
 @FlowPreview
 val appModule = module {
-    single<GoogleSheetsService> { GoogleSheetsServiceImpl(androidContext()) }
+    single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext()) }
     viewModel<MainViewModel>()
 }

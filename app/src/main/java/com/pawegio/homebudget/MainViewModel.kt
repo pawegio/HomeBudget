@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 class MainViewModel(
-    sheetsService: GoogleSheetsService
+    sheetsService: HomeBudgetApi
 ) : ViewModel(), CoroutineScope by MainScope() {
 
     val appState: LiveData<AppState> get() = _appState

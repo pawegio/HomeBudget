@@ -10,15 +10,15 @@ import kotlinx.coroutines.flow.first
 suspend fun MainFlow(
     actions: Flow<MainAction>,
     state: MutableLiveData<AppState>,
-    sheetsService: GoogleSheetsService
+    api: HomeBudgetApi
 ) {
-    while (!sheetsService.isSignedIn) {
+    while (!api.isSignedIn) {
         state.value = AppState.Unauthorized
         actions.filterIsInstance<MainAction.SelectSignIn>().first()
-        sheetsService.signIn()
+        api.signIn()
     }
     state.value = AppState.Authorized
-    sheetsService.getMonthlyBudget()
+    api.getMonthlyBudget()
 }
 
 sealed class MainAction {
