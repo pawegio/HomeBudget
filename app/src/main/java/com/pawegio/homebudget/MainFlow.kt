@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.first
 suspend fun MainFlow(
     actions: Flow<MainAction>,
     state: MutableLiveData<AppState>,
+    monthlyBudget: MutableLiveData<MonthlyBudget>,
     api: HomeBudgetApi
 ) {
     while (!api.isSignedIn) {
@@ -18,7 +19,7 @@ suspend fun MainFlow(
         api.signIn()
     }
     state.value = AppState.Authorized
-    api.getMonthlyBudget().let(::println)
+    monthlyBudget.value = api.getMonthlyBudget()
 }
 
 sealed class MainAction {

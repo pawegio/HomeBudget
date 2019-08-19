@@ -14,12 +14,17 @@ internal class MainFlowTest : FlowSpec({
     "On main flow" - {
         val actions = Channel<MainAction>()
         val state = MutableLiveData<AppState>()
-        val api = mock<HomeBudgetApi>()
+        val monthlyBudget = MutableLiveData<MonthlyBudget>()
+        val loadedMonthlyBudget = createMonthlyBudget()
+        val api = mock<HomeBudgetApi> {
+            onBlocking { getMonthlyBudget() } doReturn loadedMonthlyBudget
+        }
 
         val flow = launch(start = CoroutineStart.LAZY) {
             MainFlow(
                 actions.consumeAsFlow(),
                 state,
+                monthlyBudget,
                 api
             )
         }
@@ -55,6 +60,13 @@ internal class MainFlowTest : FlowSpec({
 
             "get monthly budget" {
                 verifyBlocking(api) { getMonthlyBudget() }
+            }
+
+            "on monthly budget loaded with success" - {
+
+                "update monthly budget" {
+                    monthlyBudget.test().assertValue(loadedMonthlyBudget)
+                }
             }
         }
     }

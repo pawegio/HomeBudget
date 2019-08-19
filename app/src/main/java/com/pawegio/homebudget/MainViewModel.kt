@@ -12,21 +12,24 @@ import kotlinx.coroutines.launch
 
 @FlowPreview
 class MainViewModel(
-    sheetsService: HomeBudgetApi
+    api: HomeBudgetApi
 ) : ViewModel(), CoroutineScope by MainScope() {
 
     val appState: LiveData<AppState> get() = _appState
+    val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
 
     val mainEvents = Channel<MainAction>()
 
     private val _appState = MutableLiveData<AppState>()
+    private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
 
     init {
         launch {
             MainFlow(
                 mainEvents.consumeAsFlow(),
                 _appState,
-                sheetsService
+                _monthlyBudget,
+                api
             )
         }
     }
