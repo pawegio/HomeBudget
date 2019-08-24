@@ -14,11 +14,15 @@ import com.google.api.services.sheets.v4.SheetsScopes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.threeten.bp.Month
+import org.threeten.bp.format.TextStyle
+import java.util.*
+import kotlin.collections.ArrayList
 
 interface HomeBudgetApi {
     val isSignedIn: Boolean
     suspend fun signIn()
-    suspend fun getMonthlyBudget(): MonthlyBudget
+    suspend fun getMonthlyBudget(month: Month): MonthlyBudget
 }
 
 class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
@@ -58,12 +62,13 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
         }
     }
 
-    override suspend fun getMonthlyBudget() = withContext(Dispatchers.IO) {
+    override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {
+        val monthName = month.getDisplayName(TextStyle.FULL, Locale("pl"))
         val response = sheetsService.spreadsheets().values()
             .batchGet(BuildConfig.SPREADSHEET_ID)
             .setRanges(listOf(
-                "'Sierpień'!D9:D10",
-                "'Sierpień'!D16:D17"
+                "'$monthName'!D9:D10",
+                "'$monthName'!D16:D17"
             ))
             .execute()
         val ranges = response.valueRanges

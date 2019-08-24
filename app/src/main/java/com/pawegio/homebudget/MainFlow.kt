@@ -6,12 +6,15 @@ import androidx.lifecycle.MutableLiveData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
+import org.threeten.bp.Clock
+import org.threeten.bp.ZoneId
 
 suspend fun MainFlow(
     actions: Flow<MainAction>,
     state: MutableLiveData<AppState>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
-    api: HomeBudgetApi
+    api: HomeBudgetApi,
+    clock: Clock
 ) {
     while (!api.isSignedIn) {
         state.value = AppState.Unauthorized
@@ -19,7 +22,8 @@ suspend fun MainFlow(
         api.signIn()
     }
     state.value = AppState.Authorized
-    monthlyBudget.value = api.getMonthlyBudget()
+    val month = clock.instant().atZone(ZoneId.systemDefault()).month
+    monthlyBudget.value = api.getMonthlyBudget(month)
 }
 
 sealed class MainAction {

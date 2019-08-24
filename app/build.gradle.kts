@@ -58,9 +58,11 @@ dependencies {
         exclude("org.apache.httpcomponents")
     }
     implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
+    implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.1.0")
     testImplementation("com.github.langara:SMokK:0.0.3")
+    testImplementation("org.threeten:threetenbp:1.4.0")
 }

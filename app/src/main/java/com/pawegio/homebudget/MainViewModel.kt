@@ -9,10 +9,12 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import org.threeten.bp.Clock
 
 @FlowPreview
 class MainViewModel(
-    api: HomeBudgetApi
+    api: HomeBudgetApi,
+    clock: Clock
 ) : ViewModel(), CoroutineScope by MainScope() {
 
     val appState: LiveData<AppState> get() = _appState
@@ -29,7 +31,8 @@ class MainViewModel(
                 mainActions.consumeAsFlow(),
                 _appState,
                 _monthlyBudget,
-                api
+                api,
+                clock
             )
         }
     }

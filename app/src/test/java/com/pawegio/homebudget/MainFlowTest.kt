@@ -8,6 +8,10 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import org.threeten.bp.Clock
+import org.threeten.bp.Instant
+import org.threeten.bp.Month
+import org.threeten.bp.ZoneId
 
 @FlowPreview
 internal class MainFlowTest : FlowSpec({
@@ -17,15 +21,17 @@ internal class MainFlowTest : FlowSpec({
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
         val loadedMonthlyBudget = createMonthlyBudget()
         val api = mock<HomeBudgetApi> {
-            onBlocking { getMonthlyBudget() } doReturn loadedMonthlyBudget
+            onBlocking { getMonthlyBudget(any()) } doReturn loadedMonthlyBudget
         }
+        val clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
 
         val flow = launch(start = CoroutineStart.LAZY) {
             MainFlow(
                 actions.consumeAsFlow(),
                 state,
                 monthlyBudget,
-                api
+                api,
+                clock
             )
         }
 
@@ -58,8 +64,8 @@ internal class MainFlowTest : FlowSpec({
                 state.test().assertValue(AppState.Authorized)
             }
 
-            "get monthly budget" {
-                verifyBlocking(api) { getMonthlyBudget() }
+            "get monthly budget for current month" {
+                verifyBlocking(api) { getMonthlyBudget(Month.APRIL) }
             }
 
             "on monthly budget loaded with success" - {
