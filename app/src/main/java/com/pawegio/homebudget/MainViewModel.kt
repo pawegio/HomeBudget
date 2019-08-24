@@ -18,7 +18,7 @@ class MainViewModel(
     val appState: LiveData<AppState> get() = _appState
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
 
-    val mainEvents = Channel<MainAction>()
+    val mainActions = Channel<MainAction>()
 
     private val _appState = MutableLiveData<AppState>()
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
@@ -26,7 +26,7 @@ class MainViewModel(
     init {
         launch {
             MainFlow(
-                mainEvents.consumeAsFlow(),
+                mainActions.consumeAsFlow(),
                 _appState,
                 _monthlyBudget,
                 api

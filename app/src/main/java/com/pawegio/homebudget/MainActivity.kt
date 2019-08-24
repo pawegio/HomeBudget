@@ -19,7 +19,7 @@ class MainActivity : AppCompatActivity() {
         lifecycle.addObserver(CurrentActivityObserver)
         viewModel.appState.observe(this, Observer(::updateView))
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
-        signInButton.setOnClickListener { viewModel.mainEvents.offer(MainAction.SelectSignIn) }
+        signInButton.setOnClickListener { viewModel.mainActions.offer(MainAction.SelectSignIn) }
     }
 
     private fun updateView(state: AppState?) {
