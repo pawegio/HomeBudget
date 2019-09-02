@@ -63,7 +63,7 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
     }
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {
-        val monthName = month.getDisplayName(TextStyle.FULL, Locale("pl"))
+        val monthName = month.polishDisplayName
         val response = sheetsService.spreadsheets().values()
             .batchGet(BuildConfig.SPREADSHEET_ID)
             .setRanges(listOf(
