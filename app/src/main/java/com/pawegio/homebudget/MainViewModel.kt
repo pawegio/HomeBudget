@@ -4,14 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 
-@FlowPreview
 class MainViewModel(
     api: HomeBudgetApi,
     clock: Clock
@@ -27,6 +25,7 @@ class MainViewModel(
 
     init {
         launch {
+            @Suppress("EXPERIMENTAL_API_USAGE")
             MainFlow(
                 mainActions.consumeAsFlow(),
                 _appState,

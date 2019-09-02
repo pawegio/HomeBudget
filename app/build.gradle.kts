@@ -43,9 +43,9 @@ tasks.withType<Test> {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0-RC")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0-RC")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.0-RC2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.0")
     implementation("androidx.appcompat:appcompat:1.0.2")
     implementation("androidx.core:core-ktx:1.0.2")
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")

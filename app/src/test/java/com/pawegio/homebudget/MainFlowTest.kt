@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.*
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -13,7 +12,6 @@ import org.threeten.bp.Instant
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 
-@FlowPreview
 internal class MainFlowTest : FlowSpec({
     "On main flow" - {
         val actions = Channel<MainAction>()
@@ -26,6 +24,7 @@ internal class MainFlowTest : FlowSpec({
         val clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
 
         val flow = launch(start = CoroutineStart.LAZY) {
+            @Suppress("EXPERIMENTAL_API_USAGE")
             MainFlow(
                 actions.consumeAsFlow(),
                 state,
