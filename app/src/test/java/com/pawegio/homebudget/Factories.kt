@@ -5,5 +5,6 @@ fun createMonthlyBudget() =
         plannedIncomes = "10000",
         plannedExpenses = "10000",
         actualIncomes = "11000",
-        actualExpenses = "9000"
+        actualExpenses = "9000",
+        categories = emptyList()
     )
