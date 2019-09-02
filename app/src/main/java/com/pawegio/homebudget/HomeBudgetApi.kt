@@ -15,9 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
-import org.threeten.bp.format.TextStyle
 import java.util.*
-import kotlin.collections.ArrayList
 
 interface HomeBudgetApi {
     val isSignedIn: Boolean
@@ -66,20 +64,36 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
         val monthName = month.polishDisplayName
         val response = sheetsService.spreadsheets().values()
             .batchGet(BuildConfig.SPREADSHEET_ID)
-            .setRanges(listOf(
-                "'$monthName'!D9:D10",
-                "'$monthName'!D16:D17"
-            ))
+            .setRanges(
+                listOf(
+                    "'$monthName'!D9:D10",
+                    "'$monthName'!D16:D17",
+                    "'$monthName'!B51:D66"
+                )
+            )
             .execute()
         val ranges = response.valueRanges
         val planned = ranges[0]["values"] as ArrayList<ArrayList<String>>
         val actual = ranges[1]["values"] as ArrayList<ArrayList<String>>
+        val incomes = ranges[2]["values"] as ArrayList<ArrayList<String>>
+        val categories = listOf(
+            Category(
+                incomes[0][0],
+                Category.Type.INCOMES,
+                List(incomes.size - 1) { index ->
+                    Subcategory(incomes[index + 1][0], incomes[index + 1][1], incomes[index + 1][2])
+                }.filter { it.name != "." },
+                incomes[0][1],
+                incomes[0][2]
+            )
+        )
         MonthlyBudget(
             plannedIncomes = planned[0][0],
             plannedExpenses = planned[1][0],
             actualIncomes = actual[0][0],
-            actualExpenses = actual[1][0]
-        )
+            actualExpenses = actual[1][0],
+            categories = categories
+        ).also(::println)
     }
 
     companion object {
