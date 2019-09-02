@@ -26,12 +26,16 @@ class MainActivity : AppCompatActivity() {
 
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
         monthlyBudgetTextView.text =
-            monthlyBudget?.let { (plannedIncomes, plannedExpenses, actualIncomes, actualExpenses) ->
+            monthlyBudget?.let { (plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
+                val incomes = categories.first()
                 listOf(
                     "Planowane przychody: $plannedIncomes",
                     "Planowane wydatki: $plannedExpenses",
                     "Rzeczywiste przychody: $actualIncomes",
-                    "Rzeczywiste wydatki: $actualExpenses"
+                    "Rzeczywiste wydatki: $actualExpenses\n",
+                    incomes.let { "${it.name}:\n${it.actual} / ${it.planned}\n" },
+                    incomes.subcategories
+                        .joinToString("\n\n") { "${it.name}:\n${it.actual} / ${it.planned}" }
                 ).joinToString("\n")
             }
     }
