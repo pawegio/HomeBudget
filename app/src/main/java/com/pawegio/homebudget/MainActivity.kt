@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity() {
                     "Planowane wydatki: ${plannedExpenses.currencyValue}",
                     "Rzeczywiste przychody: ${actualIncomes.currencyValue}",
                     "Rzeczywiste wydatki: ${actualExpenses.currencyValue}\n",
+                    "Do wydania: ${(actualIncomes - actualExpenses).currencyValue}\n",
                     incomes.let { "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}\n" },
                     incomes.subcategories.joinToString("\n\n") {
                         "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
