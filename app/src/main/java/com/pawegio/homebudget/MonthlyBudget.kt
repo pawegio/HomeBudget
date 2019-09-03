@@ -1,10 +1,12 @@
 package com.pawegio.homebudget
 
+import java.math.BigDecimal
+
 data class MonthlyBudget(
-    val plannedIncomes: String,
-    val plannedExpenses: String,
-    val actualIncomes: String,
-    val actualExpenses: String,
+    val plannedIncomes: BigDecimal,
+    val plannedExpenses: BigDecimal,
+    val actualIncomes: BigDecimal,
+    val actualExpenses: BigDecimal,
     val categories: List<Category>
 )
 
@@ -12,8 +14,8 @@ data class Category(
     val name: String,
     val type: Type,
     val subcategories: List<Subcategory>,
-    val planned: String,
-    val actual: String
+    val planned: BigDecimal,
+    val actual: BigDecimal
 ) {
     enum class Type {
         INCOMES, EXPENSES
@@ -22,6 +24,6 @@ data class Category(
 
 data class Subcategory(
     val name: String,
-    val planned: String,
-    val actual: String
+    val planned: BigDecimal,
+    val actual: BigDecimal
 )

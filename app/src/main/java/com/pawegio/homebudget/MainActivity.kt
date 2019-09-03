@@ -29,13 +29,14 @@ class MainActivity : AppCompatActivity() {
             monthlyBudget?.let { (plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
                 val incomes = categories.first()
                 listOf(
-                    "Planowane przychody: $plannedIncomes",
-                    "Planowane wydatki: $plannedExpenses",
-                    "Rzeczywiste przychody: $actualIncomes",
-                    "Rzeczywiste wydatki: $actualExpenses\n",
-                    incomes.let { "${it.name}:\n${it.actual} / ${it.planned}\n" },
-                    incomes.subcategories
-                        .joinToString("\n\n") { "${it.name}:\n${it.actual} / ${it.planned}" }
+                    "Planowane przychody: ${plannedIncomes.currencyValue}",
+                    "Planowane wydatki: ${plannedExpenses.currencyValue}",
+                    "Rzeczywiste przychody: ${actualIncomes.currencyValue}",
+                    "Rzeczywiste wydatki: ${actualExpenses.currencyValue}\n",
+                    incomes.let { "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}\n" },
+                    incomes.subcategories.joinToString("\n\n") {
+                        "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
+                    }
                 ).joinToString("\n")
             }
     }

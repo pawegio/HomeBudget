@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
+import java.math.BigDecimal
 import java.util.*
 
 interface HomeBudgetApi {
@@ -64,6 +65,7 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
         val monthName = month.polishDisplayName
         val response = sheetsService.spreadsheets().values()
             .batchGet(BuildConfig.SPREADSHEET_ID)
+            .setValueRenderOption("UNFORMATTED_VALUE")
             .setRanges(
                 listOf(
                     "'$monthName'!D9:D10",
@@ -73,18 +75,22 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
             )
             .execute()
         val ranges = response.valueRanges
-        val planned = ranges[0]["values"] as ArrayList<ArrayList<String>>
-        val actual = ranges[1]["values"] as ArrayList<ArrayList<String>>
-        val incomes = ranges[2]["values"] as ArrayList<ArrayList<String>>
+        val planned = ranges[0]["values"] as ArrayList<ArrayList<BigDecimal>>
+        val actual = ranges[1]["values"] as ArrayList<ArrayList<BigDecimal>>
+        val incomes = ranges[2]["values"] as ArrayList<ArrayList<Any>>
         val categories = listOf(
             Category(
-                incomes[0][0],
+                incomes[0][0] as String,
                 Category.Type.INCOMES,
                 List(incomes.size - 1) { index ->
-                    Subcategory(incomes[index + 1][0], incomes[index + 1][1], incomes[index + 1][2])
+                    Subcategory(
+                        incomes[index + 1][0] as String,
+                        incomes[index + 1][1] as BigDecimal,
+                        incomes[index + 1][2] as BigDecimal
+                    )
                 }.filter { it.name != "." },
-                incomes[0][1],
-                incomes[0][2]
+                incomes[0][1] as BigDecimal,
+                incomes[0][2] as BigDecimal
             )
         )
         MonthlyBudget(
