@@ -1,4 +1,4 @@
-package com.pawegio.homebudget
+package com.pawegio.homebudget.util
 
 import org.threeten.bp.Month
 
