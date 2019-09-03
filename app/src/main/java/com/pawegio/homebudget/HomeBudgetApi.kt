@@ -17,7 +17,6 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
 import java.math.BigDecimal
-import java.util.*
 
 interface HomeBudgetApi {
     val isSignedIn: Boolean
@@ -76,9 +75,9 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
             )
             .execute()
         val ranges = response.valueRanges
-        val planned = ranges[0]["values"] as ArrayList<ArrayList<BigDecimal>>
-        val actual = ranges[1]["values"] as ArrayList<ArrayList<BigDecimal>>
-        val incomes = ranges[2]["values"] as ArrayList<ArrayList<Any>>
+        val planned = ranges[0]["values"] as List<List<BigDecimal>>
+        val actual = ranges[1]["values"] as List<List<BigDecimal>>
+        val incomes = ranges[2]["values"] as List<List<Any>>
         val categories = listOf(
             Category(
                 incomes[0][0] as String,
