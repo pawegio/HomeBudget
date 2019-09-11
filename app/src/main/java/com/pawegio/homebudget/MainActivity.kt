@@ -26,10 +26,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
-        monthlyBudget?.let { (month, _, _, actualIncomes, actualExpenses, categories) ->
+        monthlyBudget?.let { (month, plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
             monthHeaderView.text = month
             incomesTextView.text = actualIncomes.currencyValue
+            plannedIncomesView.text = getString(R.string.of, plannedIncomes.currencyValue)
             expensesTextView.text = actualExpenses.currencyValue
+            plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
             totalTextView.text = (actualIncomes - actualExpenses).currencyValue
             val incomes = categories.first()
             allIncomesTextView.text = listOf(

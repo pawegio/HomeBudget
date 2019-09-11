@@ -14,8 +14,8 @@
             style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Kwiecień" />
@@ -33,13 +33,23 @@
 
         <TextView
             android:id="@+id/incomesTextView"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@id/incomesLabelView"
             app:layout_constraintStart_toStartOf="@id/incomesLabelView"
             app:layout_constraintTop_toBottomOf="@id/incomesLabelView"
             tools:text="10 000,00 zł" />
+
+        <TextView
+            android:id="@+id/plannedIncomesView"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/incomesLabelView"
+            app:layout_constraintStart_toStartOf="@id/incomesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/incomesTextView"
+            tools:text="z 15 000,00 zł" />
 
         <TextView
             android:id="@+id/expensesLabelView"
@@ -54,13 +64,23 @@
 
         <TextView
             android:id="@+id/expensesTextView"
-            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            style="@style/TextAppearance.MaterialComponents.Body1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintEnd_toEndOf="@id/expensesLabelView"
             app:layout_constraintStart_toStartOf="@id/expensesLabelView"
             app:layout_constraintTop_toBottomOf="@id/expensesLabelView"
             tools:text="8 500,00 zł" />
+
+        <TextView
+            android:id="@+id/plannedExpensesView"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/expensesLabelView"
+            app:layout_constraintStart_toStartOf="@id/expensesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/expensesTextView"
+            tools:text="z 15 000,00 zł" />
 
         <TextView
             android:id="@+id/totalLabelView"
@@ -91,17 +111,19 @@
             android:layout_margin="16dp"
             android:text="@string/incomes"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/incomesTextView" />
+            app:layout_constraintTop_toBottomOf="@id/plannedIncomesView" />
 
         <TextView
             android:id="@+id/allIncomesTextView"
+            style="@style/TextAppearance.MaterialComponents.Body2"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_margin="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/incomesHeaderView" />
+            app:layout_constraintTop_toBottomOf="@id/incomesHeaderView"
+            tools:text="asdf" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
