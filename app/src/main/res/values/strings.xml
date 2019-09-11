@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">Home Budget</string>
+    <string name="app_name">Budżet domowy</string>
+
+    <!-- MAIN -->
+    <string name="incomes">Przychody</string>
+    <string name="expenses">Wydatki</string>
+    <string name="total">Razem</string>
 </resources>

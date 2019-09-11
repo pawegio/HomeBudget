@@ -43,11 +43,12 @@ tasks.withType<Test> {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.50")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.0")
-    implementation("androidx.appcompat:appcompat:1.0.2")
-    implementation("androidx.core:core-ktx:1.0.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.1")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.core:core-ktx:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta2")
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")
     implementation("org.koin:koin-android-ext:2.0.1")
     implementation("com.google.android.material:material:1.1.0-alpha09")
@@ -61,7 +62,7 @@ dependencies {
     implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
 
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.3.2")
+    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.1")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.1.0")
     testImplementation("com.github.langara:SMokK:0.0.3")

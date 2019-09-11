@@ -94,6 +94,7 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
             )
         )
         MonthlyBudget(
+            month = monthName,
             plannedIncomes = planned[0][0],
             plannedExpenses = planned[1][0],
             actualIncomes = actual[0][0],

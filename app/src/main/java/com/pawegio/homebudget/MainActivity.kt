@@ -26,20 +26,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
-        monthlyBudgetTextView.text =
-            monthlyBudget?.let { (plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
-                val incomes = categories.first()
-                listOf(
-                    "Planowane przychody: ${plannedIncomes.currencyValue}",
-                    "Planowane wydatki: ${plannedExpenses.currencyValue}",
-                    "Rzeczywiste przychody: ${actualIncomes.currencyValue}",
-                    "Rzeczywiste wydatki: ${actualExpenses.currencyValue}\n",
-                    "Do wydania: ${(actualIncomes - actualExpenses).currencyValue}\n",
-                    incomes.let { "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}\n" },
-                    incomes.subcategories.joinToString("\n\n") {
-                        "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
-                    }
-                ).joinToString("\n")
-            }
+        monthlyBudget?.let { (month, _, _, actualIncomes, actualExpenses, categories) ->
+            monthHeaderView.text = month
+            incomesTextView.text = actualIncomes.currencyValue
+            expensesTextView.text = actualExpenses.currencyValue
+            totalTextView.text = (actualIncomes - actualExpenses).currencyValue
+            val incomes = categories.first()
+            allIncomesTextView.text = listOf(
+                incomes.subcategories.joinToString("\n\n") {
+                    "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
+                }
+            ).joinToString("\n")
+        }
     }
 }

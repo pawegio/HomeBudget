@@ -4,6 +4,7 @@ import java.math.BigDecimal
 
 fun createMonthlyBudget() =
     MonthlyBudget(
+        month = "Kwiecień",
         plannedIncomes = BigDecimal(10000),
         plannedExpenses = BigDecimal(10000),
         actualIncomes = BigDecimal(11000),

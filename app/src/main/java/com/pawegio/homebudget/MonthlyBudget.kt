@@ -3,6 +3,7 @@ package com.pawegio.homebudget
 import java.math.BigDecimal
 
 data class MonthlyBudget(
+    val month: String,
     val plannedIncomes: BigDecimal,
     val plannedExpenses: BigDecimal,
     val actualIncomes: BigDecimal,
