@@ -22,6 +22,7 @@ internal class MainFlowTest : FlowSpec({
             onBlocking { getMonthlyBudget(any()) } doReturn loadedMonthlyBudget
         }
         val clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
+        val navigator = mock<Navigator>()
 
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
@@ -30,7 +31,8 @@ internal class MainFlowTest : FlowSpec({
                 state,
                 monthlyBudget,
                 api,
-                clock
+                clock,
+                navigator
             )
         }
 
@@ -61,6 +63,10 @@ internal class MainFlowTest : FlowSpec({
 
             "set state to authorized" {
                 state.test().assertValue(AppState.Authorized)
+            }
+
+            "navigate to main screen" {
+                verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
             }
 
             "get monthly budget for current month" {

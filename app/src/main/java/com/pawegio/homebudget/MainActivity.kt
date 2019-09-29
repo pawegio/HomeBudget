@@ -1,44 +1,22 @@
 package com.pawegio.homebudget
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
-import androidx.lifecycle.Observer
-import com.pawegio.homebudget.util.currencyValue
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import com.pawegio.homebudget.util.CurrentActivityObserver
 import kotlinx.android.synthetic.main.main_activity.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class MainActivity : AppCompatActivity() {
-
-    private val viewModel by viewModel<MainViewModel>()
+class MainActivity : AppCompatActivity(R.layout.main_activity) {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.main_activity)
         lifecycle.addObserver(CurrentActivityObserver)
-        viewModel.appState.observe(this, Observer(::updateView))
-        viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
-        signInButton.setOnClickListener { viewModel.mainActions.offer(MainAction.SelectSignIn) }
-    }
-
-    private fun updateView(state: AppState?) {
-        signInButton.isVisible = state is AppState.Unauthorized
-    }
-
-    private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
-        monthlyBudget?.let { (month, plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
-            monthHeaderView.text = month
-            incomesTextView.text = actualIncomes.currencyValue
-            plannedIncomesView.text = getString(R.string.of, plannedIncomes.currencyValue)
-            expensesTextView.text = actualExpenses.currencyValue
-            plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
-            totalTextView.text = (actualIncomes - actualExpenses).currencyValue
-            val incomes = categories.first()
-            allIncomesTextView.text = listOf(
-                incomes.subcategories.joinToString("\n\n") {
-                    "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
-                }
-            ).joinToString("\n")
-        }
+        appNavController = navHostFragment.findNavController()
     }
 }
+
+@SuppressLint("StaticFieldLeak")
+var appNavController: NavController? = null

@@ -12,7 +12,8 @@ import org.threeten.bp.Clock
 
 class MainViewModel(
     api: HomeBudgetApi,
-    clock: Clock
+    clock: Clock,
+    navigator: Navigator
 ) : ViewModel(), CoroutineScope by MainScope() {
 
     val appState: LiveData<AppState> get() = _appState
@@ -31,7 +32,8 @@ class MainViewModel(
                 _appState,
                 _monthlyBudget,
                 api,
-                clock
+                clock,
+                navigator
             )
         }
     }

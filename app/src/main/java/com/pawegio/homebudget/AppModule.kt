@@ -8,5 +8,6 @@ import org.threeten.bp.Clock
 val appModule = module {
     single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext()) }
     single<Clock> { Clock.systemDefaultZone() }
+    single<Navigator> { NavigatorImpl { appNavController } }
     viewModel<MainViewModel>()
 }

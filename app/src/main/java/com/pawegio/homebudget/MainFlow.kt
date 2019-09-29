@@ -14,7 +14,8 @@ suspend fun MainFlow(
     state: MutableLiveData<AppState>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
     api: HomeBudgetApi,
-    clock: Clock
+    clock: Clock,
+    navigator: Navigator
 ) {
     while (!api.isSignedIn) {
         state.value = AppState.Unauthorized
@@ -22,6 +23,7 @@ suspend fun MainFlow(
         api.signIn()
     }
     state.value = AppState.Authorized
+    navigator.navigate(R.id.action_loginFragment_to_mainFragment)
     val month = clock.instant().atZone(ZoneId.systemDefault()).month
     monthlyBudget.value = api.getMonthlyBudget(month)
 }

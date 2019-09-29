@@ -1,4 +1,4 @@
-package com.pawegio.homebudget
+package com.pawegio.homebudget.util
 
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Lifecycle
