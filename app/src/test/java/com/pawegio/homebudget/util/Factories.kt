@@ -1,5 +1,6 @@
-package com.pawegio.homebudget
+package com.pawegio.homebudget.util
 
+import com.pawegio.homebudget.MonthlyBudget
 import java.math.BigDecimal
 
 fun createMonthlyBudget() =

@@ -1,5 +1,6 @@
 package com.pawegio.homebudget
 
+import com.pawegio.homebudget.util.InstantTaskUtils
 import io.kotlintest.IsolationMode
 import io.kotlintest.Spec
 import io.kotlintest.TestCase

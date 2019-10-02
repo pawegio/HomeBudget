@@ -3,38 +3,51 @@ package com.pawegio.homebudget
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.pawegio.homebudget.login.LoginAction
+import com.pawegio.homebudget.login.LoginFlow
+import com.pawegio.homebudget.main.MainAction
+import com.pawegio.homebudget.main.MainFlow
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 
+@FlowPreview
 class MainViewModel(
-    api: HomeBudgetApi,
-    clock: Clock,
-    navigator: Navigator
+    private val api: HomeBudgetApi,
+    private val clock: Clock,
+    private val navigator: Navigator
 ) : ViewModel(), CoroutineScope by MainScope() {
 
-    val appState: LiveData<AppState> get() = _appState
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
 
+    val loginActions = Channel<LoginAction>()
     val mainActions = Channel<MainAction>()
 
-    private val _appState = MutableLiveData<AppState>()
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
 
     init {
-        launch {
-            @Suppress("EXPERIMENTAL_API_USAGE")
-            MainFlow(
-                mainActions.consumeAsFlow(),
-                _appState,
-                _monthlyBudget,
-                api,
-                clock,
-                navigator
-            )
-        }
+        launch { initLoginFlow() }
+    }
+
+    private suspend fun initLoginFlow() {
+        LoginFlow(
+            loginActions.consumeAsFlow(),
+            api,
+            ::initMainFlow,
+            navigator
+        )
+    }
+
+    private suspend fun initMainFlow() {
+        MainFlow(
+            mainActions.consumeAsFlow(),
+            _monthlyBudget,
+            api,
+            clock
+        )
     }
 }

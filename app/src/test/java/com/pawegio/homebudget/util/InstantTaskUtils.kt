@@ -1,4 +1,4 @@
-package com.pawegio.homebudget
+package com.pawegio.homebudget.util
 
 import androidx.arch.core.executor.ArchTaskExecutor
 import androidx.arch.core.executor.TaskExecutor
