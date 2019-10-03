@@ -35,6 +35,14 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                     "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
                 }
             ).joinToString("\n")
+            val allExpenses = categories.drop(1)
+            allExpensesTextView.text = allExpenses.joinToString("\n\n") { expenses ->
+                listOf(
+                    expenses.subcategories.joinToString("\n\n") {
+                        "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
+                    }
+                ).joinToString("\n", "${expenses.name}\n\n")
+            }
         }
     }
 }

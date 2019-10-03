@@ -64,36 +64,36 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {
         val monthName = month.polishDisplayName
+        val plannedBudgetRange = mapOf("D9" to "D10")
+        val actualBudgetRange = mapOf("D16" to "D17")
+        val incomesRange = mapOf("B51" to "D66")
+        val expensesRanges = mapOf(
+            "B73" to "D83",
+            "B85" to "D95",
+            "B97" to "D107",
+            "B109" to "D119",
+            "B121" to "D131",
+            "B133" to "D143",
+            "B145" to "D155",
+            "B157" to "D167",
+            "B169" to "D179",
+            "B181" to "D191",
+            "B193" to "D203",
+            "B205" to "D215"
+        )
+        val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
         val response = sheetsService.spreadsheets().values()
             .batchGet(BuildConfig.SPREADSHEET_ID)
             .setValueRenderOption("UNFORMATTED_VALUE")
-            .setRanges(
-                listOf(
-                    "'$monthName'!D9:D10",
-                    "'$monthName'!D16:D17",
-                    "'$monthName'!B51:D66"
-                )
-            )
+            .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
             .execute()
         val ranges = response.valueRanges
         val planned = ranges[0]["values"] as List<List<BigDecimal>>
         val actual = ranges[1]["values"] as List<List<BigDecimal>>
         val incomes = ranges[2]["values"] as List<List<Any>>
-        val categories = listOf(
-            Category(
-                incomes[0][0] as String,
-                Category.Type.INCOMES,
-                List(incomes.size - 1) { index ->
-                    Subcategory(
-                        incomes[index + 1][0] as String,
-                        incomes[index + 1][1] as BigDecimal,
-                        incomes[index + 1][2] as BigDecimal
-                    )
-                }.filter { it.name != "." },
-                incomes[0][1] as BigDecimal,
-                incomes[0][2] as BigDecimal
-            )
-        )
+        val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
+        val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
+                expenses.map { createCategory(it, Category.Type.EXPENSES) }
         MonthlyBudget(
             month = monthName,
             plannedIncomes = planned[0][0],
@@ -103,6 +103,21 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
             categories = categories
         ).also(::println)
     }
+
+    private fun createCategory(data: List<List<Any>>, type: Category.Type) =
+        Category(
+            name = data[0][0] as String,
+            type = type,
+            subcategories = List(data.size - 1) { index ->
+                Subcategory(
+                    data[index + 1][0] as String,
+                    data[index + 1][1] as BigDecimal,
+                    data[index + 1][2] as BigDecimal
+                )
+            }.filter { it.name != "." },
+            planned = data[0][1] as BigDecimal,
+            actual = data[0][2] as BigDecimal
+        )
 
     companion object {
         private const val USER_AGENT = "HomeBudget"
