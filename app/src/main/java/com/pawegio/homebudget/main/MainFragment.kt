@@ -30,18 +30,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
             totalTextView.text = (actualIncomes - actualExpenses).currencyValue
             val incomes = categories.first()
-            allIncomesTextView.text = listOf(
-                incomes.subcategories.joinToString("\n\n") {
-                    "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
-                }
-            ).joinToString("\n")
+            incomes.subcategories.forEach { subcategory ->
+                allIncomesLayout.addView(SubcategoryView(requireContext()).apply {
+                    this.subcategory = subcategory
+                })
+            }
             val allExpenses = categories.drop(1)
-            allExpensesTextView.text = allExpenses.joinToString("\n\n") { expenses ->
-                listOf(
-                    expenses.subcategories.joinToString("\n\n") {
-                        "${it.name}:\n${it.actual.currencyValue} / ${it.planned.currencyValue}"
-                    }
-                ).joinToString("\n", "${expenses.name}\n\n")
+            allExpenses.forEach { category ->
+                allExpensesLayout.addView(CategoryView(requireContext()).apply {
+                    this.category = category
+                })
             }
         }
     }

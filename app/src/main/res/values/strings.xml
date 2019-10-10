@@ -6,4 +6,5 @@
     <string name="expenses">Wydatki</string>
     <string name="total">Razem</string>
     <string name="of">z %s</string>
+    <string name="percent">%d%%</string>
 </resources>

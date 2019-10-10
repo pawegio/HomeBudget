@@ -63,6 +63,7 @@ dependencies {
     }
     implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
+    implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.1")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.1.0")
