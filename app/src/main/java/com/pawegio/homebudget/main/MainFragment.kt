@@ -30,11 +30,13 @@ class MainFragment : Fragment(R.layout.main_fragment) {
             plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
             totalTextView.text = (actualIncomes - actualExpenses).currencyValue
             val incomes = categories.first()
-            incomes.subcategories.forEach { subcategory ->
-                allIncomesLayout.addView(SubcategoryView(requireContext()).apply {
-                    this.subcategory = subcategory
-                })
-            }
+            incomes.subcategories
+                .filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
+                .forEach { subcategory ->
+                    allIncomesLayout.addView(SubcategoryView(requireContext()).apply {
+                        this.subcategory = subcategory
+                    })
+                }
             val allExpenses = categories.drop(1)
             allExpenses.forEach { category ->
                 allExpensesLayout.addView(CategoryView(requireContext()).apply {

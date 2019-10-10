@@ -26,11 +26,13 @@ class CategoryView @JvmOverloads constructor(
                 (100 * (actual.toDouble() / planned.toDouble())).roundToInt().coerceIn(0, 100)
             } ?: 0
             categoryProgressView.text = resources.getString(R.string.percent, progress)
-            value?.subcategories?.forEach { subcategory ->
-                subcategoriesLayout.addView(SubcategoryView(context).apply {
-                    this.subcategory = subcategory
-                })
-            }
+            value?.subcategories
+                ?.filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
+                ?.forEach { subcategory ->
+                    subcategoriesLayout.addView(SubcategoryView(context).apply {
+                        this.subcategory = subcategory
+                    })
+                }
         }
 
     init {
