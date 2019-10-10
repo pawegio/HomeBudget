@@ -1,8 +1,6 @@
 package com.pawegio.homebudget
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
 import com.pawegio.homebudget.login.LoginAction
 import com.pawegio.homebudget.login.LoginFlow
 import com.pawegio.homebudget.main.MainAction
@@ -20,7 +18,7 @@ class MainViewModel(
     private val api: HomeBudgetApi,
     private val clock: Clock,
     private val navigator: Navigator
-) : ViewModel(), CoroutineScope by MainScope() {
+) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
 
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
 
@@ -29,8 +27,12 @@ class MainViewModel(
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
 
-    init {
-        launch { initLoginFlow() }
+    @Suppress("unused")
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate(source: LifecycleOwner) {
+        if (source is MainActivity) {
+            launch { initLoginFlow() }
+        }
     }
 
     private suspend fun initLoginFlow() {

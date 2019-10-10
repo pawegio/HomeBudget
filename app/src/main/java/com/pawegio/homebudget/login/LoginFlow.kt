@@ -15,10 +15,10 @@ suspend fun LoginFlow(
     initMainFlow: suspend () -> Unit,
     navigator: Navigator
 ) {
-    if (!api.isSignedIn) do {
+    while (!api.isSignedIn) {
         actions.filterIsInstance<LoginAction.SelectSignIn>().first()
         api.signIn()
-    } while (!api.isSignedIn)
+    }
     navigator.navigate(R.id.action_loginFragment_to_mainFragment)
     initMainFlow()
 }
