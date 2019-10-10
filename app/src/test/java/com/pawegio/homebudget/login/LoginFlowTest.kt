@@ -1,17 +1,25 @@
 package com.pawegio.homebudget.login
 
-import com.nhaarman.mockitokotlin2.*
-import com.pawegio.homebudget.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.pawegio.homebudget.FlowSpec
+import com.pawegio.homebudget.Navigator
+import com.pawegio.homebudget.R
+import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.SuspendFunction
+import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
+import kotlin.coroutines.resume
 
 internal class LoginFlowTest : FlowSpec({
     "On login flow" - {
         val actions = Channel<LoginAction>()
-        val api = mock<HomeBudgetApi>()
+        val api = MockHomeBudgetApi()
         val initMainFlow = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
@@ -26,28 +34,66 @@ internal class LoginFlowTest : FlowSpec({
         }
 
         "on user not signed in" - {
-            whenever(api.isSignedIn) doReturn false
+            api.isSignInResult = false
             flow.start()
 
             "do not sign in" {
-                verifyBlocking(api, never()) { signIn() }
+                api.signIn.invocations shouldBe 0
+            }
+
+            "do not navigate to main screen" {
+                verify(navigator, never()).navigate(R.id.action_loginFragment_to_mainFragment)
+            }
+
+            "do not init main flow" {
+                verifyBlocking(initMainFlow, never()) { invokeSuspend() }
             }
 
             "on select sign in" - {
                 actions.offer(LoginAction.SelectSignIn)
 
                 "sign in" {
-                    verifyBlocking(api) { signIn() }
+                    api.signIn.invocations shouldBe 1
+                }
+
+                "on sign in success" - {
+                    api.isSignInResult = true
+                    api.signIn.resume(Unit)
+
+                    "navigate to main screen" {
+                        verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+                    }
+
+                    "init main flow" {
+                        verifyBlocking(initMainFlow) { invokeSuspend() }
+                    }
+                }
+
+                "on sign in failure" - {
+                    api.isSignInResult = false
+                    api.signIn.resume(Unit)
+
+                    "do not navigate to main screen" {
+                        verify(navigator, never()).navigate(R.id.action_loginFragment_to_mainFragment)
+                    }
+
+                    "do not init main flow" {
+                        verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+                    }
                 }
             }
         }
 
         "on user signed in" - {
-            whenever(api.isSignedIn) doReturn true
+            api.isSignInResult = true
             flow.start()
 
             "navigate to main screen" {
                 verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+            }
+
+            "init main flow" {
+                verifyBlocking(initMainFlow) { invokeSuspend() }
             }
         }
     }
