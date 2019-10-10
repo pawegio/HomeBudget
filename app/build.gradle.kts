@@ -53,7 +53,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.1.0")
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")
     implementation("org.koin:koin-android-ext:2.0.1")
-    implementation("com.google.android.material:material:1.1.0-alpha10")
+    implementation("com.google.android.material:material:1.1.0-beta01")
     implementation("com.google.android.gms:play-services-auth:17.0.0")
     implementation("com.google.api-client:google-api-client-android:1.23.0") {
         exclude("org.apache.httpcomponents")
