@@ -2,13 +2,11 @@ package com.pawegio.homebudget.main
 
 import androidx.lifecycle.MutableLiveData
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.any
-import com.nhaarman.mockitokotlin2.doReturn
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
+import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.createMonthlyBudget
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
@@ -26,6 +24,7 @@ internal class MainFlowTest : FlowSpec({
         val api = mock<HomeBudgetApi> {
             onBlocking { getMonthlyBudget(any()) } doReturn loadedMonthlyBudget
         }
+        val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         val clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
 
         launch {
@@ -34,6 +33,7 @@ internal class MainFlowTest : FlowSpec({
                 actions.consumeAsFlow(),
                 monthlyBudget,
                 api,
+                spreadsheetLauncher,
                 clock
             )
         }
@@ -46,6 +46,14 @@ internal class MainFlowTest : FlowSpec({
 
             "update monthly budget" {
                 monthlyBudget.test().assertValue(loadedMonthlyBudget)
+            }
+        }
+
+        "on open spreadsheet" - {
+            actions.offer(MainAction.OpenSpreadsheet)
+
+            "launch spreadsheet" {
+                verify(spreadsheetLauncher).launch()
             }
         }
     }

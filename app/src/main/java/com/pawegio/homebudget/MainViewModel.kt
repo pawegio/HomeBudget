@@ -5,6 +5,7 @@ import com.pawegio.homebudget.login.LoginAction
 import com.pawegio.homebudget.login.LoginFlow
 import com.pawegio.homebudget.main.MainAction
 import com.pawegio.homebudget.main.MainFlow
+import com.pawegio.homebudget.util.SpreadsheetLauncher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.MainScope
@@ -16,6 +17,7 @@ import org.threeten.bp.Clock
 @FlowPreview
 class MainViewModel(
     private val api: HomeBudgetApi,
+    private val spreadsheetLauncher: SpreadsheetLauncher,
     private val clock: Clock,
     private val navigator: Navigator
 ) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
@@ -49,6 +51,7 @@ class MainViewModel(
             mainActions.consumeAsFlow(),
             _monthlyBudget,
             api,
+            spreadsheetLauncher,
             clock
         )
     }
