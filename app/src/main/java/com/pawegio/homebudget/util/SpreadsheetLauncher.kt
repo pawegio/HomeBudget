@@ -2,6 +2,7 @@ package com.pawegio.homebudget.util
 
 import android.content.Context
 import android.content.Intent
+import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import com.pawegio.homebudget.BuildConfig
 
@@ -15,6 +16,7 @@ class SpreadsheetLauncherImpl(private val context: Context) : SpreadsheetLaunche
     override fun launch() {
         context.startActivity(Intent(Intent.ACTION_VIEW).apply {
             data = Uri.parse("$SPREADSHEETS_URL${BuildConfig.SPREADSHEET_ID}")
+            addFlags(FLAG_ACTIVITY_NEW_TASK)
         })
     }
 }

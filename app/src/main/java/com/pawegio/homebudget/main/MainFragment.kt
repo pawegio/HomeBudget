@@ -19,6 +19,9 @@ class MainFragment : Fragment(R.layout.main_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
+        openSpreadsheetButton.setOnClickListener {
+            viewModel.mainActions.offer(MainAction.OpenSpreadsheet)
+        }
     }
 
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
