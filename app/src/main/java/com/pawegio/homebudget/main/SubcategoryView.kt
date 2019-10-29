@@ -7,6 +7,8 @@ import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.subcategory_view.view.*
+import java.math.BigDecimal
+import kotlin.math.roundToInt
 
 class SubcategoryView @JvmOverloads constructor(
     context: Context,
@@ -21,17 +23,18 @@ class SubcategoryView @JvmOverloads constructor(
             subcategoryValueTextView.text = value?.run {
                 "${actual.currencyValue} / ${planned.currencyValue}"
             }
-            var exceeded = false
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
-                exceeded = actual > planned
-                (100 * (actual / planned).toDouble()).toInt()
-            } ?: 0
-            subcategoryProgressView.text = resources.getString(R.string.percent, progress)
+                (100.0 * actual.toDouble() / planned.toDouble()).roundToInt()
+            }
+            val exceeded = progress == null || progress > 100
+            subcategoryProgressView.text = progress?.let {
+                resources.getString(R.string.percent, it)
+            }
             subcategoryProgressBar.setProgressColors(
                 context.getColor(R.color.progressBackground),
                 context.getColor(if (exceeded) R.color.progressExceeded else R.color.progress)
             )
-            subcategoryProgressBar.progress = progress
+            subcategoryProgressBar.progress = progress ?: 100
         }
 
     init {
