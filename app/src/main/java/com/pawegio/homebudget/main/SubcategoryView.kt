@@ -24,7 +24,7 @@ class SubcategoryView @JvmOverloads constructor(
             var exceeded = false
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
                 exceeded = actual > planned
-                (100 * (actual / planned).toDouble()).toInt().coerceIn(0, 100)
+                (100 * (actual / planned).toDouble()).toInt()
             } ?: 0
             subcategoryProgressView.text = resources.getString(R.string.percent, progress)
             subcategoryProgressBar.setProgressColors(

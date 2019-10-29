@@ -23,7 +23,7 @@ class CategoryView @JvmOverloads constructor(
                 "${actual.currencyValue} / ${planned.currencyValue}"
             }
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
-                (100 * (actual.toDouble() / planned.toDouble())).roundToInt().coerceIn(0, 100)
+                (100 * (actual.toDouble() / planned.toDouble())).roundToInt()
             } ?: 0
             categoryProgressView.text = resources.getString(R.string.percent, progress)
             value?.subcategories
