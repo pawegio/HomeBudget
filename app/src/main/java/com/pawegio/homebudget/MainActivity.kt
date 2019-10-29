@@ -17,6 +17,8 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
         appNavController = navHostFragment.findNavController()
         lifecycle.addObserver(getViewModel<MainViewModel>())
     }
+
+    override fun onBackPressed() = finish()
 }
 
 @SuppressLint("StaticFieldLeak")
