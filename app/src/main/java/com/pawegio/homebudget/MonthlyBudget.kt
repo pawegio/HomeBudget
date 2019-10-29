@@ -26,5 +26,6 @@ data class Category(
 data class Subcategory(
     val name: String,
     val planned: BigDecimal,
-    val actual: BigDecimal
+    val actual: BigDecimal,
+    val type: Category.Type
 )

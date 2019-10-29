@@ -3,11 +3,11 @@ package com.pawegio.homebudget.main
 import android.content.Context
 import android.util.AttributeSet
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.subcategory_view.view.*
-import java.math.BigDecimal
 import kotlin.math.roundToInt
 
 class SubcategoryView @JvmOverloads constructor(
@@ -32,7 +32,13 @@ class SubcategoryView @JvmOverloads constructor(
             }
             subcategoryProgressBar.setProgressColors(
                 context.getColor(R.color.progressBackground),
-                context.getColor(if (exceeded) R.color.progressExceeded else R.color.progress)
+                context.getColor(
+                    when {
+                        exceeded && value?.type == Category.Type.EXPENSES -> R.color.progressExceededNegative
+                        exceeded && value?.type == Category.Type.INCOMES -> R.color.progressExceededPositive
+                        else -> R.color.progress
+                    }
+                )
             )
             subcategoryProgressBar.progress = progress ?: 100
         }

@@ -112,7 +112,8 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
                 Subcategory(
                     data[index + 1][0] as String,
                     data[index + 1][1] as BigDecimal,
-                    data[index + 1][2] as BigDecimal
+                    data[index + 1][2] as BigDecimal,
+                    type
                 )
             }.filter { it.name != "." },
             planned = data[0][1] as BigDecimal,

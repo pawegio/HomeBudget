@@ -5,6 +5,7 @@
     <color name="colorAccent">#D81B60</color>
 
     <color name="progress">#388e3c</color>
-    <color name="progressExceeded">#d32f2f</color>
+    <color name="progressExceededPositive">#9c27b0</color>
+    <color name="progressExceededNegative">#d32f2f</color>
     <color name="progressBackground">#bdbdbd</color>
 </resources>
