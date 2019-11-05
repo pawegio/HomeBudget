@@ -5,6 +5,7 @@ import com.pawegio.homebudget.login.LoginAction
 import com.pawegio.homebudget.login.LoginFlow
 import com.pawegio.homebudget.main.MainAction
 import com.pawegio.homebudget.main.MainFlow
+import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -23,11 +24,13 @@ class MainViewModel(
 ) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
 
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
+    val monthType: LiveData<MonthType> get() = _monthType
 
     val loginActions = Channel<LoginAction>()
     val mainActions = Channel<MainAction>()
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
+    private val _monthType = MutableLiveData<MonthType>()
 
     @Suppress("unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -49,6 +52,7 @@ class MainViewModel(
     private suspend fun initMainFlow() {
         MainFlow(
             mainActions.consumeAsFlow(),
+            _monthType,
             _monthlyBudget,
             api,
             spreadsheetLauncher,

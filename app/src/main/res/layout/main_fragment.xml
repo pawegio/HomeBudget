@@ -33,6 +33,30 @@
             app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
             tools:ignore="ContentDescription" />
 
+        <ImageButton
+            android:id="@+id/nextMonthButton"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_next"
+            app:layout_constraintEnd_toStartOf="@id/openSpreadsheetButton"
+            app:layout_constraintTop_toTopOf="@id/monthHeaderView"
+            app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
+            tools:ignore="ContentDescription" />
+
+        <ImageButton
+            android:id="@+id/prevMonthButton"
+            style="@style/Widget.AppCompat.ActionButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_prev"
+            app:layout_constraintEnd_toStartOf="@id/nextMonthButton"
+            app:layout_constraintTop_toTopOf="@id/monthHeaderView"
+            app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
+            tools:ignore="ContentDescription" />
+
         <TextView
             android:id="@+id/incomesLabelView"
             style="@style/TextAppearance.MaterialComponents.Subtitle2"

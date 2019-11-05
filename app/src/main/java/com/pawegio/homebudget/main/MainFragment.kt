@@ -3,6 +3,7 @@ package com.pawegio.homebudget.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
@@ -18,10 +19,16 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModel.monthType.observe(this, Observer(::updateMonthType))
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
         openSpreadsheetButton.setOnClickListener {
             viewModel.mainActions.offer(MainAction.OpenSpreadsheet)
         }
+    }
+
+    private fun updateMonthType(monthType: MonthType?) {
+        prevMonthButton.isVisible = monthType != MonthType.FIRST
+        nextMonthButton.isVisible = monthType != MonthType.LAST
     }
 
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {

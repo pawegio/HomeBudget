@@ -8,6 +8,7 @@ import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.createMonthlyBudget
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
@@ -20,22 +21,48 @@ internal class MainFlowTest : FlowSpec({
     "On main flow" - {
         val actions = Channel<MainAction>()
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
+        val monthType = MutableLiveData<MonthType>()
         val loadedMonthlyBudget = createMonthlyBudget()
         val api = mock<HomeBudgetApi> {
             onBlocking { getMonthlyBudget(any()) } doReturn loadedMonthlyBudget
         }
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
-        val clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
+        var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
 
-        launch {
+        val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
             MainFlow(
                 actions.consumeAsFlow(),
+                monthType,
                 monthlyBudget,
                 api,
                 spreadsheetLauncher,
                 clock
             )
+        }
+
+        "on January" - {
+            clock = Clock.fixed(Instant.parse("2019-01-01T10:15:00.00Z"), ZoneId.systemDefault())
+            flow.start()
+
+            "is first month" {
+                monthType.test().assertValue(MonthType.FIRST)
+            }
+        }
+
+        "on December" - {
+            clock = Clock.fixed(Instant.parse("2019-12-01T10:15:00.00Z"), ZoneId.systemDefault())
+            flow.start()
+
+            "is last month" {
+                monthType.test().assertValue(MonthType.LAST)
+            }
+        }
+
+        flow.start()
+
+        "is middle month" {
+            monthType.test().assertValue(MonthType.MIDDLE)
         }
 
         "get monthly budget for current month" {

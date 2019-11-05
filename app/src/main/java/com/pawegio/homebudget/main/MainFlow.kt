@@ -12,10 +12,12 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
+import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 
 suspend fun MainFlow(
     actions: Flow<MainAction>,
+    monthType: MutableLiveData<MonthType>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
@@ -27,7 +29,16 @@ suspend fun MainFlow(
         }
     }
     val month = clock.instant().atZone(ZoneId.systemDefault()).month
+    monthType.value = when (month) {
+        Month.JANUARY -> MonthType.FIRST
+        Month.DECEMBER -> MonthType.LAST
+        else -> MonthType.MIDDLE
+    }
     monthlyBudget.value = api.getMonthlyBudget(month)
+}
+
+enum class MonthType {
+    FIRST, MIDDLE, LAST
 }
 
 sealed class MainAction {
