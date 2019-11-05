@@ -1,6 +1,5 @@
 <resources>
 
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
-    </style>
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar" />
 
 </resources>
