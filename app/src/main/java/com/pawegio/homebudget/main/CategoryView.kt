@@ -26,6 +26,7 @@ class CategoryView @JvmOverloads constructor(
                 (100.0 * actual.toDouble() / planned.toDouble()).roundToInt()
             }
             categoryProgressView.text = progress?.let { resources.getString(R.string.percent, it) }
+            subcategoriesLayout.removeAllViews()
             value?.subcategories
                 ?.filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
                 ?.forEach { subcategory ->
