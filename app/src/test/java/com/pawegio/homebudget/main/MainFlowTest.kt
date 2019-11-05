@@ -83,5 +83,13 @@ internal class MainFlowTest : FlowSpec({
                 verify(spreadsheetLauncher).launch()
             }
         }
+
+        "on select prev month" - {
+            actions.offer(MainAction.SelectPrevMonth)
+
+            "get monthly budget for previous month" {
+                verifyBlocking(api) { getMonthlyBudget(Month.MARCH) }
+            }
+        }
     }
 })

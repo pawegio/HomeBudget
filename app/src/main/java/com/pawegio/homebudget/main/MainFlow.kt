@@ -22,19 +22,27 @@ suspend fun MainFlow(
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock
-) = coroutineScope {
-    launch {
-        actions.filterIsInstance<MainAction.OpenSpreadsheet>().collect {
-            spreadsheetLauncher.launch()
+) {
+    var month = clock.instant().atZone(ZoneId.systemDefault()).month
+    coroutineScope {
+        launch {
+            actions.collect { action ->
+                when (action) {
+                    MainAction.OpenSpreadsheet -> spreadsheetLauncher.launch()
+                    MainAction.SelectPrevMonth -> {
+                        month -= 1
+                        monthlyBudget.value = api.getMonthlyBudget(month)
+                    }
+                }
+            }
         }
+        monthType.value = when (month) {
+            Month.JANUARY -> MonthType.FIRST
+            Month.DECEMBER -> MonthType.LAST
+            else -> MonthType.MIDDLE
+        }
+        monthlyBudget.value = api.getMonthlyBudget(month)
     }
-    val month = clock.instant().atZone(ZoneId.systemDefault()).month
-    monthType.value = when (month) {
-        Month.JANUARY -> MonthType.FIRST
-        Month.DECEMBER -> MonthType.LAST
-        else -> MonthType.MIDDLE
-    }
-    monthlyBudget.value = api.getMonthlyBudget(month)
 }
 
 enum class MonthType {
@@ -43,4 +51,5 @@ enum class MonthType {
 
 sealed class MainAction {
     object OpenSpreadsheet : MainAction()
+    object SelectPrevMonth : MainAction()
 }
