@@ -21,6 +21,12 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.monthType.observe(this, Observer(::updateMonthType))
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
+        prevMonthButton.setOnClickListener {
+            viewModel.mainActions.offer(MainAction.SelectPrevMonth)
+        }
+        nextMonthButton.setOnClickListener {
+            viewModel.mainActions.offer(MainAction.SelectNextMonth)
+        }
         openSpreadsheetButton.setOnClickListener {
             viewModel.mainActions.offer(MainAction.OpenSpreadsheet)
         }
