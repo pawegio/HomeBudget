@@ -31,22 +31,31 @@ suspend fun MainFlow(
                     MainAction.OpenSpreadsheet -> spreadsheetLauncher.launch()
                     MainAction.SelectPrevMonth -> {
                         month -= 1
-                        monthlyBudget.value = api.getMonthlyBudget(month)
+                        loadMonth(month, monthType, monthlyBudget, api)
                     }
                     MainAction.SelectNextMonth -> {
                         month += 1
-                        monthlyBudget.value = api.getMonthlyBudget(month)
+                        loadMonth(month, monthType, monthlyBudget, api)
                     }
                 }
             }
         }
-        monthType.value = when (month) {
-            Month.JANUARY -> MonthType.FIRST
-            Month.DECEMBER -> MonthType.LAST
-            else -> MonthType.MIDDLE
-        }
-        monthlyBudget.value = api.getMonthlyBudget(month)
+        loadMonth(month, monthType, monthlyBudget, api)
     }
+}
+
+private suspend fun loadMonth(
+    month: Month,
+    monthType: MutableLiveData<MonthType>,
+    monthlyBudget: MutableLiveData<MonthlyBudget>,
+    api: HomeBudgetApi
+) {
+    monthType.value = when (month) {
+        Month.JANUARY -> MonthType.FIRST
+        Month.DECEMBER -> MonthType.LAST
+        else -> MonthType.MIDDLE
+    }
+    monthlyBudget.value = api.getMonthlyBudget(month)
 }
 
 enum class MonthType {
