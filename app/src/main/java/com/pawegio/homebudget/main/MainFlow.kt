@@ -33,6 +33,10 @@ suspend fun MainFlow(
                         month -= 1
                         monthlyBudget.value = api.getMonthlyBudget(month)
                     }
+                    MainAction.SelectNextMonth -> {
+                        month += 1
+                        monthlyBudget.value = api.getMonthlyBudget(month)
+                    }
                 }
             }
         }
@@ -52,4 +56,5 @@ enum class MonthType {
 sealed class MainAction {
     object OpenSpreadsheet : MainAction()
     object SelectPrevMonth : MainAction()
+    object SelectNextMonth : MainAction()
 }

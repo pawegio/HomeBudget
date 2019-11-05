@@ -91,5 +91,13 @@ internal class MainFlowTest : FlowSpec({
                 verifyBlocking(api) { getMonthlyBudget(Month.MARCH) }
             }
         }
+
+        "on select next month" - {
+            actions.offer(MainAction.SelectNextMonth)
+
+            "get monthly budget for next month" {
+                verifyBlocking(api) { getMonthlyBudget(Month.MAY) }
+            }
+        }
     }
 })
