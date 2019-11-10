@@ -10,6 +10,7 @@ import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.main_fragment.*
+import kotlinx.android.synthetic.main.month_summary_surface.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
 class MainFragment : Fragment(R.layout.main_fragment) {
