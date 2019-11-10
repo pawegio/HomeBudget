@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/monthSummarySurface"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_margin="16dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/monthHeaderView"
+    tools:showIn="@layout/main_fragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp">
+
+        <TextView
+            android:id="@+id/incomesLabelView"
+            style="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/incomes"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/incomesTextView"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/incomesLabelView"
+            app:layout_constraintStart_toStartOf="@id/incomesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/incomesLabelView"
+            tools:text="10 000,00 zł" />
+
+        <TextView
+            android:id="@+id/plannedIncomesView"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/incomesLabelView"
+            app:layout_constraintStart_toStartOf="@id/incomesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/incomesTextView"
+            tools:text="z 15 000,00 zł" />
+
+        <TextView
+            android:id="@+id/expensesLabelView"
+            style="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/expenses"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/expensesTextView"
+            style="@style/TextAppearance.MaterialComponents.Body1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/expensesLabelView"
+            app:layout_constraintStart_toStartOf="@id/expensesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/expensesLabelView"
+            tools:text="8 500,00 zł" />
+
+        <TextView
+            android:id="@+id/plannedExpensesView"
+            style="@style/TextAppearance.MaterialComponents.Caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/expensesLabelView"
+            app:layout_constraintStart_toStartOf="@id/expensesLabelView"
+            app:layout_constraintTop_toBottomOf="@id/expensesTextView"
+            tools:text="z 15 000,00 zł" />
+
+        <TextView
+            android:id="@+id/totalLabelView"
+            style="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/total"
+            app:layout_constraintHorizontal_bias="0.9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/totalTextView"
+            style="@style/TextAppearance.MaterialComponents.Subtitle1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@id/totalLabelView"
+            app:layout_constraintStart_toStartOf="@id/totalLabelView"
+            app:layout_constraintTop_toBottomOf="@id/totalLabelView"
+            tools:text="1 500,00 zł" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>
+
