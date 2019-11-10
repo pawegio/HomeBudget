@@ -67,7 +67,7 @@ dependencies {
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
-    testImplementation("com.jraska.livedata:testing-ktx:1.1.0")
+    testImplementation("com.jraska.livedata:testing-ktx:1.1.1")
     testImplementation("com.github.langara:SMokK:0.0.3")
     testImplementation("org.threeten:threetenbp:1.4.0")
 }
