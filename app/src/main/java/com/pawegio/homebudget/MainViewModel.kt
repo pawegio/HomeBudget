@@ -36,6 +36,7 @@ class MainViewModel(
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun onCreate(source: LifecycleOwner) {
         if (source is MainActivity) {
+            navigator.restart(R.navigation.app_navigation)
             launch { initLoginFlow() }
         }
     }
