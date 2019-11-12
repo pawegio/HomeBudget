@@ -10,6 +10,15 @@
         android:layout_height="match_parent"
         android:layout_marginBottom="16dp">
 
+        <View
+            android:id="@+id/headerView"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:background="@color/primaryColor"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <TextView
             android:id="@+id/monthHeaderView"
             style="@style/TextAppearance.MaterialComponents.Headline5"
@@ -17,6 +26,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:textColor="?attr/colorOnPrimary"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="Kwiecień" />
@@ -28,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_open_spreadsheet"
+            android:tint="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@id/monthHeaderView"
@@ -40,6 +51,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_next"
+            android:tint="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
             app:layout_constraintEnd_toStartOf="@id/openSpreadsheetButton"
             app:layout_constraintTop_toTopOf="@id/monthHeaderView"
@@ -52,6 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:src="@drawable/ic_prev"
+            android:tint="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
             app:layout_constraintEnd_toStartOf="@id/nextMonthButton"
             app:layout_constraintTop_toTopOf="@id/monthHeaderView"
