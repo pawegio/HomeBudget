@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=795548-->
+    <color name="primaryColor">#795548</color>
+    <color name="primaryLightColor">#a98274</color>
+    <color name="primaryDarkColor">#4b2c20</color>
+    <color name="primaryTextColor">#ffffff</color>
+    <color name="backgroundColor">#f5f5f5</color>
 
     <color name="progress">#388e3c</color>
     <color name="progressExceededPositive">#9c27b0</color>

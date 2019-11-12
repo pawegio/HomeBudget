@@ -2,7 +2,7 @@ package com.pawegio.homebudget.main
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.cardview.widget.CardView
+import android.widget.FrameLayout
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.currencyValue
@@ -13,7 +13,7 @@ class CategoryView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : CardView(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     var category: Category? = null
         set(value) {
