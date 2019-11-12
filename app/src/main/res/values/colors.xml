@@ -5,7 +5,8 @@
     <color name="primaryLightColor">#a98274</color>
     <color name="primaryDarkColor">#4b2c20</color>
     <color name="primaryTextColor">#ffffff</color>
-    <color name="backgroundColor">#f5f5f5</color>
+    <color name="surfaceColor">#F5F5F6</color>
+    <color name="backgroundColor">#E1E2E1</color>
 
     <color name="progress">#388e3c</color>
     <color name="progressExceededPositive">#9c27b0</color>
