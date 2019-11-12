@@ -2,7 +2,7 @@ package com.pawegio.homebudget.main
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.constraintlayout.widget.ConstraintLayout
+import android.widget.FrameLayout
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
@@ -14,7 +14,7 @@ class SubcategoryView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ConstraintLayout(context, attrs, defStyleAttr) {
+) : FrameLayout(context, attrs, defStyleAttr) {
 
     var subcategory: Subcategory? = null
         set(value) {
