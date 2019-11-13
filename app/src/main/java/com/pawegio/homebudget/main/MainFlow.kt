@@ -6,15 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.util.SpreadsheetLauncher
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 
+@ExperimentalCoroutinesApi
 suspend fun MainFlow(
     actions: Flow<MainAction>,
     monthType: MutableLiveData<MonthType>,
@@ -26,7 +27,7 @@ suspend fun MainFlow(
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     coroutineScope {
         launch {
-            actions.collect { action ->
+            actions.collectLatest { action ->
                 when (action) {
                     MainAction.OpenSpreadsheet -> spreadsheetLauncher.launch()
                     MainAction.SelectPrevMonth -> {
