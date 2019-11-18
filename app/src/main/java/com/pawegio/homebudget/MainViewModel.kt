@@ -7,14 +7,12 @@ import com.pawegio.homebudget.main.MainAction
 import com.pawegio.homebudget.main.MainFlow
 import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.util.SpreadsheetLauncher
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
-import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 
+@ExperimentalCoroutinesApi
 @FlowPreview
 class MainViewModel(
     private val api: HomeBudgetApi,
@@ -25,12 +23,14 @@ class MainViewModel(
 
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
     val monthType: LiveData<MonthType> get() = _monthType
+    val isLoading: LiveData<Boolean> get() = _isLoading
 
     val loginActions = Channel<LoginAction>()
     val mainActions = Channel<MainAction>()
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
     private val _monthType = MutableLiveData<MonthType>()
+    private val _isLoading = MutableLiveData<Boolean>()
 
     @Suppress("unused")
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
@@ -55,6 +55,7 @@ class MainViewModel(
             mainActions.consumeAsFlow(),
             _monthType,
             _monthlyBudget,
+            _isLoading,
             api,
             spreadsheetLauncher,
             clock

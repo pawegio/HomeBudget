@@ -24,6 +24,7 @@ internal class MainFlowTest : FlowSpec({
         val actions = Channel<MainAction>()
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
         val monthType = MutableLiveData<MonthType>()
+        val isLoading = MutableLiveData<Boolean>()
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
@@ -34,6 +35,7 @@ internal class MainFlowTest : FlowSpec({
                 actions.consumeAsFlow(),
                 monthType,
                 monthlyBudget,
+                isLoading,
                 api,
                 spreadsheetLauncher,
                 clock
@@ -66,6 +68,10 @@ internal class MainFlowTest : FlowSpec({
 
         "get monthly budget for current month" {
             api.getMonthlyBudget.invocations shouldBe listOf(Month.APRIL)
+        }
+
+        "show loader" {
+            isLoading.test().assertValue(true)
         }
 
         "on monthly budget loaded with success" - {

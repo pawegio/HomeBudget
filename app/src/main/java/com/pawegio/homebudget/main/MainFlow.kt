@@ -20,6 +20,7 @@ suspend fun MainFlow(
     actions: Flow<MainAction>,
     monthType: MutableLiveData<MonthType>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
+    isLoading: MutableLiveData<Boolean>,
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock
@@ -32,16 +33,16 @@ suspend fun MainFlow(
                     MainAction.OpenSpreadsheet -> spreadsheetLauncher.launch()
                     MainAction.SelectPrevMonth -> {
                         month -= 1
-                        loadMonth(month, monthType, monthlyBudget, api)
+                        loadMonth(month, monthType, monthlyBudget, isLoading, api)
                     }
                     MainAction.SelectNextMonth -> {
                         month += 1
-                        loadMonth(month, monthType, monthlyBudget, api)
+                        loadMonth(month, monthType, monthlyBudget, isLoading, api)
                     }
                 }
             }
         }
-        loadMonth(month, monthType, monthlyBudget, api)
+        loadMonth(month, monthType, monthlyBudget, isLoading, api)
     }
 }
 
@@ -49,8 +50,10 @@ private suspend fun loadMonth(
     month: Month,
     monthType: MutableLiveData<MonthType>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
+    isLoading: MutableLiveData<Boolean>,
     api: HomeBudgetApi
 ) {
+    isLoading.value = true
     monthType.value = when (month) {
         Month.JANUARY -> MonthType.FIRST
         Month.DECEMBER -> MonthType.LAST
