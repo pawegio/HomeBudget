@@ -3,6 +3,7 @@ package com.pawegio.homebudget.main
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
@@ -11,8 +12,12 @@ import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.main_fragment.*
 import kotlinx.android.synthetic.main.month_summary_surface.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
+@ExperimentalCoroutinesApi
+@FlowPreview
 class MainFragment : Fragment(R.layout.main_fragment) {
 
     private val viewModel by sharedViewModel<MainViewModel>()
@@ -21,6 +26,7 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.monthType.observe(this, Observer(::updateMonthType))
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
+        viewModel.isLoading.observe(this, Observer(::updateProgress))
         prevMonthButton.setOnClickListener {
             viewModel.mainActions.offer(MainAction.SelectPrevMonth)
         }
@@ -62,5 +68,15 @@ class MainFragment : Fragment(R.layout.main_fragment) {
                 })
             }
         }
+    }
+
+    private fun updateProgress(isLoading: Boolean?) {
+        if (isLoading == true) {
+            allIncomesLayout.removeAllViews()
+            allExpensesLayout.removeAllViews()
+        }
+        incomesHeaderView.isVisible = isLoading == false
+        expensesHeaderView.isVisible = isLoading == false
+        monthlyBudgetProgressBar.isVisible = isLoading == true
     }
 }

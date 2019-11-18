@@ -8,6 +8,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
         android:layout_marginBottom="16dp">
 
         <View
@@ -98,9 +99,10 @@
                 android:id="@+id/allIncomesLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:minHeight="48dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:animateLayoutChanges="true"
+                android:minHeight="48dp"
                 android:orientation="vertical" />
 
         </androidx.cardview.widget.CardView>
@@ -119,10 +121,21 @@
             android:id="@+id/allExpensesLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:animateLayoutChanges="true"
             android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/expensesHeaderView" />
+
+        <ProgressBar
+            android:id="@+id/monthlyBudgetProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="4dp"
+            app:layout_constraintBottom_toBottomOf="@id/allIncomesCardView"
+            app:layout_constraintEnd_toEndOf="@id/allIncomesCardView"
+            app:layout_constraintStart_toStartOf="@id/allIncomesCardView"
+            app:layout_constraintTop_toTopOf="@id/allIncomesCardView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
