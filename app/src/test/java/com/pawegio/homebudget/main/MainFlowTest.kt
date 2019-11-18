@@ -78,6 +78,10 @@ internal class MainFlowTest : FlowSpec({
             val loadedMonthlyBudget = createMonthlyBudget()
             api.getMonthlyBudget.resume(loadedMonthlyBudget)
 
+            "hide loader" {
+                isLoading.test().assertValue(false)
+            }
+
             "update monthly budget" {
                 monthlyBudget.test().assertValue(loadedMonthlyBudget)
             }

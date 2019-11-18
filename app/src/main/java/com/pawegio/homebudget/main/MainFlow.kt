@@ -60,6 +60,7 @@ private suspend fun loadMonth(
         else -> MonthType.MIDDLE
     }
     monthlyBudget.value = api.getMonthlyBudget(month)
+    isLoading.value = false
 }
 
 enum class MonthType {
