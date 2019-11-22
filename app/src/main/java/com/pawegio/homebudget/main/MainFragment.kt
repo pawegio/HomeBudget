@@ -27,6 +27,14 @@ class MainFragment : Fragment(R.layout.main_fragment) {
         viewModel.monthType.observe(this, Observer(::updateMonthType))
         viewModel.monthlyBudget.observe(this, Observer(::updateMonthlyBudget))
         viewModel.isLoading.observe(this, Observer(::updateProgress))
+        subscribeToActions()
+    }
+
+    private fun subscribeToActions() {
+        swipeRefreshLayout.setOnRefreshListener {
+            viewModel.mainActions.offer(MainAction.Refresh)
+            swipeRefreshLayout.isRefreshing = false
+        }
         prevMonthButton.setOnClickListener {
             viewModel.mainActions.offer(MainAction.SelectPrevMonth)
         }

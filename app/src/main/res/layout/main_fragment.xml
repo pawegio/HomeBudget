@@ -1,142 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:layout_marginBottom="16dp">
+        android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/headerView"
-            android:layout_width="0dp"
-            android:layout_height="100dp"
-            android:background="?attr/colorPrimary"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginBottom="16dp"
+            android:animateLayoutChanges="true">
 
-        <TextView
-            android:id="@+id/monthHeaderView"
-            style="@style/TextAppearance.MaterialComponents.Headline5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:textColor="?attr/colorOnPrimary"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="Kwiecień" />
+            <View
+                android:id="@+id/headerView"
+                android:layout_width="0dp"
+                android:layout_height="100dp"
+                android:background="?attr/colorPrimary"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/openSpreadsheetButton"
-            style="@style/Widget.AppCompat.ActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_open_spreadsheet"
-            android:tint="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/monthHeaderView"
-            tools:ignore="ContentDescription" />
+            <TextView
+                android:id="@+id/monthHeaderView"
+                style="@style/TextAppearance.MaterialComponents.Headline5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:textColor="?attr/colorOnPrimary"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Kwiecień" />
 
-        <ImageButton
-            android:id="@+id/nextMonthButton"
-            style="@style/Widget.AppCompat.ActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_next"
-            android:tint="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
-            app:layout_constraintEnd_toStartOf="@id/openSpreadsheetButton"
-            app:layout_constraintTop_toTopOf="@id/monthHeaderView"
-            tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/openSpreadsheetButton"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_open_spreadsheet"
+                android:tint="?attr/colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="@id/monthHeaderView"
+                tools:ignore="ContentDescription" />
 
-        <ImageButton
-            android:id="@+id/prevMonthButton"
-            style="@style/Widget.AppCompat.ActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:src="@drawable/ic_prev"
-            android:tint="?attr/colorOnPrimary"
-            app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
-            app:layout_constraintEnd_toStartOf="@id/nextMonthButton"
-            app:layout_constraintTop_toTopOf="@id/monthHeaderView"
-            tools:ignore="ContentDescription" />
+            <ImageButton
+                android:id="@+id/nextMonthButton"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_next"
+                android:tint="?attr/colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
+                app:layout_constraintEnd_toStartOf="@id/openSpreadsheetButton"
+                app:layout_constraintTop_toTopOf="@id/monthHeaderView"
+                tools:ignore="ContentDescription" />
 
-        <include layout="@layout/month_summary_surface" />
+            <ImageButton
+                android:id="@+id/prevMonthButton"
+                style="@style/Widget.AppCompat.ActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:src="@drawable/ic_prev"
+                android:tint="?attr/colorOnPrimary"
+                app:layout_constraintBottom_toBottomOf="@id/monthHeaderView"
+                app:layout_constraintEnd_toStartOf="@id/nextMonthButton"
+                app:layout_constraintTop_toTopOf="@id/monthHeaderView"
+                tools:ignore="ContentDescription" />
 
-        <TextView
-            android:id="@+id/incomesHeaderView"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/incomes"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/monthSummarySurface" />
+            <include layout="@layout/month_summary_surface" />
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/allIncomesCardView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/incomesHeaderView">
+            <TextView
+                android:id="@+id/incomesHeaderView"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/incomes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/monthSummarySurface" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/allIncomesCardView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/incomesHeaderView">
+
+                <LinearLayout
+                    android:id="@+id/allIncomesLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:animateLayoutChanges="true"
+                    android:minHeight="48dp"
+                    android:orientation="vertical" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/expensesHeaderView"
+                style="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:text="@string/expenses"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/allIncomesCardView" />
 
             <LinearLayout
-                android:id="@+id/allIncomesLayout"
-                android:layout_width="match_parent"
+                android:id="@+id/allExpensesLayout"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:animateLayoutChanges="true"
-                android:minHeight="48dp"
-                android:orientation="vertical" />
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/expensesHeaderView" />
 
-        </androidx.cardview.widget.CardView>
+            <ProgressBar
+                android:id="@+id/monthlyBudgetProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="4dp"
+                app:layout_constraintBottom_toBottomOf="@id/allIncomesCardView"
+                app:layout_constraintEnd_toEndOf="@id/allIncomesCardView"
+                app:layout_constraintStart_toStartOf="@id/allIncomesCardView"
+                app:layout_constraintTop_toTopOf="@id/allIncomesCardView" />
 
-        <TextView
-            android:id="@+id/expensesHeaderView"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:text="@string/expenses"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/allIncomesCardView" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <LinearLayout
-            android:id="@+id/allExpensesLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:animateLayoutChanges="true"
-            android:orientation="vertical"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/expensesHeaderView" />
-
-        <ProgressBar
-            android:id="@+id/monthlyBudgetProgressBar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="4dp"
-            app:layout_constraintBottom_toBottomOf="@id/allIncomesCardView"
-            app:layout_constraintEnd_toEndOf="@id/allIncomesCardView"
-            app:layout_constraintStart_toStartOf="@id/allIncomesCardView"
-            app:layout_constraintTop_toTopOf="@id/allIncomesCardView" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</androidx.core.widget.NestedScrollView>
+    </androidx.core.widget.NestedScrollView>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
