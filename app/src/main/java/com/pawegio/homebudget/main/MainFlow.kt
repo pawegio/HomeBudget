@@ -5,6 +5,7 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
+import com.pawegio.homebudget.main.MainAction.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.coroutineScope
@@ -30,12 +31,13 @@ suspend fun MainFlow(
         launch {
             actions.collectLatest { action ->
                 when (action) {
-                    MainAction.OpenSpreadsheet -> spreadsheetLauncher.launch()
-                    MainAction.SelectPrevMonth -> {
+                    Refresh -> loadMonth(month, monthType, monthlyBudget, isLoading, api)
+                    OpenSpreadsheet -> spreadsheetLauncher.launch()
+                    SelectPrevMonth -> {
                         month -= 1
                         loadMonth(month, monthType, monthlyBudget, isLoading, api)
                     }
-                    MainAction.SelectNextMonth -> {
+                    SelectNextMonth -> {
                         month += 1
                         loadMonth(month, monthType, monthlyBudget, isLoading, api)
                     }
@@ -68,6 +70,7 @@ enum class MonthType {
 }
 
 sealed class MainAction {
+    object Refresh : MainAction()
     object OpenSpreadsheet : MainAction()
     object SelectPrevMonth : MainAction()
     object SelectNextMonth : MainAction()

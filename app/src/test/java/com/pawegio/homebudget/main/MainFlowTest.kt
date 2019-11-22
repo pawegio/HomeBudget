@@ -2,7 +2,8 @@ package com.pawegio.homebudget.main
 
 import androidx.lifecycle.MutableLiveData
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.*
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.util.MockHomeBudgetApi
@@ -84,6 +85,17 @@ internal class MainFlowTest : FlowSpec({
 
             "update monthly budget" {
                 monthlyBudget.test().assertValue(loadedMonthlyBudget)
+            }
+
+            "on refresh" - {
+                actions.offer(MainAction.Refresh)
+
+                "get refreshed monthly budget for current month" {
+                    api.getMonthlyBudget.invocations.run {
+                        count() shouldBe 2
+                        last() shouldBe Month.APRIL
+                    }
+                }
             }
 
             "on open spreadsheet" - {
