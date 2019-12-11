@@ -13,7 +13,7 @@ import org.threeten.bp.Clock
 @ExperimentalCoroutinesApi
 @FlowPreview
 val appModule = module {
-    single<HomeBudgetRepository> { HomeBudgetRepositoryImpl }
+    single<HomeBudgetRepository> { HomeBudgetRepositoryImpl(androidContext()) }
     single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get()) }
     single<Clock> { Clock.systemDefaultZone() }
     single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }
