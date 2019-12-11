@@ -12,17 +12,16 @@ import kotlinx.coroutines.flow.first
 suspend fun PickerFlow(
     actions: Flow<PickerAction>,
     repository: HomeBudgetRepository,
+    parseSpreadsheetId: (String) -> String,
     initMainFlow: suspend () -> Unit,
     navigator: Navigator
 ) {
-    repository.spreadsheetId = actions
-        .filterIsInstance<PickerAction.PickDocument>()
-        .first()
-        .spreadsheetId
+    val url = actions.filterIsInstance<PickerAction.PickDocument>().first().url
+    repository.spreadsheetId = parseSpreadsheetId(url)
     navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
     initMainFlow()
 }
 
 sealed class PickerAction {
-    data class PickDocument(val spreadsheetId: String) : PickerAction()
+    data class PickDocument(val url: String) : PickerAction()
 }

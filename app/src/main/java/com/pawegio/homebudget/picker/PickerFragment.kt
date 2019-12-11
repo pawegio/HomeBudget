@@ -19,10 +19,8 @@ class PickerFragment : Fragment(R.layout.picker_fragment) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         connectSpreadsheetButton.setOnClickListener {
-            viewModel.pickerActions.offer(PickerAction.PickDocument(getSpreadsheetId()))
+            val url = spreadsheetUrlEditText.editableText.toString()
+            viewModel.pickerActions.offer(PickerAction.PickDocument(url))
         }
     }
-
-    private fun getSpreadsheetId(): String =
-        parseSpreadsheetId(spreadsheetUrlEditText.editableText.toString())
 }

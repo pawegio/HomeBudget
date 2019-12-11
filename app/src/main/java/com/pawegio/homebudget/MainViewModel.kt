@@ -8,6 +8,7 @@ import com.pawegio.homebudget.main.MainFlow
 import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerFlow
+import com.pawegio.homebudget.picker.parseSpreadsheetId
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -60,6 +61,7 @@ class MainViewModel(
         PickerFlow(
             pickerActions.consumeAsFlow(),
             repository,
+            ::parseSpreadsheetId,
             ::initMainFlow,
             navigator
         )
