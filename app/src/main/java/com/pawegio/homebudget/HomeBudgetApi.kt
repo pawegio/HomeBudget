@@ -17,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
+import java.io.IOException
 import java.math.BigDecimal
 
 interface HomeBudgetApi {
@@ -87,26 +88,30 @@ class HomeBudgetApiImpl(
             "B205" to "D215"
         )
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
-        val response = sheetsService.spreadsheets().values()
-            .batchGet(spreadsheetId)
-            .setValueRenderOption("UNFORMATTED_VALUE")
-            .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
-            .execute()
-        val ranges = response.valueRanges
-        val planned = ranges[0]["values"] as List<List<BigDecimal>>
-        val actual = ranges[1]["values"] as List<List<BigDecimal>>
-        val incomes = ranges[2]["values"] as List<List<Any>>
-        val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
-        val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
-                expenses.map { createCategory(it, Category.Type.EXPENSES) }
-        MonthlyBudget(
-            month = monthName,
-            plannedIncomes = planned[0][0],
-            plannedExpenses = planned[1][0],
-            actualIncomes = actual[0][0],
-            actualExpenses = actual[1][0],
-            categories = categories
-        ).also(::println)
+        try {
+            val response = sheetsService.spreadsheets().values()
+                .batchGet(spreadsheetId)
+                .setValueRenderOption("UNFORMATTED_VALUE")
+                .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
+                .execute()
+            val ranges = response.valueRanges
+            val planned = ranges[0]["values"] as List<List<BigDecimal>>
+            val actual = ranges[1]["values"] as List<List<BigDecimal>>
+            val incomes = ranges[2]["values"] as List<List<Any>>
+            val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
+            val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
+                    expenses.map { createCategory(it, Category.Type.EXPENSES) }
+            MonthlyBudget(
+                month = monthName,
+                plannedIncomes = planned[0][0],
+                plannedExpenses = planned[1][0],
+                actualIncomes = actual[0][0],
+                actualExpenses = actual[1][0],
+                categories = categories
+            ).also(::println)
+        } catch (e: IOException) {
+            throw HomeBudgetApiException(e)
+        }
     }
 
     private fun createCategory(data: List<List<Any>>, type: Category.Type) =
