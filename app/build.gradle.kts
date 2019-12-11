@@ -19,11 +19,6 @@ android {
         if (project.rootProject.file("local.properties").exists()) {
             localProperties.load(project.rootProject.file("local.properties").inputStream())
         }
-        buildConfigField(
-            "String",
-            "SPREADSHEET_ID",
-            localProperties.getOrDefault("spreadsheetId", "\"\"") as String
-        )
     }
     buildTypes {
         getByName("release") {

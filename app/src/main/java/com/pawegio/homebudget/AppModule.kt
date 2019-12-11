@@ -14,9 +14,9 @@ import org.threeten.bp.Clock
 @FlowPreview
 val appModule = module {
     single<HomeBudgetRepository> { HomeBudgetRepositoryImpl }
-    single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext()) }
+    single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get()) }
     single<Clock> { Clock.systemDefaultZone() }
-    single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext()) }
+    single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }
     single<Navigator> { NavigatorImpl(androidApplication(), ::appNavController) }
     viewModel<MainViewModel>()
 }

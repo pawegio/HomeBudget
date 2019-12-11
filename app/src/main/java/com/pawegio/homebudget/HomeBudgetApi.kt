@@ -25,7 +25,10 @@ interface HomeBudgetApi {
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
 }
 
-class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
+class HomeBudgetApiImpl(
+    private val context: Context,
+    private val repository: HomeBudgetRepository
+) : HomeBudgetApi {
 
     override val isSignedIn: Boolean get() = account != null
 
@@ -50,6 +53,8 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
             credential
         ).setApplicationName(USER_AGENT).build()
     }
+
+    private val spreadsheetId get() = repository.spreadsheetId
 
     override suspend fun signIn() {
         if (!isSignedIn) {
@@ -83,7 +88,7 @@ class HomeBudgetApiImpl(private val context: Context) : HomeBudgetApi {
         )
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
         val response = sheetsService.spreadsheets().values()
-            .batchGet(BuildConfig.SPREADSHEET_ID)
+            .batchGet(spreadsheetId)
             .setValueRenderOption("UNFORMATTED_VALUE")
             .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
             .execute()
