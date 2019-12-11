@@ -59,6 +59,7 @@ class MainViewModel(
     private suspend fun initPickerFlow() {
         PickerFlow(
             pickerActions.consumeAsFlow(),
+            repository,
             ::initMainFlow,
             navigator
         )
