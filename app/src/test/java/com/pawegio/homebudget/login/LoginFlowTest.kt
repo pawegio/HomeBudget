@@ -1,10 +1,8 @@
 package com.pawegio.homebudget.login
 
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.never
-import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.FlowSpec
+import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.MockHomeBudgetApi
@@ -19,7 +17,9 @@ import kotlin.coroutines.resume
 internal class LoginFlowTest : FlowSpec({
     "On login flow" - {
         val actions = Channel<LoginAction>()
+        val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
+        val initPickerFlow = mock<SuspendFunction<Unit>>()
         val initMainFlow = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
@@ -27,7 +27,9 @@ internal class LoginFlowTest : FlowSpec({
             @Suppress("EXPERIMENTAL_API_USAGE")
             LoginFlow(
                 actions.consumeAsFlow(),
+                repository,
                 api,
+                initPickerFlow::invokeSuspend,
                 initMainFlow::invokeSuspend,
                 navigator
             )
@@ -60,12 +62,12 @@ internal class LoginFlowTest : FlowSpec({
                     api.isSignInResult = true
                     api.signIn.resume(Unit)
 
-                    "navigate to main screen" {
-                        verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+                    "navigate to picker screen" {
+                        verify(navigator).navigate(R.id.action_loginFragment_to_pickerFragment)
                     }
 
-                    "init main flow" {
-                        verifyBlocking(initMainFlow) { invokeSuspend() }
+                    "init picker flow" {
+                        verifyBlocking(initPickerFlow) { invokeSuspend() }
                     }
                 }
 
@@ -85,15 +87,33 @@ internal class LoginFlowTest : FlowSpec({
         }
 
         "on user signed in" - {
-            api.isSignInResult = true
-            flow.start()
 
-            "navigate to main screen" {
-                verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+            "on spreadsheet not picked" - {
+                whenever(repository.spreadsheetId) doReturn null
+                api.isSignInResult = true
+                flow.start()
+
+                "navigate to picker screen" {
+                    verify(navigator).navigate(R.id.action_loginFragment_to_pickerFragment)
+                }
+
+                "init picker flow" {
+                    verifyBlocking(initPickerFlow) { invokeSuspend() }
+                }
             }
 
-            "init main flow" {
-                verifyBlocking(initMainFlow) { invokeSuspend() }
+            "on spreadsheet picked" - {
+                whenever(repository.spreadsheetId) doReturn "id"
+                api.isSignInResult = true
+                flow.start()
+
+                "navigate to main screen" {
+                    verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+                }
+
+                "init main flow" {
+                    verifyBlocking(initMainFlow) { invokeSuspend() }
+                }
             }
         }
     }

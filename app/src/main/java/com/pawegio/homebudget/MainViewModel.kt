@@ -6,6 +6,8 @@ import com.pawegio.homebudget.login.LoginFlow
 import com.pawegio.homebudget.main.MainAction
 import com.pawegio.homebudget.main.MainFlow
 import com.pawegio.homebudget.main.MonthType
+import com.pawegio.homebudget.picker.PickerAction
+import com.pawegio.homebudget.picker.PickerFlow
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.Channel
@@ -15,6 +17,7 @@ import org.threeten.bp.Clock
 @ExperimentalCoroutinesApi
 @FlowPreview
 class MainViewModel(
+    private val repository: HomeBudgetRepository,
     private val api: HomeBudgetApi,
     private val spreadsheetLauncher: SpreadsheetLauncher,
     private val clock: Clock,
@@ -26,6 +29,7 @@ class MainViewModel(
     val isLoading: LiveData<Boolean> get() = _isLoading
 
     val loginActions = Channel<LoginAction>()
+    val pickerActions = Channel<PickerAction>()
     val mainActions = Channel<MainAction>()
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
@@ -44,7 +48,17 @@ class MainViewModel(
     private suspend fun initLoginFlow() {
         LoginFlow(
             loginActions.consumeAsFlow(),
+            repository,
             api,
+            ::initPickerFlow,
+            ::initMainFlow,
+            navigator
+        )
+    }
+
+    private suspend fun initPickerFlow() {
+        PickerFlow(
+            pickerActions.consumeAsFlow(),
             ::initMainFlow,
             navigator
         )

@@ -11,7 +11,19 @@
         android:label="login_fragment"
         tools:layout="@layout/login_fragment">
         <action
+            android:id="@+id/action_loginFragment_to_pickerFragment"
+            app:destination="@id/pickerFragment" />
+        <action
             android:id="@+id/action_loginFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/pickerFragment"
+        android:name="com.pawegio.homebudget.picker.PickerFragment"
+        android:label="PickerFragment" >
+        <action
+            android:id="@+id/action_pickerFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
 
