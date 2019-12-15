@@ -75,7 +75,9 @@ class MainViewModel(
             _isLoading,
             api,
             spreadsheetLauncher,
-            clock
+            clock,
+            ::initPickerFlow,
+            navigator
         )
     }
 }

@@ -135,4 +135,4 @@ class HomeBudgetApiImpl(
     }
 }
 
-class HomeBudgetApiException(override val cause: Throwable?) : RuntimeException(cause)
+class HomeBudgetApiException(override val cause: Throwable? = null) : RuntimeException(cause)

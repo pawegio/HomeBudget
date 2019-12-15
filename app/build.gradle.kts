@@ -61,6 +61,7 @@ dependencies {
     implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
+    implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")

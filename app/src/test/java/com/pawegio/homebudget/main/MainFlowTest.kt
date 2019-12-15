@@ -4,10 +4,11 @@ import androidx.lifecycle.MutableLiveData
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.pawegio.homebudget.FlowSpec
-import com.pawegio.homebudget.MonthlyBudget
+import com.nhaarman.mockitokotlin2.verifyBlocking
+import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.SpreadsheetLauncher
+import com.pawegio.homebudget.util.SuspendFunction
 import com.pawegio.homebudget.util.createMonthlyBudget
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
@@ -19,6 +20,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 internal class MainFlowTest : FlowSpec({
     "On main flow" - {
@@ -29,6 +31,8 @@ internal class MainFlowTest : FlowSpec({
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
+        val initPickerFlow = mock<SuspendFunction<Unit>>()
+        val navigator = mock<Navigator>()
 
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
@@ -39,7 +43,9 @@ internal class MainFlowTest : FlowSpec({
                 isLoading,
                 api,
                 spreadsheetLauncher,
-                clock
+                clock,
+                initPickerFlow::invokeSuspend,
+                navigator
             )
         }
 
@@ -119,6 +125,41 @@ internal class MainFlowTest : FlowSpec({
 
                 "get monthly budget for next month" {
                     api.getMonthlyBudget.invocations.last() shouldBe Month.MAY
+                }
+            }
+        }
+
+        "on monthly budget load error" - {
+            api.getMonthlyBudget.resumeWithException(HomeBudgetApiException())
+
+            "hide loader" {
+                isLoading.test().assertValue(false)
+            }
+
+            "show error dialog" {
+                verify(navigator).navigate(R.id.action_mainFragment_to_loadErrorFragment)
+            }
+
+            "on try again" - {
+                actions.offer(MainAction.TryAgain)
+
+                "get refreshed monthly budget for current month" {
+                    api.getMonthlyBudget.invocations.run {
+                        count() shouldBe 2
+                        last() shouldBe Month.APRIL
+                    }
+                }
+            }
+
+            "on pick document again" - {
+                actions.offer(MainAction.PickDocumentAgain)
+
+                "navigate to picker screen" {
+                    verify(navigator).navigate(R.id.action_mainFragment_to_pickerFragment)
+                }
+
+                "init picker flow" {
+                    verifyBlocking(initPickerFlow) { invokeSuspend() }
                 }
             }
         }

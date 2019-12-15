@@ -31,6 +31,17 @@
         android:id="@+id/mainFragment"
         android:name="com.pawegio.homebudget.main.MainFragment"
         android:label="main_fragment"
-        tools:layout="@layout/main_fragment" />
+        tools:layout="@layout/main_fragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_loadErrorFragment"
+            app:destination="@id/loadErrorFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_pickerFragment"
+            app:destination="@id/pickerFragment" />
+    </fragment>
+    <dialog
+        android:id="@+id/loadErrorFragment"
+        android:name="com.pawegio.homebudget.main.LoadErrorFragment"
+        android:label="LoadErrorFragment" />
 
 </navigation>
