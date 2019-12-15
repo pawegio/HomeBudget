@@ -13,6 +13,7 @@
     <string name="percent">%d%%</string>
     <string name="load_error_title">Wystąpił błąd</string>
     <string name="load_error_message">Nie udało się pobrać danych budżetowych z wybranego arkusza.</string>
-    <string name="load_error_positive">Ponów próbę</string>
-    <string name="load_error_negative">Zmień arkusz</string>
+    <string name="try_again">Ponów próbę</string>
+    <string name="pick_document">Zmień arkusz</string>
+    <string name="sign_out">Wyloguj się</string>
 </resources>

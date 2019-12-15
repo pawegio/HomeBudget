@@ -6,26 +6,30 @@ import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
+import io.reactivex.Observable
+import kotlinx.coroutines.rx2.collect
 
-@ExperimentalCoroutinesApi
 suspend fun LoginFlow(
-    actions: Flow<LoginAction>,
+    actions: Observable<LoginAction>,
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
     initPickerFlow: suspend () -> Unit,
     initMainFlow: suspend () -> Unit,
     navigator: Navigator
-) = try {
-    cancelIfSignedIn(api)
+) {
+    if (api.isSignedIn) proceed(repository, navigator, initMainFlow, initPickerFlow)
     actions.collect {
         api.signIn()
-        cancelIfSignedIn(api)
+        if (api.isSignedIn) proceed(repository, navigator, initMainFlow, initPickerFlow)
     }
-} finally {
+}
+
+private suspend fun proceed(
+    repository: HomeBudgetRepository,
+    navigator: Navigator,
+    initMainFlow: suspend () -> Unit,
+    initPickerFlow: suspend () -> Unit
+) {
     if (repository.spreadsheetId != null) {
         navigator.navigate(R.id.action_loginFragment_to_mainFragment)
         initMainFlow()
@@ -33,10 +37,6 @@ suspend fun LoginFlow(
         navigator.navigate(R.id.action_loginFragment_to_pickerFragment)
         initPickerFlow()
     }
-}
-
-private fun cancelIfSignedIn(api: HomeBudgetApi) {
-    if (api.isSignedIn) throw CancellationException()
 }
 
 sealed class LoginAction {

@@ -1,7 +1,9 @@
 package com.pawegio.homebudget.main
 
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -16,8 +18,6 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class MainFragment : Fragment(R.layout.main_fragment) {
 
     private val viewModel by sharedViewModel<MainViewModel>()
@@ -32,18 +32,33 @@ class MainFragment : Fragment(R.layout.main_fragment) {
 
     private fun subscribeToActions() {
         swipeRefreshLayout.setOnRefreshListener {
-            viewModel.mainActions.offer(MainAction.Refresh)
+            viewModel.mainActions.accept(MainAction.Refresh)
             swipeRefreshLayout.isRefreshing = false
         }
         prevMonthButton.setOnClickListener {
-            viewModel.mainActions.offer(MainAction.SelectPrevMonth)
+            viewModel.mainActions.accept(MainAction.SelectPrevMonth)
         }
         nextMonthButton.setOnClickListener {
-            viewModel.mainActions.offer(MainAction.SelectNextMonth)
+            viewModel.mainActions.accept(MainAction.SelectNextMonth)
         }
         openSpreadsheetButton.setOnClickListener {
-            viewModel.mainActions.offer(MainAction.OpenSpreadsheet)
+            viewModel.mainActions.accept(MainAction.OpenSpreadsheet)
         }
+        moreButton.setOnClickListener { openPopupMenu() }
+    }
+
+    private fun openPopupMenu() {
+        PopupMenu(requireContext(), moreButton).apply {
+            menuInflater.inflate(R.menu.main_popup_menu, menu)
+            setOnMenuItemClickListener { item: MenuItem ->
+                when (item.itemId) {
+                    R.id.action_pick_document -> MainAction.PickDocumentAgain
+                    R.id.action_sign_out -> MainAction.SignOut
+                    else -> throw IllegalArgumentException()
+                }.let(viewModel.mainActions::accept)
+                true
+            }
+        }.show()
     }
 
     private fun updateMonthType(monthType: MonthType?) {

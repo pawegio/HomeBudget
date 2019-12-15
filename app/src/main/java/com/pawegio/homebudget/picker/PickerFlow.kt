@@ -5,21 +5,22 @@ package com.pawegio.homebudget.picker
 import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.first
+import io.reactivex.Observable
+import io.reactivex.rxkotlin.ofType
+import kotlinx.coroutines.rx2.awaitFirst
 
 suspend fun PickerFlow(
-    actions: Flow<PickerAction>,
+    actions: Observable<PickerAction>,
     repository: HomeBudgetRepository,
     parseSpreadsheetId: (String) -> String,
     initMainFlow: suspend () -> Unit,
     navigator: Navigator
 ) {
-    val url = actions.filterIsInstance<PickerAction.PickDocument>().first().url
+    val url = actions.ofType<PickerAction.PickDocument>().awaitFirst().url
     repository.spreadsheetId = parseSpreadsheetId(url)
     navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
     initMainFlow()
+    navigator.popBackStack()
 }
 
 sealed class PickerAction {

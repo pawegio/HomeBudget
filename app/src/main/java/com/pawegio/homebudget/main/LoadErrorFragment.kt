@@ -10,8 +10,6 @@ import kotlinx.coroutines.FlowPreview
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import splitties.alertdialog.appcompat.*
 
-@FlowPreview
-@ExperimentalCoroutinesApi
 class LoadErrorFragment : DialogFragment() {
 
     private val viewModel by sharedViewModel<MainViewModel>()
@@ -20,13 +18,13 @@ class LoadErrorFragment : DialogFragment() {
         requireContext().alertDialog {
             titleResource = R.string.load_error_title
             messageResource = R.string.load_error_message
-            positiveButton(R.string.load_error_positive) {
+            positiveButton(R.string.try_again) {
                 dismissAllowingStateLoss()
-                viewModel.mainActions.offer(MainAction.TryAgain)
+                viewModel.mainActions.accept(MainAction.TryAgain)
             }
-            negativeButton(R.string.load_error_negative) {
+            negativeButton(R.string.pick_document) {
                 dismissAllowingStateLoss()
-                viewModel.mainActions.offer(MainAction.PickDocumentAgain)
+                viewModel.mainActions.accept(MainAction.PickDocumentAgain)
             }
         }
 }

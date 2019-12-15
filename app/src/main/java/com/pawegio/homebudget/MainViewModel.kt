@@ -1,6 +1,7 @@
 package com.pawegio.homebudget
 
 import androidx.lifecycle.*
+import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.login.LoginAction
 import com.pawegio.homebudget.login.LoginFlow
 import com.pawegio.homebudget.main.MainAction
@@ -15,8 +16,6 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.consumeAsFlow
 import org.threeten.bp.Clock
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class MainViewModel(
     private val repository: HomeBudgetRepository,
     private val api: HomeBudgetApi,
@@ -29,9 +28,9 @@ class MainViewModel(
     val monthType: LiveData<MonthType> get() = _monthType
     val isLoading: LiveData<Boolean> get() = _isLoading
 
-    val loginActions = Channel<LoginAction>()
-    val pickerActions = Channel<PickerAction>()
-    val mainActions = Channel<MainAction>()
+    val loginActions = PublishRelay.create<LoginAction>()
+    val pickerActions = PublishRelay.create<PickerAction>()
+    val mainActions = PublishRelay.create<MainAction>()
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
     private val _monthType = MutableLiveData<MonthType>()
@@ -48,7 +47,7 @@ class MainViewModel(
 
     private suspend fun initLoginFlow() {
         LoginFlow(
-            loginActions.consumeAsFlow(),
+            loginActions,
             repository,
             api,
             ::initPickerFlow,
@@ -59,7 +58,7 @@ class MainViewModel(
 
     private suspend fun initPickerFlow() {
         PickerFlow(
-            pickerActions.consumeAsFlow(),
+            pickerActions,
             repository,
             ::parseSpreadsheetId,
             ::initMainFlow,
@@ -69,10 +68,11 @@ class MainViewModel(
 
     private suspend fun initMainFlow() {
         MainFlow(
-            mainActions.consumeAsFlow(),
+            mainActions,
             _monthType,
             _monthlyBudget,
             _isLoading,
+            repository,
             api,
             spreadsheetLauncher,
             clock,

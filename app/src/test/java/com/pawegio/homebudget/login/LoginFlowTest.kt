@@ -1,5 +1,6 @@
 package com.pawegio.homebudget.login
 
+import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.HomeBudgetRepository
@@ -16,7 +17,7 @@ import kotlin.coroutines.resume
 
 internal class LoginFlowTest : FlowSpec({
     "On login flow" - {
-        val actions = Channel<LoginAction>()
+        val actions = PublishRelay.create<LoginAction>()
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
         val initPickerFlow = mock<SuspendFunction<Unit>>()
@@ -26,7 +27,7 @@ internal class LoginFlowTest : FlowSpec({
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
             LoginFlow(
-                actions.consumeAsFlow(),
+                actions,
                 repository,
                 api,
                 initPickerFlow::invokeSuspend,
@@ -52,7 +53,7 @@ internal class LoginFlowTest : FlowSpec({
             }
 
             "on select sign in" - {
-                actions.offer(LoginAction.SelectSignIn)
+                actions.accept(LoginAction.SelectSignIn)
 
                 "sign in" {
                     api.signIn.invocations shouldBe 1

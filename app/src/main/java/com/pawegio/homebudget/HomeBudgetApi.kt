@@ -23,6 +23,7 @@ import java.math.BigDecimal
 interface HomeBudgetApi {
     val isSignedIn: Boolean
     suspend fun signIn()
+    suspend fun signOut()
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
 }
 
@@ -65,6 +66,14 @@ class HomeBudgetApiImpl(
             } catch (e: ApiException) {
                 throw HomeBudgetApiException(e)
             }
+        }
+    }
+
+    override suspend fun signOut() {
+        try {
+            signInClient.signOut().await()
+        } catch (e: ApiException) {
+            throw HomeBudgetApiException(e)
         }
     }
 

@@ -6,12 +6,8 @@ import androidx.fragment.app.Fragment
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
 import kotlinx.android.synthetic.main.picker_fragment.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 class PickerFragment : Fragment(R.layout.picker_fragment) {
 
     private val viewModel by sharedViewModel<MainViewModel>()
@@ -20,7 +16,7 @@ class PickerFragment : Fragment(R.layout.picker_fragment) {
         super.onViewCreated(view, savedInstanceState)
         connectSpreadsheetButton.setOnClickListener {
             val url = spreadsheetUrlEditText.editableText.toString()
-            viewModel.pickerActions.offer(PickerAction.PickDocument(url))
+            viewModel.pickerActions.accept(PickerAction.PickDocument(url))
         }
     }
 }

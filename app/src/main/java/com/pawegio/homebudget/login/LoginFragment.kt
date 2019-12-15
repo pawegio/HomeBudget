@@ -14,6 +14,6 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        signInButton.setOnClickListener { viewModel.loginActions.offer(LoginAction.SelectSignIn) }
+        signInButton.setOnClickListener { viewModel.loginActions.accept(LoginAction.SelectSignIn) }
     }
 }

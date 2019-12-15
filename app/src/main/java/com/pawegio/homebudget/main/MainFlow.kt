@@ -6,22 +6,19 @@ import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.MainAction.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.ensureActive
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import io.reactivex.Observable
+import kotlinx.coroutines.*
+import kotlinx.coroutines.rx2.collect
 import org.threeten.bp.Clock
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 
-@ExperimentalCoroutinesApi
 suspend fun MainFlow(
-    actions: Flow<MainAction>,
+    actions: Observable<MainAction>,
     monthType: MutableLiveData<MonthType>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
     isLoading: MutableLiveData<Boolean>,
+    repository: HomeBudgetRepository,
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock,
@@ -31,7 +28,7 @@ suspend fun MainFlow(
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     coroutineScope {
         launch {
-            actions.collectLatest { action ->
+            actions.collect { action ->
                 when (action) {
                     Refresh, TryAgain -> {
                         loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
@@ -46,8 +43,14 @@ suspend fun MainFlow(
                         loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                     }
                     PickDocumentAgain -> {
+                        repository.spreadsheetId = null
                         navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
                         initPickerFlow()
+                    }
+                    SignOut -> {
+                        repository.spreadsheetId = null
+                        api.signOut()
+                        throw CancellationException()
                     }
                 }
             }
@@ -55,6 +58,7 @@ suspend fun MainFlow(
         ensureActive()
         loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
     }
+    navigator.popBackStack()
 }
 
 private suspend fun loadMonth(
@@ -91,4 +95,5 @@ sealed class MainAction {
     object SelectNextMonth : MainAction()
     object TryAgain : MainAction()
     object PickDocumentAgain : MainAction()
+    object SignOut : MainAction()
 }

@@ -1,6 +1,7 @@
 package com.pawegio.homebudget.main
 
 import androidx.lifecycle.MutableLiveData
+import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
@@ -24,10 +25,11 @@ import kotlin.coroutines.resumeWithException
 
 internal class MainFlowTest : FlowSpec({
     "On main flow" - {
-        val actions = Channel<MainAction>()
+        val actions = PublishRelay.create<MainAction>()
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
         val monthType = MutableLiveData<MonthType>()
         val isLoading = MutableLiveData<Boolean>()
+        val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
@@ -37,10 +39,11 @@ internal class MainFlowTest : FlowSpec({
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
             MainFlow(
-                actions.consumeAsFlow(),
+                actions,
                 monthType,
                 monthlyBudget,
                 isLoading,
+                repository,
                 api,
                 spreadsheetLauncher,
                 clock,
@@ -94,7 +97,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on refresh" - {
-                actions.offer(MainAction.Refresh)
+                actions.accept(MainAction.Refresh)
 
                 "get refreshed monthly budget for current month" {
                     api.getMonthlyBudget.invocations.run {
@@ -105,7 +108,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on open spreadsheet" - {
-                actions.offer(MainAction.OpenSpreadsheet)
+                actions.accept(MainAction.OpenSpreadsheet)
 
                 "launch spreadsheet" {
                     verify(spreadsheetLauncher).launch()
@@ -113,7 +116,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on select prev month" - {
-                actions.offer(MainAction.SelectPrevMonth)
+                actions.accept(MainAction.SelectPrevMonth)
 
                 "get monthly budget for previous month" {
                     api.getMonthlyBudget.invocations.last() shouldBe Month.MARCH
@@ -121,10 +124,30 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on select next month" - {
-                actions.offer(MainAction.SelectNextMonth)
+                actions.accept(MainAction.SelectNextMonth)
 
                 "get monthly budget for next month" {
                     api.getMonthlyBudget.invocations.last() shouldBe Month.MAY
+                }
+            }
+
+            "on sign out" - {
+                actions.accept(MainAction.SignOut)
+
+                "clear spreadsheet id" {
+                    verify(repository).spreadsheetId = null
+                }
+
+                "sign out" {
+                    api.signOut.invocations shouldBe 1
+                }
+
+                "on sign out success" - {
+                    api.signOut.resume(Unit)
+
+                    "pop back stack" {
+                        verify(navigator).popBackStack()
+                    }
                 }
             }
         }
@@ -141,7 +164,7 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on try again" - {
-                actions.offer(MainAction.TryAgain)
+                actions.accept(MainAction.TryAgain)
 
                 "get refreshed monthly budget for current month" {
                     api.getMonthlyBudget.invocations.run {
@@ -152,7 +175,11 @@ internal class MainFlowTest : FlowSpec({
             }
 
             "on pick document again" - {
-                actions.offer(MainAction.PickDocumentAgain)
+                actions.accept(MainAction.PickDocumentAgain)
+
+                "clear spreadsheet id" {
+                    verify(repository).spreadsheetId = null
+                }
 
                 "navigate to picker screen" {
                     verify(navigator).navigate(R.id.action_mainFragment_to_pickerFragment)

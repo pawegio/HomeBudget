@@ -10,8 +10,6 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.dsl.module
 import org.threeten.bp.Clock
 
-@ExperimentalCoroutinesApi
-@FlowPreview
 val appModule = module {
     single<HomeBudgetRepository> { HomeBudgetRepositoryImpl(androidContext()) }
     single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get()) }

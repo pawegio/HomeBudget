@@ -1,5 +1,6 @@
 package com.pawegio.homebudget.picker
 
+import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.HomeBudgetRepository
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 
 internal class PickerFlowTest : FlowSpec({
     "On picker flow" - {
-        val actions = Channel<PickerAction>()
+        val actions = PublishRelay.create<PickerAction>()
         val repository = mock<HomeBudgetRepository>()
         val parseSpreadsheetId = mock<(String) -> String>()
         val initMainFlow = mock<SuspendFunction<Unit>>()
@@ -21,7 +22,7 @@ internal class PickerFlowTest : FlowSpec({
         launch {
             @Suppress("EXPERIMENTAL_API_USAGE")
             PickerFlow(
-                actions.consumeAsFlow(),
+                actions,
                 repository,
                 parseSpreadsheetId,
                 initMainFlow::invokeSuspend,
@@ -33,7 +34,7 @@ internal class PickerFlowTest : FlowSpec({
             val url = "https://dummySpreadsheetUrl"
             val spreadsheetId = "dummySpreadsheetId"
             whenever(parseSpreadsheetId.invoke(any())) doReturn spreadsheetId
-            actions.offer(PickerAction.PickDocument(url))
+            actions.accept(PickerAction.PickDocument(url))
 
             "parse spreadsheet id" {
                 verify(parseSpreadsheetId).invoke(url)
