@@ -2,7 +2,7 @@
     <string name="app_name">Budżet domowy</string>
 
     <!-- PICKER -->
-    <string name="enter_spreadsheet_url">Wprowadź link do arkusza:</string>
+    <string name="enter_spreadsheet_url">Wprowadź link do arkusza budżetu domowego:</string>
     <string name="connect_spreadsheet">Połącz arkusz</string>
 
     <!-- MAIN -->
