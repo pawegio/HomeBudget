@@ -1,0 +1,32 @@
+#!/bin/bash
+# USAGE: ./publish-release 1.1.1
+
+if [ $# -eq 0 ]
+  then
+    echo "USAGE: ./publish-release 1.1.1"
+   exit
+fi
+
+function checkResult {
+    if [ $? -ne 0 ]
+      then
+        echo "!!!!!     >>>ERROR<<<    !!!!!"
+       exit
+    fi
+}
+
+VERSION_NAME=$1
+
+git stash
+checkResult
+./scripts/update-version ${VERSION_NAME}
+checkResult
+git commit --allow-empty -a -m "Update to v$VERSION_NAME"
+checkResult
+git push origin master
+checkResult
+git tag v${VERSION_NAME}
+checkResult
+git push --tags
+checkResult
+./gradlew :app:publishReleaseBundle

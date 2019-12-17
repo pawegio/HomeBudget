@@ -11,3 +11,5 @@
 /build
 /captures
 .externalNativeBuild
+/play_account.json
+/upload.jks

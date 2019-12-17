@@ -4,20 +4,28 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
+    id("com.github.triplet.play") version "2.6.1"
 }
+apply("../gradle/app-version.gradle")
 
 android {
     compileSdkVersion(28)
     defaultConfig {
         applicationId = "com.pawegio.homebudget"
-        minSdkVersion(23)
+        minSdkVersion(24)
         targetSdkVersion(28)
-        versionCode = 1
-        versionName = "1.0"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        val localProperties = Properties()
-        if (project.rootProject.file("local.properties").exists()) {
-            localProperties.load(project.rootProject.file("local.properties").inputStream())
+    }
+    signingConfigs {
+        create("release") {
+            val localProperties = Properties()
+            if (project.rootProject.file("local.properties").exists()) {
+                localProperties.load(project.rootProject.file("local.properties").inputStream())
+            }
+            storeFile = file("../upload.jks")
+            storePassword = localProperties.getOrDefault("storePassword", "\"\"") as String
+            keyAlias = localProperties.getOrDefault("keyAlias", "\"\"") as String
+            keyPassword = localProperties.getOrDefault("keyPassword", "\"\"") as String
         }
     }
     buildTypes {
@@ -27,8 +35,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
+}
+
+play {
+    serviceAccountCredentials = file("../play_account.json")
 }
 
 tasks.withType<Test> {
