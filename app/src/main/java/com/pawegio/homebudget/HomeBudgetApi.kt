@@ -18,6 +18,7 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
 import java.io.IOException
+import java.lang.IllegalStateException
 import java.math.BigDecimal
 
 interface HomeBudgetApi {
@@ -99,7 +100,7 @@ class HomeBudgetApiImpl(
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
         try {
             val response = sheetsService.spreadsheets().values()
-                .batchGet(spreadsheetId)
+                .batchGet(checkNotNull(spreadsheetId))
                 .setValueRenderOption("UNFORMATTED_VALUE")
                 .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
                 .execute()
@@ -119,6 +120,8 @@ class HomeBudgetApiImpl(
                 categories = categories
             ).also(::println)
         } catch (e: IOException) {
+            throw HomeBudgetApiException(e)
+        } catch (e: IllegalStateException) {
             throw HomeBudgetApiException(e)
         }
     }
