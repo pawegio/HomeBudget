@@ -7,8 +7,10 @@ import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.MainAction.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import io.reactivex.Observable
-import kotlinx.coroutines.*
-import kotlinx.coroutines.rx2.collect
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.rx2.awaitFirst
 import org.threeten.bp.Clock
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
@@ -27,36 +29,33 @@ suspend fun MainFlow(
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     coroutineScope {
-        launch {
-            actions.collect { action ->
-                when (action) {
-                    Refresh, TryAgain -> {
-                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
-                    }
-                    OpenSpreadsheet -> spreadsheetLauncher.launch()
-                    SelectPrevMonth -> {
-                        month -= 1
-                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
-                    }
-                    SelectNextMonth -> {
-                        month += 1
-                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
-                    }
-                    PickDocumentAgain -> {
-                        repository.spreadsheetId = null
-                        navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
-                        initPickerFlow()
-                    }
-                    SignOut -> {
-                        repository.spreadsheetId = null
-                        api.signOut()
-                        throw CancellationException()
-                    }
+        launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
+        loop@ while (isActive) {
+            when (actions.awaitFirst()) {
+                Refresh, TryAgain -> {
+                    loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
+                }
+                OpenSpreadsheet -> spreadsheetLauncher.launch()
+                SelectPrevMonth -> {
+                    month -= 1
+                    loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
+                }
+                SelectNextMonth -> {
+                    month += 1
+                    loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
+                }
+                PickDocumentAgain -> {
+                    repository.spreadsheetId = null
+                    navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
+                    initPickerFlow()
+                }
+                SignOut -> {
+                    repository.spreadsheetId = null
+                    api.signOut()
+                    break@loop
                 }
             }
         }
-        ensureActive()
-        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
     }
     navigator.popBackStack()
 }
