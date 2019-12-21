@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!--https://material.io/resources/color/#!/?view.left=0&view.right=0&primary.color=795548-->
-    <color name="primaryColor">#14bcaaa4</color>
-    <color name="primaryLightColor">#14efdcd5</color>
-    <color name="primaryDarkColor">#148c7b75</color>
+    <color name="primaryColor">#33BCAAA4</color>
+    <color name="primaryLightColor">#33efdcd5</color>
+    <color name="primaryDarkColor">#338c7b75</color>
     <color name="primaryTextColor">#ffffff</color>
     <color name="surfaceColor">#121212</color>
     <color name="backgroundColor">#121212</color>
