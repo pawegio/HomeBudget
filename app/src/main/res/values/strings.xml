@@ -2,6 +2,7 @@
     <string name="app_name">Budżet domowy</string>
 
     <!-- LOGIN -->
+    <string name="sign_in_info">Użyj konta Google, przez które masz dostęp do swojego arkusza budżetu domowego w Google Docs.</string>
     <string name="sign_in_error">Wystąpił błąd podczas logowania</string>
 
     <!-- PICKER -->
