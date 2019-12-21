@@ -61,9 +61,11 @@ class HomeBudgetApiImpl(
 
     override suspend fun signIn() {
         if (!isSignedIn) {
-            val result = currentActivity?.startForResult(signInClient.signInIntent)
             try {
+                val result = currentActivity?.startForResult(signInClient.signInIntent)
                 GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
+            } catch (e: ApiException) {
+                throw HomeBudgetApiException(e)
             } catch (e: ApiException) {
                 throw HomeBudgetApiException(e)
             }

@@ -2,10 +2,8 @@
 
 package com.pawegio.homebudget.login
 
-import com.pawegio.homebudget.HomeBudgetApi
-import com.pawegio.homebudget.HomeBudgetRepository
-import com.pawegio.homebudget.Navigator
-import com.pawegio.homebudget.R
+import com.pawegio.homebudget.*
+import com.pawegio.homebudget.util.ToastNotifier
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.collect
 
@@ -13,13 +11,18 @@ suspend fun LoginFlow(
     actions: Observable<LoginAction>,
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
+    toastNotifier: ToastNotifier,
     initPickerFlow: suspend () -> Unit,
     initMainFlow: suspend () -> Unit,
     navigator: Navigator
 ) {
     if (api.isSignedIn) proceed(repository, navigator, initMainFlow, initPickerFlow)
     actions.collect {
-        api.signIn()
+        try {
+            api.signIn()
+        } catch (e: HomeBudgetApiException) {
+            toastNotifier.notify(R.string.sign_in_error)
+        }
         if (api.isSignedIn) proceed(repository, navigator, initMainFlow, initPickerFlow)
     }
 }

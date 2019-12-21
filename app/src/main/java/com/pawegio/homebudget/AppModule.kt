@@ -2,6 +2,8 @@ package com.pawegio.homebudget
 
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.SpreadsheetLauncherImpl
+import com.pawegio.homebudget.util.ToastNotifier
+import com.pawegio.homebudget.util.ToastNotifierImpl
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import org.koin.android.experimental.dsl.viewModel
@@ -16,5 +18,6 @@ val appModule = module {
     single<Clock> { Clock.systemDefaultZone() }
     single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }
     single<Navigator> { NavigatorImpl(androidApplication(), ::appNavController) }
+    single<ToastNotifier> { ToastNotifierImpl(androidContext()) }
     viewModel<MainViewModel>()
 }

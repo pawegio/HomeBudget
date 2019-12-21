@@ -11,9 +11,10 @@ import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerFlow
 import com.pawegio.homebudget.picker.parseSpreadsheetId
 import com.pawegio.homebudget.util.SpreadsheetLauncher
-import kotlinx.coroutines.*
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
+import com.pawegio.homebudget.util.ToastNotifier
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 
 class MainViewModel(
@@ -21,7 +22,8 @@ class MainViewModel(
     private val api: HomeBudgetApi,
     private val spreadsheetLauncher: SpreadsheetLauncher,
     private val clock: Clock,
-    private val navigator: Navigator
+    private val navigator: Navigator,
+    private val toastNotifier: ToastNotifier
 ) : ViewModel(), LifecycleObserver, CoroutineScope by MainScope() {
 
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
@@ -50,6 +52,7 @@ class MainViewModel(
             loginActions,
             repository,
             api,
+            toastNotifier,
             ::initPickerFlow,
             ::initMainFlow,
             navigator
