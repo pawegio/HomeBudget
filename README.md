@@ -1,2 +1,2 @@
 # HomeBudget
-<img src="logo.png" width="160px">
+<img src="media/logo.png" width="160px">
