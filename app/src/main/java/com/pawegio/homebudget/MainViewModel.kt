@@ -1,6 +1,9 @@
 package com.pawegio.homebudget
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LifecycleObserver
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.login.LoginAction
 import com.pawegio.homebudget.login.LoginFlow
@@ -40,13 +43,9 @@ class MainViewModel(
     private val _monthType = MutableLiveData<MonthType>()
     private val _isLoading = MutableLiveData<Boolean>()
 
-    @Suppress("unused")
-    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
-    fun onCreate(source: LifecycleOwner) {
-        if (source is MainActivity) {
-            navigator.restart(R.navigation.app_navigation)
-            launch { initLoginFlow() }
-        }
+    init {
+        navigator.restart(R.navigation.app_navigation)
+        launch { initLoginFlow() }
     }
 
     private suspend fun initLoginFlow() {
