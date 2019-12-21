@@ -1,11 +1,6 @@
 package com.pawegio.homebudget
 
-import com.pawegio.homebudget.util.SpreadsheetLauncher
-import com.pawegio.homebudget.util.SpreadsheetLauncherImpl
-import com.pawegio.homebudget.util.ToastNotifier
-import com.pawegio.homebudget.util.ToastNotifierImpl
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
+import com.pawegio.homebudget.util.*
 import org.koin.android.experimental.dsl.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -16,6 +11,7 @@ val appModule = module {
     single<HomeBudgetRepository> { HomeBudgetRepositoryImpl(androidContext()) }
     single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get()) }
     single<Clock> { Clock.systemDefaultZone() }
+    single<HowToLauncher> { HowToLauncherImpl(androidContext()) }
     single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }
     single<Navigator> { NavigatorImpl(androidApplication(), ::appNavController) }
     single<ToastNotifier> { ToastNotifierImpl(androidContext()) }

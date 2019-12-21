@@ -5,8 +5,9 @@
     <string name="sign_in_error">Wystąpił błąd podczas logowania</string>
 
     <!-- PICKER -->
-    <string name="enter_spreadsheet_url">Wprowadź link do arkusza budżetu domowego:</string>
+    <string name="enter_spreadsheet_url">Wprowadź link do arkusza budżetu domowego Google Docs:</string>
     <string name="connect_spreadsheet">Połącz arkusz</string>
+    <string name="create_spreadsheet">Jak stworzyć własną kopię arkusza?</string>
 
     <!-- MAIN -->
     <string name="incomes">Przychody</string>

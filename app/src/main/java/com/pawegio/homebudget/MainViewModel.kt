@@ -10,6 +10,7 @@ import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerFlow
 import com.pawegio.homebudget.picker.parseSpreadsheetId
+import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.CoroutineScope
@@ -20,6 +21,7 @@ import org.threeten.bp.Clock
 class MainViewModel(
     private val repository: HomeBudgetRepository,
     private val api: HomeBudgetApi,
+    private val howToLauncher: HowToLauncher,
     private val spreadsheetLauncher: SpreadsheetLauncher,
     private val clock: Clock,
     private val navigator: Navigator,
@@ -62,6 +64,7 @@ class MainViewModel(
     private suspend fun initPickerFlow() {
         PickerFlow(
             pickerActions,
+            howToLauncher,
             repository,
             ::parseSpreadsheetId,
             ::initMainFlow,

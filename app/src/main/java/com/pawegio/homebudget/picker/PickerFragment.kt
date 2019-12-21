@@ -18,5 +18,8 @@ class PickerFragment : Fragment(R.layout.picker_fragment) {
             val url = spreadsheetUrlEditText.editableText.toString()
             viewModel.pickerActions.accept(PickerAction.PickDocument(url))
         }
+        howToButton.setOnClickListener {
+            viewModel.pickerActions.accept(PickerAction.SelectHowTo)
+        }
     }
 }

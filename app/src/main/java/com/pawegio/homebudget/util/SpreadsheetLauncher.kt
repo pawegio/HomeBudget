@@ -6,7 +6,6 @@ import android.content.Intent.FLAG_ACTIVITY_NEW_TASK
 import android.net.Uri
 import com.pawegio.homebudget.HomeBudgetRepository
 
-
 interface SpreadsheetLauncher {
     fun launch()
 }

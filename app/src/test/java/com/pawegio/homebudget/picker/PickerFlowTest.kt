@@ -6,14 +6,14 @@ import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SuspendFunction
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 
 internal class PickerFlowTest : FlowSpec({
     "On picker flow" - {
         val actions = PublishRelay.create<PickerAction>()
+        val howToLauncher = mock<HowToLauncher>()
         val repository = mock<HomeBudgetRepository>()
         val parseSpreadsheetId = mock<(String) -> String>()
         val initMainFlow = mock<SuspendFunction<Unit>>()
@@ -23,11 +23,28 @@ internal class PickerFlowTest : FlowSpec({
             @Suppress("EXPERIMENTAL_API_USAGE")
             PickerFlow(
                 actions,
+                howToLauncher,
                 repository,
                 parseSpreadsheetId,
                 initMainFlow::invokeSuspend,
                 navigator
             )
+        }
+
+        "on select how to" - {
+            actions.accept(PickerAction.SelectHowTo)
+
+            "launch how to" {
+                verify(howToLauncher).launch()
+            }
+
+            "do not navigate to main screen" {
+                verify(navigator, never()).navigate(R.id.action_pickerFragment_to_mainFragment)
+            }
+
+            "do not init main flow" {
+                verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+            }
         }
 
         "on pick document" - {
