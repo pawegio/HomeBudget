@@ -78,10 +78,15 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
+    implementation("com.google.firebase:firebase-analytics:17.2.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.1.1")
     testImplementation("com.github.langara:SMokK:0.0.3")
     testImplementation("org.threeten:threetenbp:1.4.0")
+}
+
+apply {
+    plugin("com.google.gms.google-services")
 }
