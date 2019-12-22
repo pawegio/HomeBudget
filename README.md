@@ -1,10 +1,9 @@
-<img src="media/logo.png" width="120px" align="left">
+<img src="media/logo.png" width="80px" align="left">
 
 # HomeBudget
 
-<p align="center">
-   🇵🇱 Kod źródłowy aplikacji "Budżet domowy".
-</p>
+> 🇵🇱 Kod źródłowy aplikacji **Budżet domowy**.
+
 <p align="center">
    <a href='https://play.google.com/store/apps/details?id=com.pawegio.homebudget'><img alt='Pobierz z Google Play' src='https://play.google.com/intl/en_us/badges/static/images/badges/pl_badge_web_generic.png' width="200px"/></a>
 </p>
