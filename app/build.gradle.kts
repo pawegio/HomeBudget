@@ -5,6 +5,7 @@ plugins {
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("com.github.triplet.play") version "2.6.1"
+    id("io.fabric")
 }
 apply("../gradle/app-version.gradle")
 
@@ -79,6 +80,7 @@ dependencies {
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
     implementation("com.google.firebase:firebase-analytics:17.2.1")
+    implementation("com.crashlytics.sdk.android:crashlytics:2.10.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
