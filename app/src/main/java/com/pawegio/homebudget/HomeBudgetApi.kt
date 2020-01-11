@@ -81,6 +81,13 @@ class HomeBudgetApiImpl(
     }
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {
+        when (repository.spreadsheetVersion) {
+            2019 -> getMonthlyBudget2019(month)
+            else -> getMonthlyBudget2020(month)
+        }
+    }
+
+    private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName
         val plannedBudgetRange = mapOf("D9" to "D10")
         val actualBudgetRange = mapOf("D16" to "D17")
@@ -100,7 +107,7 @@ class HomeBudgetApiImpl(
             "B205" to "D215"
         )
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
-        try {
+        return try {
             val response = sheetsService.spreadsheets().values()
                 .batchGet(checkNotNull(spreadsheetId))
                 .setValueRenderOption("UNFORMATTED_VALUE")
@@ -121,9 +128,53 @@ class HomeBudgetApiImpl(
                 actualExpenses = actual[1][0],
                 categories = categories
             ).also(::println)
-        } catch (e: IOException) {
+        } catch (e: Exception) {
             throw HomeBudgetApiException(e)
-        } catch (e: IllegalStateException) {
+        }
+    }
+
+    private fun getMonthlyBudget2020(month: Month): MonthlyBudget {
+        val monthName = month.polishDisplayName
+        val plannedBudgetRange = mapOf("D9" to "D10")
+        val actualBudgetRange = mapOf("D16" to "D17")
+        val incomesRange = mapOf("B57" to "D72")
+        val expensesRanges = mapOf(
+            "B79" to "D89",
+            "B91" to "D101",
+            "B103" to "D113",
+            "B115" to "D125",
+            "B127" to "D137",
+            "B139" to "D149",
+            "B151" to "D161",
+            "B163" to "D173",
+            "B175" to "D185",
+            "B187" to "D197",
+            "B199" to "D209",
+            "B211" to "D221"
+        )
+        val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
+        return try {
+            val response = sheetsService.spreadsheets().values()
+                .batchGet(checkNotNull(spreadsheetId))
+                .setValueRenderOption("UNFORMATTED_VALUE")
+                .setRanges(allRanges.map { "'$monthName'!${it.key}:${it.value}" })
+                .execute()
+            val ranges = response.valueRanges
+            val planned = ranges[0]["values"] as List<List<BigDecimal>>
+            val actual = ranges[1]["values"] as List<List<BigDecimal>>
+            val incomes = ranges[2]["values"] as List<List<Any>>
+            val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
+            val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
+                    expenses.map { createCategory(it, Category.Type.EXPENSES) }
+            MonthlyBudget(
+                month = monthName,
+                plannedIncomes = planned[0][0],
+                plannedExpenses = planned[1][0],
+                actualIncomes = actual[0][0],
+                actualExpenses = actual[1][0],
+                categories = categories
+            ).also(::println)
+        } catch (e: Exception) {
             throw HomeBudgetApiException(e)
         }
     }
