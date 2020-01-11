@@ -22,6 +22,7 @@ suspend fun PickerFlow(
     loop@ while (isActive) {
         when (val action = actions.awaitFirst()) {
             PickerAction.SelectHowTo -> howToLauncher.launch()
+            is PickerAction.SelectTemplate -> repository.spreadsheetTemplate = action.template
             is PickerAction.PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
                 navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
@@ -35,5 +36,6 @@ suspend fun PickerFlow(
 
 sealed class PickerAction {
     object SelectHowTo : PickerAction()
+    data class SelectTemplate(val template: Int) : PickerAction()
     data class PickDocument(val url: String) : PickerAction()
 }

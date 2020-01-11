@@ -17,8 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import org.threeten.bp.Month
-import java.io.IOException
-import java.lang.IllegalStateException
 import java.math.BigDecimal
 
 interface HomeBudgetApi {
@@ -81,7 +79,7 @@ class HomeBudgetApiImpl(
     }
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {
-        when (repository.spreadsheetVersion) {
+        when (repository.spreadsheetTemplate) {
             2019 -> getMonthlyBudget2019(month)
             else -> getMonthlyBudget2020(month)
         }

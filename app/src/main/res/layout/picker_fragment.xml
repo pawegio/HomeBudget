@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/enterSpreadsheetLabelView"
-        style="@style/TextAppearance.MaterialComponents.Headline5"
+        style="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -32,21 +32,49 @@
         app:layout_constraintBottom_toTopOf="@id/spreadsheetUrlEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/copyLinkImageView"
-        app:layout_constraintVertical_chainStyle="packed" />
+        app:layout_constraintTop_toBottomOf="@id/copyLinkImageView" />
 
     <EditText
         android:id="@+id/spreadsheetUrlEditText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="48dp"
         android:importantForAutofill="no"
+        android:hint="@string/spreadsheet_url_hint"
         android:inputType="textUri"
         app:layout_constraintBottom_toTopOf="@id/connectSpreadsheetButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/enterSpreadsheetLabelView"
         tools:ignore="LabelFor" />
+
+    <TextView
+        android:id="@+id/templateLabel"
+        style="@style/TextAppearance.MaterialComponents.Body1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:gravity="center"
+        android:text="@string/spreadsheet_template"
+        app:layout_constraintBottom_toTopOf="@id/connectSpreadsheetButton"
+        app:layout_constraintEnd_toStartOf="@id/templateSpinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/spreadsheetUrlEditText" />
+
+    <Spinner
+        android:id="@+id/templateSpinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/templateLabel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toEndOf="@id/templateLabel"
+        app:layout_constraintTop_toTopOf="@id/templateLabel" />
 
     <Button
         android:id="@+id/connectSpreadsheetButton"
@@ -66,7 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="36dp"
         android:gravity="center"
         android:text="@string/create_spreadsheet"
         app:layout_constraintBottom_toBottomOf="parent"

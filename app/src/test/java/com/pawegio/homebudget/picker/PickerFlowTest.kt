@@ -47,6 +47,15 @@ internal class PickerFlowTest : FlowSpec({
             }
         }
 
+        "on select template" - {
+            val template = 2020
+            actions.accept(PickerAction.SelectTemplate(template))
+
+            "save selected template in repository" {
+                verify(repository).spreadsheetTemplate = template
+            }
+        }
+
         "on pick document" - {
             val url = "https://dummySpreadsheetUrl"
             val spreadsheetId = "dummySpreadsheetId"

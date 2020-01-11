@@ -6,7 +6,7 @@ import androidx.core.content.edit
 
 interface HomeBudgetRepository {
     var spreadsheetId: String?
-    var spreadsheetVersion: Int
+    var spreadsheetTemplate: Int
 }
 
 class HomeBudgetRepositoryImpl(context: Context) : HomeBudgetRepository {
@@ -17,12 +17,12 @@ class HomeBudgetRepositoryImpl(context: Context) : HomeBudgetRepository {
         get() = sharedPreferences.getString(SPREADSHEET_ID, null)
         set(value) = sharedPreferences.edit(commit = true) { putString(SPREADSHEET_ID, value) }
 
-    override var spreadsheetVersion: Int
-        get() = sharedPreferences.getInt(SPREADSHEET_VERSION, 2020)
-        set(value) = sharedPreferences.edit(commit = true) { putInt(SPREADSHEET_VERSION, value) }
+    override var spreadsheetTemplate: Int
+        get() = sharedPreferences.getInt(SPREADSHEET_TEMPLATE, 2020)
+        set(value) = sharedPreferences.edit(commit = true) { putInt(SPREADSHEET_TEMPLATE, value) }
 
     companion object {
         private const val SPREADSHEET_ID = "spreadsheetId"
-        private const val SPREADSHEET_VERSION = "spreadsheetVersion"
+        private const val SPREADSHEET_TEMPLATE = "spreadsheetTemplate"
     }
 }
