@@ -79,7 +79,7 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
-    implementation("com.google.firebase:firebase-analytics:17.2.1")
+    implementation("com.google.firebase:firebase-analytics:17.2.2")
     implementation("com.crashlytics.sdk.android:crashlytics:2.10.1")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
