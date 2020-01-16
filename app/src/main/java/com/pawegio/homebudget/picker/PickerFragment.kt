@@ -1,6 +1,8 @@
 package com.pawegio.homebudget.picker
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -10,13 +12,14 @@ import com.pawegio.homebudget.R
 import kotlinx.android.synthetic.main.picker_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
-class PickerFragment : Fragment(R.layout.picker_fragment) {
+class PickerFragment : Fragment(R.layout.picker_fragment), TextWatcher {
 
     private val viewModel by sharedViewModel<MainViewModel>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTemplateSpinner()
+        spreadsheetUrlEditText.addTextChangedListener(this)
         connectSpreadsheetButton.setOnClickListener {
             val url = spreadsheetUrlEditText.editableText.toString()
             viewModel.pickerActions.accept(PickerAction.PickDocument(url))
@@ -37,6 +40,19 @@ class PickerFragment : Fragment(R.layout.picker_fragment) {
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit
         }
+    }
+
+    override fun onDestroyView() {
+        spreadsheetUrlEditText.removeTextChangedListener(this)
+        super.onDestroyView()
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) = Unit
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
+
+    override fun afterTextChanged(s: Editable) {
+        connectSpreadsheetButton.isEnabled = s.isNotBlank()
     }
 
     private fun setupTemplateSpinner() {
