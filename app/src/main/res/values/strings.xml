@@ -4,6 +4,7 @@
     <!-- LOGIN -->
     <string name="sign_in_info">Użyj konta Google, przez które masz dostęp do swojego arkusza budżetu domowego w Google Docs.</string>
     <string name="sign_in_error">Wystąpił błąd podczas logowania</string>
+    <string name="privacy_policy">Zapoznaj się z <![CDATA[<b><a href="https://docs.google.com/document/d/1vs5tYH70oarsbm7EOnz5Rle43alCRjuJJAlB9IGi5Fs">Polityką prywatności"</a></b>]]></string>
 
     <!-- PICKER -->
     <string name="enter_spreadsheet_url">Wprowadź link do arkusza budżetu domowego Google Docs:</string>

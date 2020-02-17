@@ -1,6 +1,9 @@
 package com.pawegio.homebudget.login
 
 import android.os.Bundle
+import android.text.Html
+import android.text.Html.FROM_HTML_MODE_LEGACY
+import android.text.method.LinkMovementMethod
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.pawegio.homebudget.MainViewModel
@@ -14,6 +17,13 @@ class LoginFragment : Fragment(R.layout.login_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        privacyPolicyTextView.run {
+            text = Html.fromHtml(
+                getString(R.string.privacy_policy), FROM_HTML_MODE_LEGACY
+            )
+            isClickable = true
+            movementMethod = LinkMovementMethod.getInstance()
+        }
         signInButton.setOnClickListener { viewModel.loginActions.accept(LoginAction.SelectSignIn) }
     }
 }
