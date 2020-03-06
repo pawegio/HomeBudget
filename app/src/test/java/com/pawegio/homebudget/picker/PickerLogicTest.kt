@@ -10,23 +10,23 @@ import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SuspendFunction
 import kotlinx.coroutines.launch
 
-internal class PickerFlowTest : FlowSpec({
-    "On picker flow" - {
+internal class PickerLogicTest : FlowSpec({
+    "On picker logic" - {
         val actions = PublishRelay.create<PickerAction>()
         val howToLauncher = mock<HowToLauncher>()
         val repository = mock<HomeBudgetRepository>()
         val parseSpreadsheetId = mock<(String) -> String>()
-        val initMainFlow = mock<SuspendFunction<Unit>>()
+        val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
         launch {
             @Suppress("EXPERIMENTAL_API_USAGE")
-            PickerFlow(
+            PickerLogic(
                 actions,
                 howToLauncher,
                 repository,
                 parseSpreadsheetId,
-                initMainFlow::invokeSuspend,
+                initMain::invokeSuspend,
                 navigator
             )
         }
@@ -43,7 +43,7 @@ internal class PickerFlowTest : FlowSpec({
             }
 
             "do not init main flow" {
-                verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+                verifyBlocking(initMain, never()) { invokeSuspend() }
             }
         }
 
@@ -75,7 +75,7 @@ internal class PickerFlowTest : FlowSpec({
             }
 
             "init main flow" {
-                verifyBlocking(initMainFlow) { invokeSuspend() }
+                verifyBlocking(initMain) { invokeSuspend() }
             }
         }
     }

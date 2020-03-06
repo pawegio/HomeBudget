@@ -8,14 +8,12 @@ import com.pawegio.homebudget.util.SuspendFunction
 import com.pawegio.homebudget.util.ToastNotifier
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class LoginFlowTest : FlowSpec({
-    "On login flow" - {
+internal class LoginLogicTest : FlowSpec({
+    "On login logic" - {
         val actions = PublishRelay.create<LoginAction>()
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
@@ -26,7 +24,7 @@ internal class LoginFlowTest : FlowSpec({
 
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
-            LoginFlow(
+            LoginLogic(
                 actions,
                 repository,
                 api,

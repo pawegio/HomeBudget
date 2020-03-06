@@ -15,7 +15,7 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Month
 import org.threeten.bp.ZoneId
 
-suspend fun MainFlow(
+suspend fun MainLogic(
     actions: Observable<MainAction>,
     monthType: MutableLiveData<MonthType>,
     monthlyBudget: MutableLiveData<MonthlyBudget>,
@@ -24,7 +24,7 @@ suspend fun MainFlow(
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock,
-    initPickerFlow: suspend () -> Unit,
+    initPicker: suspend () -> Unit,
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
@@ -47,7 +47,7 @@ suspend fun MainFlow(
                 PickDocumentAgain -> {
                     repository.spreadsheetId = null
                     navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
-                    initPickerFlow()
+                    initPicker()
                 }
                 SignOut -> {
                     repository.spreadsheetId = null

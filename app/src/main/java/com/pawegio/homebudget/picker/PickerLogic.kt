@@ -11,12 +11,12 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.rx2.awaitFirst
 
-suspend fun PickerFlow(
+suspend fun PickerLogic(
     actions: Observable<PickerAction>,
     howToLauncher: HowToLauncher,
     repository: HomeBudgetRepository,
     parseSpreadsheetId: (String) -> String,
-    initMainFlow: suspend () -> Unit,
+    initMain: suspend () -> Unit,
     navigator: Navigator
 ) = coroutineScope {
     loop@ while (isActive) {
@@ -30,7 +30,7 @@ suspend fun PickerFlow(
             }
         }
     }
-    initMainFlow()
+    initMain()
     navigator.popBackStack()
 }
 

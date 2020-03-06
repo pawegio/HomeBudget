@@ -6,12 +6,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.login.LoginAction
-import com.pawegio.homebudget.login.LoginFlow
+import com.pawegio.homebudget.login.LoginLogic
 import com.pawegio.homebudget.main.MainAction
-import com.pawegio.homebudget.main.MainFlow
+import com.pawegio.homebudget.main.MainLogic
 import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.picker.PickerAction
-import com.pawegio.homebudget.picker.PickerFlow
+import com.pawegio.homebudget.picker.PickerLogic
 import com.pawegio.homebudget.picker.parseSpreadsheetId
 import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SpreadsheetLauncher
@@ -45,34 +45,34 @@ class MainViewModel(
 
     init {
         navigator.restart(R.navigation.app_navigation)
-        launch { initLoginFlow() }
+        launch { initLogin() }
     }
 
-    private suspend fun initLoginFlow() {
-        LoginFlow(
+    private suspend fun initLogin() {
+        LoginLogic(
             loginActions,
             repository,
             api,
             toastNotifier,
-            ::initPickerFlow,
-            ::initMainFlow,
+            ::initPicker,
+            ::initMain,
             navigator
         )
     }
 
-    private suspend fun initPickerFlow() {
-        PickerFlow(
+    private suspend fun initPicker() {
+        PickerLogic(
             pickerActions,
             howToLauncher,
             repository,
             ::parseSpreadsheetId,
-            ::initMainFlow,
+            ::initMain,
             navigator
         )
     }
 
-    private suspend fun initMainFlow() {
-        MainFlow(
+    private suspend fun initMain() {
+        MainLogic(
             mainActions,
             _monthType,
             _monthlyBudget,
@@ -81,7 +81,7 @@ class MainViewModel(
             api,
             spreadsheetLauncher,
             clock,
-            ::initPickerFlow,
+            ::initPicker,
             navigator
         )
     }

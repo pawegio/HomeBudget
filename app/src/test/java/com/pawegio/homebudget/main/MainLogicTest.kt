@@ -13,8 +13,6 @@ import com.pawegio.homebudget.util.SuspendFunction
 import com.pawegio.homebudget.util.createMonthlyBudget
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
@@ -23,8 +21,8 @@ import org.threeten.bp.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class MainFlowTest : FlowSpec({
-    "On main flow" - {
+internal class MainLogicTest : FlowSpec({
+    "On main logic" - {
         val actions = PublishRelay.create<MainAction>()
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
         val monthType = MutableLiveData<MonthType>()
@@ -38,7 +36,7 @@ internal class MainFlowTest : FlowSpec({
 
         val flow = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
-            MainFlow(
+            MainLogic(
                 actions,
                 monthType,
                 monthlyBudget,
