@@ -1,29 +1,27 @@
 package com.pawegio.homebudget.login
 
 import android.os.Bundle
-import android.text.Html
-import android.text.Html.FROM_HTML_MODE_LEGACY
-import android.text.method.LinkMovementMethod
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.pawegio.homebudget.MainViewModel
-import com.pawegio.homebudget.R
-import kotlinx.android.synthetic.main.login_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import splitties.views.onClick
 
-class LoginFragment : Fragment(R.layout.login_fragment) {
+class LoginFragment : Fragment() {
 
     private val viewModel by sharedViewModel<MainViewModel>()
+    private val ui by lazy { LoginUi(requireContext()) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ui.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        privacyPolicyTextView.run {
-            text = Html.fromHtml(
-                getString(R.string.privacy_policy), FROM_HTML_MODE_LEGACY
-            )
-            isClickable = true
-            movementMethod = LinkMovementMethod.getInstance()
-        }
-        signInButton.setOnClickListener { viewModel.loginActions.accept(LoginAction.SelectSignIn) }
+        ui.signInButton.onClick { viewModel.loginActions.accept(LoginAction.SelectSignIn) }
     }
 }

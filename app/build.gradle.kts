@@ -88,6 +88,7 @@ dependencies {
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
     implementation("com.google.firebase:firebase-analytics:17.2.2")
     implementation("com.crashlytics.sdk.android:crashlytics:2.10.1")
+    implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-alpha06")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")

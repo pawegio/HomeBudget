@@ -8,8 +8,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.pawegio.homebudget.login.LoginFragment"
-        android:label="login_fragment"
-        tools:layout="@layout/login_fragment">
+        android:label="login_fragment">
         <action
             android:id="@+id/action_loginFragment_to_pickerFragment"
             app:destination="@id/pickerFragment" />
