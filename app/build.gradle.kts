@@ -69,7 +69,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.2.0")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha03")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-beta01")
     implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
     implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")
@@ -86,7 +86,7 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
-    implementation("com.google.firebase:firebase-analytics:17.2.2")
+    implementation("com.google.firebase:firebase-analytics:17.2.3")
     implementation("com.crashlytics.sdk.android:crashlytics:2.10.1")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-alpha06")
 
