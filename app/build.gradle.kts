@@ -58,11 +58,11 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.61")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.3.3")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.70")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.4")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.3.4")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
     implementation("com.jakewharton.rxrelay2:rxrelay:2.1.1")
     implementation("android.arch.lifecycle:extensions:1.1.1")
