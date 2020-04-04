@@ -1,6 +1,6 @@
 <img src="media/logo.png" width="80px" align="left">
 
-# HomeBudget
+# HomeBudget ![Android CI](https://github.com/pawegio/HomeBudget/workflows/Android%20CI/badge.svg)
 
 > 🇵🇱 Kod źródłowy aplikacji **Budżet domowy**.
 
