@@ -3,31 +3,40 @@ package com.pawegio.homebudget.picker
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
-import kotlinx.android.synthetic.main.picker_fragment.*
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import splitties.views.onClick
 
-class PickerFragment : Fragment(R.layout.picker_fragment), TextWatcher {
+class PickerFragment : Fragment(), TextWatcher {
 
     private val viewModel by sharedViewModel<MainViewModel>()
+    private val ui by lazy { PickerUi(requireContext()) }
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View = ui.root
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTemplateSpinner()
-        spreadsheetUrlEditText.addTextChangedListener(this)
-        connectSpreadsheetButton.setOnClickListener {
-            val url = spreadsheetUrlEditText.editableText.toString()
+        ui.spreadsheetUrlEditText.addTextChangedListener(this)
+        ui.connectSpreadsheetButton.onClick {
+            val url = ui.spreadsheetUrlEditText.editableText.toString()
             viewModel.pickerActions.accept(PickerAction.PickDocument(url))
         }
-        howToButton.setOnClickListener {
+        ui.howToButton.onClick {
             viewModel.pickerActions.accept(PickerAction.SelectHowTo)
         }
-        templateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        ui.templateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parent: AdapterView<*>?,
                 view: View?,
@@ -43,7 +52,7 @@ class PickerFragment : Fragment(R.layout.picker_fragment), TextWatcher {
     }
 
     override fun onDestroyView() {
-        spreadsheetUrlEditText.removeTextChangedListener(this)
+        ui.spreadsheetUrlEditText.removeTextChangedListener(this)
         super.onDestroyView()
     }
 
@@ -52,7 +61,7 @@ class PickerFragment : Fragment(R.layout.picker_fragment), TextWatcher {
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) = Unit
 
     override fun afterTextChanged(s: Editable) {
-        connectSpreadsheetButton.isEnabled = s.isNotBlank()
+        ui.connectSpreadsheetButton.isEnabled = s.isNotBlank()
     }
 
     private fun setupTemplateSpinner() {
@@ -62,7 +71,7 @@ class PickerFragment : Fragment(R.layout.picker_fragment), TextWatcher {
             android.R.layout.simple_spinner_item
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            templateSpinner.adapter = adapter
+            ui.templateSpinner.adapter = adapter
         }
     }
 }

@@ -3,6 +3,7 @@ package com.pawegio.homebudget.login
 import android.content.Context
 import android.graphics.Typeface
 import android.text.Html
+import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import com.google.android.gms.common.SignInButton
@@ -68,9 +69,14 @@ class LoginUi(override val ctx: Context) : Ui {
 }
 
 @Suppress("unused")
-private class LoginUiPreview(context: Context) : FrameLayout(context) {
+private class LoginUiPreview : FrameLayout {
 
-    init {
+    constructor(context: Context) : this(context, null)
+
+    constructor(context: Context, attrs: AttributeSet?) : this(context, attrs, 0)
+
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
+            super(context, attrs, defStyleAttr) {
         addView(LoginUi(context).root)
     }
 }
