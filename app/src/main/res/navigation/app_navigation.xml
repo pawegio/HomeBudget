@@ -29,8 +29,7 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.pawegio.homebudget.main.MainFragment"
-        android:label="main_fragment"
-        tools:layout="@layout/main_fragment" >
+        android:label="main_fragment">
         <action
             android:id="@+id/action_mainFragment_to_loadErrorFragment"
             app:destination="@id/loadErrorFragment" />
