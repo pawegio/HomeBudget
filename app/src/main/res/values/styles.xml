@@ -12,7 +12,7 @@
     </style>
 
     <style name="Widget.App.ActionButton" parent="Widget.AppCompat.ActionButton">
-        <item name="android:background">@android:color/transparent</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
 </resources>
