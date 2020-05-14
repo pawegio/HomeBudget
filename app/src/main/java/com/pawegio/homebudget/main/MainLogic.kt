@@ -49,6 +49,7 @@ suspend fun MainLogic(
                     navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
                     initPicker()
                 }
+                SelectAbout -> navigator.navigate(R.id.action_mainFragment_to_aboutFragment)
                 SignOut -> {
                     repository.spreadsheetId = null
                     api.signOut()
@@ -94,5 +95,6 @@ sealed class MainAction {
     object SelectNextMonth : MainAction()
     object TryAgain : MainAction()
     object PickDocumentAgain : MainAction()
+    object SelectAbout : MainAction()
     object SignOut : MainAction()
 }

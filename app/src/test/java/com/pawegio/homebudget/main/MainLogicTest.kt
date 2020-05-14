@@ -148,6 +148,14 @@ internal class MainLogicTest : FlowSpec({
                     }
                 }
             }
+
+            "on select about" - {
+                actions.accept(MainAction.SelectAbout)
+
+                "navigate to about screen" {
+                    verify(navigator).navigate(R.id.action_mainFragment_to_aboutFragment)
+                }
+            }
         }
 
         "on monthly budget load error" - {
