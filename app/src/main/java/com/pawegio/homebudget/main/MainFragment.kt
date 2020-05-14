@@ -60,6 +60,7 @@ class MainFragment : Fragment() {
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.action_pick_document -> MainAction.PickDocumentAgain
+                    R.id.action_about -> MainAction.SelectAbout
                     R.id.action_sign_out -> MainAction.SignOut
                     else -> throw IllegalArgumentException()
                 }.let(viewModel.mainActions::accept)

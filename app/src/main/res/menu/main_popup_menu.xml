@@ -4,6 +4,9 @@
         android:id="@+id/action_pick_document"
         android:title="@string/pick_document" />
     <item
+        android:id="@+id/action_about"
+        android:title="@string/about_app" />
+    <item
         android:id="@+id/action_sign_out"
         android:title="@string/sign_out" />
 </menu>

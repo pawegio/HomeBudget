@@ -27,5 +27,6 @@
     <string name="load_error_message">Nie udało się pobrać danych budżetowych z wybranego arkusza. Upewnij się, że wybrałeś odpowiednią wersję szablonu.</string>
     <string name="try_again">Ponów próbę</string>
     <string name="pick_document">Zmień arkusz</string>
+    <string name="about_app">O aplikacji</string>
     <string name="sign_out">Wyloguj się</string>
 </resources>
