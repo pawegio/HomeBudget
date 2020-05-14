@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/app_navigation"
     app:startDestination="@id/loginFragment">
 
@@ -20,7 +19,7 @@
     <fragment
         android:id="@+id/pickerFragment"
         android:name="com.pawegio.homebudget.picker.PickerFragment"
-        android:label="PickerFragment" >
+        android:label="PickerFragment">
         <action
             android:id="@+id/action_pickerFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -36,10 +35,19 @@
         <action
             android:id="@+id/action_mainFragment_to_pickerFragment"
             app:destination="@id/pickerFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
+
     <dialog
         android:id="@+id/loadErrorFragment"
         android:name="com.pawegio.homebudget.main.LoadErrorFragment"
         android:label="LoadErrorFragment" />
+
+    <dialog
+        android:id="@+id/aboutFragment"
+        android:name="com.pawegio.homebudget.about.AboutFragment"
+        android:label="AboutFragment" />
 
 </navigation>
