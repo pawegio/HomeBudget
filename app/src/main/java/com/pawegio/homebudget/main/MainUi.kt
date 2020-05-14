@@ -7,9 +7,12 @@ import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.cardview.widget.CardView
+import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.Subcategory
 import com.pawegio.homebudget.util.cardView
 import com.pawegio.homebudget.util.colorAttr
 import splitties.dimensions.dip
@@ -24,6 +27,41 @@ class MainUi(override val ctx: Context) : Ui {
         get() = monthHeaderView.text.toString()
         set(value) {
             monthHeaderView.text = value
+        }
+
+    var incomes: List<Subcategory> = emptyList()
+        set(value) {
+            field = value
+            allIncomesLayout.removeAllViews()
+            value.filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
+                .forEach { subcategory ->
+                    allIncomesLayout.addView(SubcategoryView(ctx).apply {
+                        this.subcategory = subcategory
+                    })
+                }
+        }
+
+    var expenses: List<Category> = emptyList()
+        set(value) {
+            field = value
+            allExpensesLayout.removeAllViews()
+            value.forEach { category ->
+                allExpensesLayout.addView(CategoryView(ctx).apply {
+                    this.category = category
+                })
+            }
+        }
+
+    var isLoading: Boolean = false
+        set(value) {
+            field = value
+            if (value) {
+                incomes = emptyList()
+                expenses = emptyList()
+            }
+            incomesHeaderView.isVisible = !value
+            expensesHeaderView.isVisible = !value
+            monthlyBudgetProgressBar.isVisible = value
         }
 
     private val headerView = view(::View) {
@@ -59,12 +97,12 @@ class MainUi(override val ctx: Context) : Ui {
 
     private val monthSummarySurface = inflate<CardView>(R.layout.month_summary_surface)
 
-    val incomesHeaderView = textView {
+    private val incomesHeaderView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
         textResource = R.string.incomes
     }
 
-    val allIncomesLayout = verticalLayout {
+    private val allIncomesLayout = verticalLayout {
         layoutTransition = LayoutTransition()
     }
 
@@ -76,16 +114,16 @@ class MainUi(override val ctx: Context) : Ui {
         })
     }
 
-    val expensesHeaderView = textView {
+    private val expensesHeaderView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
         textResource = R.string.expenses
     }
 
-    val allExpensesLayout = verticalLayout {
+    private val allExpensesLayout = verticalLayout {
         layoutTransition = LayoutTransition()
     }
 
-    val monthlyBudgetProgressBar = view(::ProgressBar) {
+    private val monthlyBudgetProgressBar = view(::ProgressBar) {
         elevation = dp(4)
     }
 

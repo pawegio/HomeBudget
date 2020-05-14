@@ -81,32 +81,12 @@ class MainFragment : Fragment() {
             expensesTextView.text = actualExpenses.currencyValue
             plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
             totalTextView.text = (actualIncomes - actualExpenses).currencyValue
-            val incomes = categories.first()
-            ui.allIncomesLayout.removeAllViews()
-            incomes.subcategories
-                .filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
-                .forEach { subcategory ->
-                    ui.allIncomesLayout.addView(SubcategoryView(requireContext()).apply {
-                        this.subcategory = subcategory
-                    })
-                }
-            val allExpenses = categories.drop(1)
-            ui.allExpensesLayout.removeAllViews()
-            allExpenses.forEach { category ->
-                ui.allExpensesLayout.addView(CategoryView(requireContext()).apply {
-                    this.category = category
-                })
-            }
+            ui.incomes = categories.first().subcategories
+            ui.expenses = categories.drop(1)
         }
     }
 
     private fun updateProgress(isLoading: Boolean?) {
-        if (isLoading == true) {
-            ui.allIncomesLayout.removeAllViews()
-            ui.allExpensesLayout.removeAllViews()
-        }
-        ui.incomesHeaderView.isVisible = isLoading == false
-        ui.expensesHeaderView.isVisible = isLoading == false
-        ui.monthlyBudgetProgressBar.isVisible = isLoading == true
+        ui.isLoading = isLoading == true
     }
 }
