@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Budżet domowy</string>
 
     <!-- LOGIN -->
@@ -32,7 +32,7 @@
 
     <!-- ABOUT -->
     <string name="version">Wersja</string>
-    <string name="author">Author</string>
+    <string name="author" tools:ignore="Typos">Autor</string>
     <string name="me">Paweł Gajda</string>
     <string name="app_icon">Ikona aplikacji</string>
     <string name="app_icon_author"><![CDATA[<b><a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a>]]></string>
