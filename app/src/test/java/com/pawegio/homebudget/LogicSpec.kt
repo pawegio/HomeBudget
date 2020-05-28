@@ -13,7 +13,7 @@ import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 @Suppress("UNCHECKED_CAST")
-abstract class FlowSpec constructor(body: FlowSpec.() -> Unit) :
+abstract class LogicSpec constructor(body: LogicSpec.() -> Unit) :
     FreeSpec(body as AbstractFreeSpec.() -> Unit), CoroutineScope {
 
     override val coroutineContext: CoroutineContext

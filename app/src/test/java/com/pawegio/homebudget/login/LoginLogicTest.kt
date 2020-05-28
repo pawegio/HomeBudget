@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class LoginLogicTest : FlowSpec({
+internal class LoginLogicTest : LogicSpec({
     "On login logic" - {
         val actions = PublishRelay.create<LoginAction>()
         val repository = mock<HomeBudgetRepository>()
@@ -22,7 +22,7 @@ internal class LoginLogicTest : FlowSpec({
         val navigator = mock<Navigator>()
         val toastNotifier = mock<ToastNotifier>()
 
-        val flow = launch(start = CoroutineStart.LAZY) {
+        val logic = launch(start = CoroutineStart.LAZY) {
             @Suppress("EXPERIMENTAL_API_USAGE")
             LoginLogic(
                 actions,
@@ -37,7 +37,7 @@ internal class LoginLogicTest : FlowSpec({
 
         "on user not signed in" - {
             api.isSignInResult = false
-            flow.start()
+            logic.start()
 
             "do not sign in" {
                 api.signIn.invocations shouldBe 0
@@ -111,7 +111,7 @@ internal class LoginLogicTest : FlowSpec({
             "on spreadsheet not picked" - {
                 whenever(repository.spreadsheetId) doReturn null
                 api.isSignInResult = true
-                flow.start()
+                logic.start()
 
                 "navigate to picker screen" {
                     verify(navigator).navigate(R.id.action_loginFragment_to_pickerFragment)
@@ -125,7 +125,7 @@ internal class LoginLogicTest : FlowSpec({
             "on spreadsheet picked" - {
                 whenever(repository.spreadsheetId) doReturn "id"
                 api.isSignInResult = true
-                flow.start()
+                logic.start()
 
                 "navigate to main screen" {
                     verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)

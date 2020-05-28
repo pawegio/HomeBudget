@@ -21,7 +21,7 @@ import org.threeten.bp.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class MainLogicTest : FlowSpec({
+internal class MainLogicTest : LogicSpec({
     "On main logic" - {
         val actions = PublishRelay.create<MainAction>()
         val monthlyBudget = MutableLiveData<MonthlyBudget>()
@@ -34,8 +34,7 @@ internal class MainLogicTest : FlowSpec({
         val initPickerFlow = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
-        val flow = launch(start = CoroutineStart.LAZY) {
-            @Suppress("EXPERIMENTAL_API_USAGE")
+        val logic = launch(start = CoroutineStart.LAZY) {
             MainLogic(
                 actions,
                 monthType,
@@ -52,7 +51,7 @@ internal class MainLogicTest : FlowSpec({
 
         "on January" - {
             clock = Clock.fixed(Instant.parse("2019-01-01T10:15:00.00Z"), ZoneId.systemDefault())
-            flow.start()
+            logic.start()
 
             "is first month" {
                 monthType.test().assertValue(MonthType.FIRST)
@@ -61,14 +60,14 @@ internal class MainLogicTest : FlowSpec({
 
         "on December" - {
             clock = Clock.fixed(Instant.parse("2019-12-01T10:15:00.00Z"), ZoneId.systemDefault())
-            flow.start()
+            logic.start()
 
             "is last month" {
                 monthType.test().assertValue(MonthType.LAST)
             }
         }
 
-        flow.start()
+        logic.start()
 
         "is middle month" {
             monthType.test().assertValue(MonthType.MIDDLE)

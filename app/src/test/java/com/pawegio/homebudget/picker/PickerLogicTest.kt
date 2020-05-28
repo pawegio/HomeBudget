@@ -2,15 +2,15 @@ package com.pawegio.homebudget.picker
 
 import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
-import com.pawegio.homebudget.FlowSpec
 import com.pawegio.homebudget.HomeBudgetRepository
+import com.pawegio.homebudget.LogicSpec
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SuspendFunction
 import kotlinx.coroutines.launch
 
-internal class PickerLogicTest : FlowSpec({
+internal class PickerLogicTest : LogicSpec({
     "On picker logic" - {
         val actions = PublishRelay.create<PickerAction>()
         val howToLauncher = mock<HowToLauncher>()
