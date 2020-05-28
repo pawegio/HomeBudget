@@ -1,18 +1,21 @@
 package com.pawegio.homebudget.about
 
+import android.app.Dialog
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import com.pawegio.homebudget.R
+import splitties.alertdialog.appcompat.alertDialog
+import splitties.alertdialog.appcompat.okButton
+import splitties.alertdialog.appcompat.titleResource
 
 class AboutFragment : DialogFragment() {
 
     private val ui by lazy { AboutUi(requireActivity()) }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? = ui.root
+    override fun onCreateDialog(savedInstanceState: Bundle?): Dialog =
+        requireActivity().alertDialog {
+            titleResource = R.string.about_app
+            setView(ui.root)
+            okButton()
+        }
 }
