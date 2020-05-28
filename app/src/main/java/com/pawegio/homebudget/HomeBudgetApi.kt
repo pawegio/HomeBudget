@@ -24,6 +24,7 @@ interface HomeBudgetApi {
     suspend fun signIn()
     suspend fun signOut()
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
+    suspend fun addExpense()
 }
 
 class HomeBudgetApiImpl(
@@ -84,6 +85,8 @@ class HomeBudgetApiImpl(
             else -> getMonthlyBudget2020(month)
         }
     }
+
+    override suspend fun addExpense() = Unit
 
     private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName

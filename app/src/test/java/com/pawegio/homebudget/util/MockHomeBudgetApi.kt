@@ -12,6 +12,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
     val signIn = smokk<Unit>()
     val signOut = smokk<Unit>()
     val getMonthlyBudget = smokk<Month, MonthlyBudget>()
+    val addExpense = smokk<Unit>()
 
     var isSignInResult = false
 
@@ -21,4 +22,6 @@ class MockHomeBudgetApi : HomeBudgetApi {
 
     override suspend fun getMonthlyBudget(month: Month): MonthlyBudget =
         getMonthlyBudget.invoke(month)
+
+    override suspend fun addExpense() = addExpense.invoke()
 }
