@@ -16,6 +16,7 @@ import com.pawegio.homebudget.util.polishDisplayName
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import org.threeten.bp.LocalDate
 import org.threeten.bp.Month
 import java.math.BigDecimal
 
@@ -24,8 +25,12 @@ interface HomeBudgetApi {
     suspend fun signIn()
     suspend fun signOut()
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
-    suspend fun addExpense()
+    suspend fun addExpense(expense: NewExpense)
 }
+
+data class NewExpense(
+    val date: LocalDate
+)
 
 class HomeBudgetApiImpl(
     private val context: Context,
@@ -86,7 +91,7 @@ class HomeBudgetApiImpl(
         }
     }
 
-    override suspend fun addExpense() = Unit
+    override suspend fun addExpense(expense: NewExpense) = Unit
 
     private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName

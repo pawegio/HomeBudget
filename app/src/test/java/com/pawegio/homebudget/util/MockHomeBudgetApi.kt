@@ -2,6 +2,7 @@ package com.pawegio.homebudget.util
 
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
+import com.pawegio.homebudget.NewExpense
 import org.threeten.bp.Month
 import pl.mareklangiewicz.smokk.smokk
 
@@ -12,7 +13,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
     val signIn = smokk<Unit>()
     val signOut = smokk<Unit>()
     val getMonthlyBudget = smokk<Month, MonthlyBudget>()
-    val addExpense = smokk<Unit>()
+    val addExpense = smokk<NewExpense, Unit>()
 
     var isSignInResult = false
 
@@ -23,5 +24,5 @@ class MockHomeBudgetApi : HomeBudgetApi {
     override suspend fun getMonthlyBudget(month: Month): MonthlyBudget =
         getMonthlyBudget.invoke(month)
 
-    override suspend fun addExpense() = addExpense.invoke()
+    override suspend fun addExpense(expense: NewExpense) = addExpense.invoke(expense)
 }

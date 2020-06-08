@@ -4,14 +4,18 @@ package com.pawegio.homebudget.main.newexpense
 
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
+import com.pawegio.homebudget.NewExpense
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.awaitFirst
+import org.threeten.bp.Clock
 import org.threeten.bp.LocalDate
+import org.threeten.bp.ZoneId
 
 suspend fun NewExpenseLogic(
     actions: Observable<NewExpenseAction>,
     state: MutableLiveData<NewExpenseState>,
-    api: HomeBudgetApi
+    api: HomeBudgetApi,
+    clock: Clock
 ) {
     var selectedDate: LocalDate
     while (true) {
@@ -20,7 +24,11 @@ suspend fun NewExpenseLogic(
                 selectedDate = action.date
                 state.value = NewExpenseState(selectedDate)
             }
-            NewExpenseAction.SelectAdd -> api.addExpense()
+            NewExpenseAction.SelectAdd -> {
+                val expense =
+                    NewExpense(clock.instant().atZone(ZoneId.systemDefault()).toLocalDate())
+                api.addExpense(expense)
+            }
         }
     }
 }
