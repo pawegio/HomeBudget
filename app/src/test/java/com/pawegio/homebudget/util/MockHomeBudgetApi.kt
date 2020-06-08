@@ -17,6 +17,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
 
     val addExpenseCalled get() = addExpense.invocations.count() > 0
     val addedExpenseDate get() = addExpense.invocations.first().date
+    val addedExpenseCategory get() = addExpense.invocations.first().category
 
     var isSignInResult = false
 

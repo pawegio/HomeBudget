@@ -55,6 +55,18 @@ internal class NewExpenseLogicTest : LogicSpec({
                 "update category" {
                     state.test().assertValue { it.selectedCategory == selectedCategory }
                 }
+
+                "on select add" - {
+                    actions.accept(NewExpenseAction.SelectAdd)
+
+                    "add expense to home budget" {
+                        api.addExpenseCalled shouldBe true
+                    }
+
+                    "add expense for selected category" {
+                        api.addedExpenseCategory shouldBe selectedCategory
+                    }
+                }
             }
         }
 

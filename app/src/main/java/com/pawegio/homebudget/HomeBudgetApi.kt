@@ -29,7 +29,8 @@ interface HomeBudgetApi {
 }
 
 data class NewExpense(
-    val date: LocalDate
+    val date: LocalDate,
+    val category: String
 )
 
 class HomeBudgetApiImpl(
