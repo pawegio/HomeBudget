@@ -47,6 +47,15 @@ internal class NewExpenseLogicTest : LogicSpec({
                     api.addedExpenseDate shouldBe LocalDate.parse("2020-06-07")
                 }
             }
+
+            "on select category" - {
+                val selectedCategory = "Hobby"
+                actions.accept(NewExpenseAction.SelectCategory(selectedCategory))
+
+                "update category" {
+                    state.test().assertValue { it.selectedCategory == selectedCategory }
+                }
+            }
         }
 
         "on select add" - {

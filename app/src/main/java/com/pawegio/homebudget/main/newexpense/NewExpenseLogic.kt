@@ -18,11 +18,16 @@ suspend fun NewExpenseLogic(
     clock: Clock
 ) {
     var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
+    var selectedCategory: String
     while (true) {
         when (val action = actions.awaitFirst()) {
             is NewExpenseAction.SelectDate -> {
                 selectedDate = action.date
-                state.value = NewExpenseState(selectedDate)
+                state.value = NewExpenseState(selectedDate, "")
+            }
+            is NewExpenseAction.SelectCategory -> {
+                selectedCategory = action.category
+                state.value = NewExpenseState(selectedDate, selectedCategory)
             }
             NewExpenseAction.SelectAdd -> {
                 val expense = NewExpense(selectedDate)
@@ -33,10 +38,12 @@ suspend fun NewExpenseLogic(
 }
 
 data class NewExpenseState(
-    val selectedDate: LocalDate
+    val selectedDate: LocalDate,
+    val selectedCategory: String
 )
 
 sealed class NewExpenseAction {
     data class SelectDate(val date: LocalDate) : NewExpenseAction()
+    data class SelectCategory(val category: String) : NewExpenseAction()
     object SelectAdd : NewExpenseAction()
 }
