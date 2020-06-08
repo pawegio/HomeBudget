@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
 import com.pawegio.homebudget.LogicSpec
-import com.pawegio.homebudget.NewExpense
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
@@ -40,8 +39,12 @@ internal class NewExpenseLogicTest : LogicSpec({
             "on select add" - {
                 actions.accept(NewExpenseAction.SelectAdd)
 
-                "add expense for selected date to home budget" {
-                    api.addExpense.invocations.first() shouldBe NewExpense(LocalDate.parse("2020-06-07"))
+                "add expense to home budget" {
+                    api.addExpenseCalled shouldBe true
+                }
+
+                "add expense for selected date" {
+                    api.addedExpenseDate shouldBe LocalDate.parse("2020-06-07")
                 }
             }
         }
@@ -49,8 +52,12 @@ internal class NewExpenseLogicTest : LogicSpec({
         "on select add" - {
             actions.accept(NewExpenseAction.SelectAdd)
 
-            "add today's expense to home budget" {
-                api.addExpense.invocations.first() shouldBe NewExpense(LocalDate.parse("2020-06-09"))
+            "add expense to home budget" {
+                api.addExpenseCalled shouldBe true
+            }
+
+            "add expense for current date" {
+                api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
             }
         }
     }
