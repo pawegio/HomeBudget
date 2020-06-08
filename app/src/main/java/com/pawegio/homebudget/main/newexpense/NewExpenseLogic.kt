@@ -17,7 +17,7 @@ suspend fun NewExpenseLogic(
     api: HomeBudgetApi,
     clock: Clock
 ) {
-    var selectedDate: LocalDate
+    var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
     while (true) {
         when (val action = actions.awaitFirst()) {
             is NewExpenseAction.SelectDate -> {
@@ -25,8 +25,7 @@ suspend fun NewExpenseLogic(
                 state.value = NewExpenseState(selectedDate)
             }
             NewExpenseAction.SelectAdd -> {
-                val expense =
-                    NewExpense(clock.instant().atZone(ZoneId.systemDefault()).toLocalDate())
+                val expense = NewExpense(selectedDate)
                 api.addExpense(expense)
             }
         }

@@ -36,6 +36,14 @@ internal class NewExpenseLogicTest : LogicSpec({
             "update selected date" {
                 state.test().assertValue { it.selectedDate == selectedDate }
             }
+
+            "on select add" - {
+                actions.accept(NewExpenseAction.SelectAdd)
+
+                "add expense for selected date to home budget" {
+                    api.addExpense.invocations.first() shouldBe NewExpense(LocalDate.parse("2020-06-07"))
+                }
+            }
         }
 
         "on select add" - {
