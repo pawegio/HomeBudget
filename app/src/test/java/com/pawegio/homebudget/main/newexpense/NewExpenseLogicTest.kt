@@ -16,6 +16,7 @@ internal class NewExpenseLogicTest : LogicSpec({
     "On new expense logic" - {
         val actions = PublishRelay.create<NewExpenseAction>()
         val state = MutableLiveData<NewExpenseState>()
+        val categories = MutableLiveData(listOf("Jedzenie", "Transport", "Hobby"))
         val api = MockHomeBudgetApi()
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
 
@@ -23,6 +24,7 @@ internal class NewExpenseLogicTest : LogicSpec({
             NewExpenseLogic(
                 actions,
                 state,
+                categories,
                 api,
                 clock
             )
@@ -79,6 +81,10 @@ internal class NewExpenseLogicTest : LogicSpec({
 
             "add expense for current date" {
                 api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
+            }
+
+            "add expense for first category" {
+                api.addedExpenseCategory shouldBe categories.value?.first()
             }
         }
     }

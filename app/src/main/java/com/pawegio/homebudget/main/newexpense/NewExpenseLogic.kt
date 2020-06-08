@@ -2,6 +2,7 @@
 
 package com.pawegio.homebudget.main.newexpense
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.NewExpense
@@ -14,11 +15,12 @@ import org.threeten.bp.ZoneId
 suspend fun NewExpenseLogic(
     actions: Observable<NewExpenseAction>,
     state: MutableLiveData<NewExpenseState>,
+    categories: LiveData<List<String>>,
     api: HomeBudgetApi,
     clock: Clock
 ) {
     var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
-    var selectedCategory = ""
+    var selectedCategory = categories.value?.first().orEmpty()
     while (true) {
         when (val action = actions.awaitFirst()) {
             is NewExpenseAction.SelectDate -> {
