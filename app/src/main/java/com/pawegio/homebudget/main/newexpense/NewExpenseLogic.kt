@@ -25,7 +25,7 @@ suspend fun NewExpenseLogic(
         when (val action = actions.awaitFirst()) {
             is NewExpenseAction.SelectDate -> {
                 selectedDate = action.date
-                state.value = NewExpenseState(selectedDate, "")
+                state.value = NewExpenseState(selectedDate, selectedCategory)
             }
             is NewExpenseAction.SelectCategory -> {
                 selectedCategory = action.category
