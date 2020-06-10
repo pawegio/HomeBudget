@@ -39,15 +39,24 @@ internal class NewExpenseLogicTest : LogicSpec({
                 state.test().assertValue { it.selectedDate == selectedDate }
             }
 
-            "on select add" - {
-                actions.accept(NewExpenseAction.SelectAdd)
+            "on select value" - {
+                val selectedValue = BigDecimal.valueOf(7.0)
+                actions.accept(NewExpenseAction.SelectValue(selectedValue))
 
-                "add expense to home budget" {
-                    api.addExpenseCalled shouldBe true
-                }
+                "on select add" - {
+                    actions.accept(NewExpenseAction.SelectAdd)
 
-                "add expense for selected date" {
-                    api.addedExpenseDate shouldBe LocalDate.parse("2020-06-07")
+                    "add expense to home budget" {
+                        api.addExpenseCalled shouldBe true
+                    }
+
+                    "add expense for selected date" {
+                        api.addedExpenseDate shouldBe LocalDate.parse("2020-06-07")
+                    }
+
+                    "add expense value" {
+                        api.addedExpenseValue shouldBe selectedValue
+                    }
                 }
             }
 
@@ -59,15 +68,24 @@ internal class NewExpenseLogicTest : LogicSpec({
                     state.test().assertValue { it.selectedCategory == selectedCategory }
                 }
 
-                "on select add" - {
-                    actions.accept(NewExpenseAction.SelectAdd)
+                "on select value" - {
+                    val selectedValue = BigDecimal.valueOf(300.0)
+                    actions.accept(NewExpenseAction.SelectValue(selectedValue))
 
-                    "add expense to home budget" {
-                        api.addExpenseCalled shouldBe true
-                    }
+                    "on select add" - {
+                        actions.accept(NewExpenseAction.SelectAdd)
 
-                    "add expense for selected category" {
-                        api.addedExpenseCategory shouldBe selectedCategory
+                        "add expense to home budget" {
+                            api.addExpenseCalled shouldBe true
+                        }
+
+                        "add expense for selected category" {
+                            api.addedExpenseCategory shouldBe selectedCategory
+                        }
+
+                        "add expense value" {
+                            api.addedExpenseValue shouldBe selectedValue
+                        }
                     }
                 }
 
@@ -103,6 +121,10 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                 "add expense for first category" {
                     api.addedExpenseCategory shouldBe categories.value?.first()
+                }
+
+                "add expense value" {
+                    api.addedExpenseValue shouldBe selectedValue
                 }
             }
         }

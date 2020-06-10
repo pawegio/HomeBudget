@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.NewExpense
+import com.pawegio.homebudget.main.newexpense.NewExpenseAction.*
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.awaitFirst
 import org.threeten.bp.Clock
@@ -25,20 +26,24 @@ suspend fun NewExpenseLogic(
     var selectedValue: BigDecimal? = null
     while (true) {
         when (val action = actions.awaitFirst()) {
-            is NewExpenseAction.SelectDate -> {
+            is SelectDate -> {
                 selectedDate = action.date
                 state.value = NewExpenseState(selectedDate, selectedCategory, selectedValue)
             }
-            is NewExpenseAction.SelectCategory -> {
+            is SelectCategory -> {
                 selectedCategory = action.category
                 state.value = NewExpenseState(selectedDate, selectedCategory, selectedValue)
             }
-            is NewExpenseAction.SelectValue -> {
+            is SelectValue -> {
                 selectedValue = action.value
                 state.value = NewExpenseState(selectedDate, selectedCategory, selectedValue)
             }
-            NewExpenseAction.SelectAdd -> {
-                val expense = NewExpense(selectedDate, selectedCategory, BigDecimal.ZERO)
+            SelectAdd -> {
+                val expense = NewExpense(
+                    selectedDate,
+                    selectedCategory,
+                    checkNotNull(selectedValue)
+                )
                 api.addExpense(expense)
             }
         }
