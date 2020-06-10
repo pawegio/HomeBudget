@@ -11,6 +11,7 @@ import org.threeten.bp.Clock
 import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
+import java.math.BigDecimal
 
 internal class NewExpenseLogicTest : LogicSpec({
     "On new expense logic" - {
@@ -81,19 +82,28 @@ internal class NewExpenseLogicTest : LogicSpec({
             }
         }
 
-        "on select add" - {
-            actions.accept(NewExpenseAction.SelectAdd)
+        "on select value" - {
+            val selectedValue = BigDecimal.valueOf(15.0)
+            actions.accept(NewExpenseAction.SelectValue(selectedValue))
 
-            "add expense to home budget" {
-                api.addExpenseCalled shouldBe true
+            "update selected value" {
+                state.test().assertValue { it.selectedValue == selectedValue }
             }
 
-            "add expense for current date" {
-                api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
-            }
+            "on select add" - {
+                actions.accept(NewExpenseAction.SelectAdd)
 
-            "add expense for first category" {
-                api.addedExpenseCategory shouldBe categories.value?.first()
+                "add expense to home budget" {
+                    api.addExpenseCalled shouldBe true
+                }
+
+                "add expense for current date" {
+                    api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
+                }
+
+                "add expense for first category" {
+                    api.addedExpenseCategory shouldBe categories.value?.first()
+                }
             }
         }
     }

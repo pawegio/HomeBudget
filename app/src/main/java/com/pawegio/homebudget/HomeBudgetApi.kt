@@ -30,7 +30,8 @@ interface HomeBudgetApi {
 
 data class NewExpense(
     val date: LocalDate,
-    val category: String
+    val category: String,
+    val value: BigDecimal
 )
 
 class HomeBudgetApiImpl(
