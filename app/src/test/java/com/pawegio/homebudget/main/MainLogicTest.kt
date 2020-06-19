@@ -31,7 +31,8 @@ internal class MainLogicTest : LogicSpec({
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
-        val initPickerFlow = mock<SuspendFunction<Unit>>()
+        val initPickerLogic = mock<SuspendFunction<Unit>>()
+        val initNewExpenseLogic = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
@@ -44,7 +45,8 @@ internal class MainLogicTest : LogicSpec({
                 api,
                 spreadsheetLauncher,
                 clock,
-                initPickerFlow::invokeSuspend,
+                initPickerLogic::invokeSuspend,
+                initNewExpenseLogic::invokeSuspend,
                 navigator
             )
         }
@@ -179,6 +181,18 @@ internal class MainLogicTest : LogicSpec({
                 }
             }
 
+            "on add expense" - {
+                actions.accept(MainAction.AddExpense)
+
+                "navigate to new expense screen" {
+                    verify(navigator).navigate(R.id.action_mainFragment_to_newExpenseFragment)
+                }
+
+                "init new expense logic" {
+                    verifyBlocking(initNewExpenseLogic) { invokeSuspend() }
+                }
+            }
+
             "on pick document again" - {
                 actions.accept(MainAction.PickDocumentAgain)
 
@@ -190,8 +204,8 @@ internal class MainLogicTest : LogicSpec({
                     verify(navigator).navigate(R.id.action_mainFragment_to_pickerFragment)
                 }
 
-                "init picker flow" {
-                    verifyBlocking(initPickerFlow) { invokeSuspend() }
+                "init picker logic" {
+                    verifyBlocking(initPickerLogic) { invokeSuspend() }
                 }
             }
         }

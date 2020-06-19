@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isInvisible
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
@@ -59,6 +58,7 @@ class MainFragment : Fragment() {
             menuInflater.inflate(R.menu.main_popup_menu, menu)
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
+                    R.id.action_add_expense -> MainAction.AddExpense
                     R.id.action_pick_document -> MainAction.PickDocumentAgain
                     R.id.action_about -> MainAction.SelectAbout
                     R.id.action_sign_out -> MainAction.SignOut
