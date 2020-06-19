@@ -24,6 +24,7 @@ suspend fun NewExpenseLogic(
     var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
     var selectedCategory = categories.value?.first().orEmpty()
     var selectedValue: BigDecimal? = null
+    state.value = NewExpenseState(selectedDate, selectedCategory, selectedValue)
     while (true) {
         when (val action = actions.awaitFirst()) {
             is SelectDate -> {

@@ -31,6 +31,16 @@ internal class NewExpenseLogicTest : LogicSpec({
             )
         }
 
+        "set default state" {
+            state.test().assertValue(
+                NewExpenseState(
+                    selectedDate = LocalDate.parse("2020-06-09"),
+                    selectedCategory = "Jedzenie",
+                    selectedValue = null
+                )
+            )
+        }
+
         "on select date" - {
             val selectedDate = LocalDate.parse("2020-06-07")
             actions.accept(NewExpenseAction.SelectDate(selectedDate))
