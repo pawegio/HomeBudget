@@ -4,7 +4,7 @@ plugins {
     id("com.android.application")
     id("kotlin-android")
     id("kotlin-android-extensions")
-    id("com.github.triplet.play") version "2.6.1"
+    id("com.github.triplet.play") version "2.8.0"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
