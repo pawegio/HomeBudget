@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import org.threeten.bp.format.DateTimeFormatter
 import splitties.views.onClick
 
 class NewExpenseFragment : Fragment() {
@@ -34,7 +33,7 @@ class NewExpenseFragment : Fragment() {
     }
 
     private fun updateState(state: NewExpenseState) {
-        ui.dateTextView.text = state.selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE)
+        ui.date = state.selectedDate
     }
 
     private fun updateCategories(categories: List<String>) {
