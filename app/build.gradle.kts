@@ -5,7 +5,8 @@ plugins {
     id("kotlin-android")
     id("kotlin-android-extensions")
     id("com.github.triplet.play") version "2.6.1"
-    id("io.fabric")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 apply("../gradle/app-version.gradle")
 
@@ -90,8 +91,8 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
-    implementation("com.google.firebase:firebase-analytics:17.4.2")
-    implementation("com.crashlytics.sdk.android:crashlytics:2.10.1")
+    implementation("com.google.firebase:firebase-crashlytics:17.1.1")
+    implementation("com.google.firebase:firebase-analytics:17.4.4")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-alpha06")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
