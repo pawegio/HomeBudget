@@ -7,9 +7,12 @@ import android.widget.FrameLayout
 import com.pawegio.homebudget.R
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
+import splitties.dimensions.dip
+import splitties.views.dsl.constraintlayout.*
 import splitties.views.dsl.core.*
 import splitties.views.textAppearance
 import splitties.views.textResource
+import splitties.views.verticalPadding
 
 class NewExpenseUi(override val ctx: Context) : Ui {
 
@@ -21,18 +24,30 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
+        verticalPadding = dip(8)
     }
 
-    val categorySpinner = spinner()
+    val categorySpinner = spinner {
+        verticalPadding = dip(8)
+    }
 
     val addExpenseButton = button {
         textResource = R.string.add
     }
 
-    override val root: View = verticalLayout {
-        add(dateTextView, lParams())
-        add(categorySpinner, lParams())
-        add(addExpenseButton, lParams())
+    override val root: View = constraintLayout {
+        add(dateTextView, lParams(matchConstraints, wrapContent) {
+            topOfParent(dip(8))
+            centerHorizontally(dip(16))
+        })
+        add(categorySpinner, lParams(matchConstraints, wrapContent) {
+            topToBottomOf(dateTextView)
+            centerHorizontally(dip(16))
+        })
+        add(addExpenseButton, lParams(wrapContent, wrapContent) {
+            topToBottomOf(categorySpinner)
+            startOfParent(dip(16))
+        })
     }
 }
 
