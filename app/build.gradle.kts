@@ -63,7 +63,7 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.71")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.4")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.3.4")
@@ -73,14 +73,14 @@ dependencies {
     implementation("android.arch.lifecycle:extensions:1.1.1")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.3.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta6")
-    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-rc01")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
-    implementation("androidx.navigation:navigation-ui-ktx:2.2.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta8")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
     implementation("org.koin:koin-androidx-viewmodel:2.0.1")
     implementation("org.koin:koin-android-ext:2.0.1")
-    implementation("com.google.android.material:material:1.2.0-beta01")
-    implementation("com.google.android.gms:play-services-auth:18.0.0")
+    implementation("com.google.android.material:material:1.3.0-alpha01")
+    implementation("com.google.android.gms:play-services-auth:18.1.0")
     implementation("com.google.api-client:google-api-client-android:1.23.0") {
         exclude("org.apache.httpcomponents")
     }
