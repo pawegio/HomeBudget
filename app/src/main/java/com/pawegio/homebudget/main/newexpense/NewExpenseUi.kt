@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.util.colorAttr
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
@@ -17,6 +18,7 @@ import splitties.views.dsl.core.*
 import splitties.views.dsl.material.appBarLayout
 import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
+import splitties.views.imageResource
 import splitties.views.textAppearance
 import splitties.views.textResource
 import splitties.views.verticalPadding
@@ -41,6 +43,11 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         }, defaultLParams(height = matchParent))
     }
 
+    private val dateImageView = imageView {
+        imageResource = R.drawable.ic_date
+        setColorFilter(colorAttr(R.attr.colorAccent))
+    }
+
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
         verticalPadding = dip(8)
@@ -57,9 +64,15 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
-            add(dateTextView, lParams(matchConstraints, wrapContent) {
+            add(dateImageView, lParams(wrapContent, wrapContent) {
                 topOfParent(dip(8))
-                centerHorizontally(dip(16))
+                startOfParent(dip(16))
+                verticalPadding = dip(16)
+            })
+            add(dateTextView, lParams(matchConstraints, wrapContent) {
+                alignVerticallyOn(dateImageView)
+                startToEndOf(dateImageView, dip(16))
+                endOfParent(dip(16))
             })
             add(categorySpinner, lParams(matchConstraints, wrapContent) {
                 topToBottomOf(dateTextView)
