@@ -45,12 +45,19 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val dateImageView = imageView {
         imageResource = R.drawable.ic_date
-        setColorFilter(colorAttr(R.attr.colorAccent))
+        setColorFilter(colorAttr(R.attr.colorPrimary))
+        verticalPadding = dip(16)
     }
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
         verticalPadding = dip(8)
+    }
+
+    private val categoryImageView = imageView {
+        imageResource = R.drawable.ic_category
+        setColorFilter(colorAttr(R.attr.colorPrimary))
+        verticalPadding = dip(16)
     }
 
     val categorySpinner = spinner {
@@ -67,16 +74,20 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             add(dateImageView, lParams(wrapContent, wrapContent) {
                 topOfParent(dip(8))
                 startOfParent(dip(16))
-                verticalPadding = dip(16)
             })
             add(dateTextView, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(dateImageView)
                 startToEndOf(dateImageView, dip(16))
                 endOfParent(dip(16))
             })
+            add(categoryImageView, lParams(wrapContent, wrapContent) {
+                topToBottomOf(dateImageView)
+                startOfParent(dip(16))
+            })
             add(categorySpinner, lParams(matchConstraints, wrapContent) {
-                topToBottomOf(dateTextView)
-                centerHorizontally(dip(16))
+                alignVerticallyOn(categoryImageView)
+                startToEndOf(categoryImageView, dip(16))
+                endOfParent(dip(16))
             })
             add(addExpenseButton, lParams(wrapContent, wrapContent) {
                 topToBottomOf(categorySpinner)

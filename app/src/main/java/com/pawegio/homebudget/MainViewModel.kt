@@ -39,7 +39,7 @@ class MainViewModel(
         get() = Transformations.map(monthlyBudget) { budget ->
             budget.categories.flatMap { category ->
                 category.subcategories.map { subcategory ->
-                    "${category.name} > ${subcategory.name}"
+                    "${category.name}:\n${subcategory.name}"
                 }
             }
         }
