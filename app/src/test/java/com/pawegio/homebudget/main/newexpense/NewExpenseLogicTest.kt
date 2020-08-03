@@ -25,7 +25,7 @@ internal class NewExpenseLogicTest : LogicSpec({
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
         val navigator = mock<Navigator>()
 
-        launch {
+        val logic = launch {
             NewExpenseLogic(
                 actions,
                 state,
@@ -149,6 +149,10 @@ internal class NewExpenseLogicTest : LogicSpec({
 
             "pop back stack" {
                 verify(navigator).popBackStack()
+            }
+
+            "complete logic" {
+                logic.isCompleted shouldBe true
             }
         }
     }

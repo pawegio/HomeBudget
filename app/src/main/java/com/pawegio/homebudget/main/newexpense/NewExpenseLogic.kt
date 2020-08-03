@@ -27,7 +27,7 @@ suspend fun NewExpenseLogic(
     var selectedCategory = categories.value?.first().orEmpty()
     var selectedValue: BigDecimal? = null
     state.value = NewExpenseState(selectedDate, selectedCategory, selectedValue)
-    while (true) {
+    loop@ while (true) {
         when (val action = actions.awaitFirst()) {
             is SelectDate -> {
                 selectedDate = action.date
@@ -49,7 +49,10 @@ suspend fun NewExpenseLogic(
                 )
                 api.addExpense(expense)
             }
-            SelectBack -> navigator.popBackStack()
+            SelectBack -> {
+                navigator.popBackStack()
+                break@loop
+            }
         }
     }
 }
