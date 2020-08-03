@@ -5,6 +5,7 @@ package com.pawegio.homebudget.main.newexpense
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.HomeBudgetApi
+import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.NewExpense
 import com.pawegio.homebudget.main.newexpense.NewExpenseAction.*
 import io.reactivex.Observable
@@ -19,7 +20,8 @@ suspend fun NewExpenseLogic(
     state: MutableLiveData<NewExpenseState>,
     categories: LiveData<List<String>>,
     api: HomeBudgetApi,
-    clock: Clock
+    clock: Clock,
+    navigator: Navigator
 ) {
     var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
     var selectedCategory = categories.value?.first().orEmpty()
@@ -47,6 +49,7 @@ suspend fun NewExpenseLogic(
                 )
                 api.addExpense(expense)
             }
+            SelectBack -> navigator.popBackStack()
         }
     }
 }
@@ -62,4 +65,5 @@ sealed class NewExpenseAction {
     data class SelectCategory(val category: String) : NewExpenseAction()
     data class SelectValue(val value: BigDecimal) : NewExpenseAction()
     object SelectAdd : NewExpenseAction()
+    object SelectBack : NewExpenseAction()
 }

@@ -104,7 +104,8 @@ class MainViewModel(
             _newExpenseState,
             categories,
             api,
-            clock
+            clock,
+            navigator
         )
     }
 }

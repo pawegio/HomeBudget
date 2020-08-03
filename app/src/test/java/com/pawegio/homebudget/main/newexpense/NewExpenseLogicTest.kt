@@ -3,7 +3,10 @@ package com.pawegio.homebudget.main.newexpense
 import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
 import com.pawegio.homebudget.LogicSpec
+import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ internal class NewExpenseLogicTest : LogicSpec({
         val categories = MutableLiveData(listOf("Jedzenie", "Transport", "Hobby"))
         val api = MockHomeBudgetApi()
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
+        val navigator = mock<Navigator>()
 
         launch {
             NewExpenseLogic(
@@ -27,7 +31,8 @@ internal class NewExpenseLogicTest : LogicSpec({
                 state,
                 categories,
                 api,
-                clock
+                clock,
+                navigator
             )
         }
 
@@ -136,6 +141,14 @@ internal class NewExpenseLogicTest : LogicSpec({
                 "add expense value" {
                     api.addedExpenseValue shouldBe selectedValue
                 }
+            }
+        }
+
+        "on select back" - {
+            actions.accept(NewExpenseAction.SelectBack)
+
+            "pop back stack" {
+                verify(navigator).popBackStack()
             }
         }
     }
