@@ -5,6 +5,7 @@ package com.pawegio.homebudget.picker
 import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.picker.PickerAction.*
 import com.pawegio.homebudget.util.HowToLauncher
 import io.reactivex.Observable
 import kotlinx.coroutines.coroutineScope
@@ -19,18 +20,21 @@ suspend fun PickerLogic(
     initMain: suspend () -> Unit,
     navigator: Navigator
 ) = coroutineScope {
+    var newDocumentPicked = false
     loop@ while (isActive) {
         when (val action = actions.awaitFirst()) {
-            PickerAction.SelectHowTo -> howToLauncher.launch()
-            is PickerAction.SelectTemplate -> repository.spreadsheetTemplate = action.template
-            is PickerAction.PickDocument -> {
+            SelectHowTo -> howToLauncher.launch()
+            is SelectTemplate -> repository.spreadsheetTemplate = action.template
+            is PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
                 navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
+                newDocumentPicked = true
                 break@loop
             }
+            SelectBack -> break@loop
         }
     }
-    initMain()
+    if (newDocumentPicked) initMain()
     navigator.popBackStack()
 }
 
@@ -38,4 +42,5 @@ sealed class PickerAction {
     object SelectHowTo : PickerAction()
     data class SelectTemplate(val template: Int) : PickerAction()
     data class PickDocument(val url: String) : PickerAction()
+    object SelectBack : PickerAction()
 }

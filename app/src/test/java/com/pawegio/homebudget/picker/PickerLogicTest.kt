@@ -8,6 +8,7 @@ import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SuspendFunction
+import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
 
 internal class PickerLogicTest : LogicSpec({
@@ -19,7 +20,7 @@ internal class PickerLogicTest : LogicSpec({
         val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
-        launch {
+        val logic = launch {
             @Suppress("EXPERIMENTAL_API_USAGE")
             PickerLogic(
                 actions,
@@ -76,6 +77,22 @@ internal class PickerLogicTest : LogicSpec({
 
             "init main flow" {
                 verifyBlocking(initMain) { invokeSuspend() }
+            }
+        }
+
+        "on select back" - {
+            actions.accept(PickerAction.SelectBack)
+
+            "pop back stack" {
+                verify(navigator).popBackStack()
+            }
+
+            "complete logic" {
+                logic.isCompleted shouldBe true
+            }
+
+            "do not init main flow" {
+                verifyBlocking(initMain, never()) { invokeSuspend() }
             }
         }
     }
