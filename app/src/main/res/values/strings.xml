@@ -34,6 +34,7 @@
     <!-- NEW EXPENSE -->
     <string name="new_expense">Nowy wydatek</string>
     <string name="add">Dodaj</string>
+    <string name="note_hint">Dodaj notatkę</string>
 
     <!-- ABOUT -->
     <string name="version">Wersja</string>

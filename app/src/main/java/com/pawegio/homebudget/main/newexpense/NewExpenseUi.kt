@@ -10,6 +10,7 @@ import com.pawegio.homebudget.util.colorAttr
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
+import splitties.views.*
 import splitties.views.dsl.appcompat.toolbar
 import splitties.views.dsl.constraintlayout.*
 import splitties.views.dsl.coordinatorlayout.appBarLParams
@@ -18,12 +19,14 @@ import splitties.views.dsl.core.*
 import splitties.views.dsl.material.appBarLayout
 import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
-import splitties.views.imageResource
-import splitties.views.textAppearance
-import splitties.views.textResource
-import splitties.views.verticalPadding
 
 class NewExpenseUi(override val ctx: Context) : Ui {
+
+    var note: String?
+        get() = noteEditText.editableText.toString()
+        set(value) {
+            noteEditText.setText(value)
+        }
 
     var date: LocalDate? = null
         set(value) {
@@ -43,9 +46,23 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         }, defaultLParams(height = matchParent))
     }
 
+    private val noteImageView = imageView {
+        imageResource = R.drawable.ic_note
+        setColorFilter(colorAttr(R.attr.colorPrimary))
+        verticalPadding = dip(16)
+    }
+
+    private val noteEditText = editText {
+        textAppearance = R.style.TextAppearance_MaterialComponents_Headline5
+        isSingleLine = true
+        setHint(R.string.note_hint)
+        verticalPadding = dip(8)
+    }
+
     private val dateImageView = imageView {
         imageResource = R.drawable.ic_date
         setColorFilter(colorAttr(R.attr.colorPrimary))
+        horizontalPadding = dip(2)
         verticalPadding = dip(16)
     }
 
@@ -71,8 +88,17 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
-            add(dateImageView, lParams(wrapContent, wrapContent) {
+            add(noteImageView, lParams(wrapContent, wrapContent) {
                 topOfParent(dip(8))
+                startOfParent(dip(16))
+            })
+            add(noteEditText, lParams(matchConstraints, wrapContent) {
+                alignVerticallyOn(noteImageView)
+                startToEndOf(noteImageView, dip(16))
+                endOfParent(dip(16))
+            })
+            add(dateImageView, lParams(wrapContent, wrapContent) {
+                topToBottomOf(noteImageView)
                 startOfParent(dip(16))
             })
             add(dateTextView, lParams(matchConstraints, wrapContent) {
@@ -90,7 +116,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 endOfParent(dip(16))
             })
             add(addExpenseButton, lParams(wrapContent, wrapContent) {
-                topToBottomOf(categorySpinner)
+                topToBottomOf(categoryImageView)
                 startOfParent(dip(16))
             })
         }, contentScrollingWithAppBarLParams())
