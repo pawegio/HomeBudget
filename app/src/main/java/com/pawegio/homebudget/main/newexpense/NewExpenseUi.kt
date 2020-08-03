@@ -4,12 +4,19 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
+import androidx.appcompat.app.AppCompatActivity
 import com.pawegio.homebudget.R
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
+import splitties.views.dsl.appcompat.toolbar
 import splitties.views.dsl.constraintlayout.*
+import splitties.views.dsl.coordinatorlayout.appBarLParams
+import splitties.views.dsl.coordinatorlayout.coordinatorLayout
 import splitties.views.dsl.core.*
+import splitties.views.dsl.material.appBarLayout
+import splitties.views.dsl.material.contentScrollingWithAppBarLParams
+import splitties.views.dsl.material.defaultLParams
 import splitties.views.textAppearance
 import splitties.views.textResource
 import splitties.views.verticalPadding
@@ -21,6 +28,15 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             field = value
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
         }
+
+    private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
+        add(toolbar {
+            (ctx as? AppCompatActivity)?.setSupportActionBar(this)
+            popupTheme = R.style.AppTheme_PopupOverlay
+            setNavigationIcon(R.drawable.ic_close)
+            setTitle(R.string.new_expense)
+        }, defaultLParams(height = matchParent))
+    }
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
@@ -35,19 +51,22 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         textResource = R.string.add
     }
 
-    override val root: View = constraintLayout {
-        add(dateTextView, lParams(matchConstraints, wrapContent) {
-            topOfParent(dip(8))
-            centerHorizontally(dip(16))
-        })
-        add(categorySpinner, lParams(matchConstraints, wrapContent) {
-            topToBottomOf(dateTextView)
-            centerHorizontally(dip(16))
-        })
-        add(addExpenseButton, lParams(wrapContent, wrapContent) {
-            topToBottomOf(categorySpinner)
-            startOfParent(dip(16))
-        })
+    override val root: View = coordinatorLayout {
+        add(appBar, appBarLParams())
+        add(constraintLayout {
+            add(dateTextView, lParams(matchConstraints, wrapContent) {
+                topOfParent(dip(8))
+                centerHorizontally(dip(16))
+            })
+            add(categorySpinner, lParams(matchConstraints, wrapContent) {
+                topToBottomOf(dateTextView)
+                centerHorizontally(dip(16))
+            })
+            add(addExpenseButton, lParams(wrapContent, wrapContent) {
+                topToBottomOf(categorySpinner)
+                startOfParent(dip(16))
+            })
+        }, contentScrollingWithAppBarLParams())
     }
 }
 

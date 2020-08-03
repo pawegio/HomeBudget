@@ -11,6 +11,10 @@
         <item name="imageButtonStyle">@style/Widget.App.ActionButton</item>
     </style>
 
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
     <style name="Widget.App.ActionButton" parent="Widget.AppCompat.ActionButton">
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>

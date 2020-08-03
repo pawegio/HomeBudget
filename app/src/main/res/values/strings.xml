@@ -32,6 +32,7 @@
     <string name="sign_out">Wyloguj się</string>
 
     <!-- NEW EXPENSE -->
+    <string name="new_expense">Nowy wydatek</string>
     <string name="add">Dodaj</string>
 
     <!-- ABOUT -->
