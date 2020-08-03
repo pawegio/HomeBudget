@@ -5,11 +5,15 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
+import com.pawegio.homebudget.main.newexpense.NewExpenseAction
 import com.pawegio.homebudget.util.CurrentActivityObserver
 import kotlinx.android.synthetic.main.main_activity.*
 import org.koin.android.viewmodel.ext.android.getViewModel
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity) {
+
+    private val viewModel by viewModel<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -18,7 +22,14 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
         lifecycle.addObserver(getViewModel<MainViewModel>())
     }
 
-    override fun onBackPressed() = finish()
+    override fun onBackPressed() {
+        when (appNavController?.currentDestination?.id) {
+            R.id.newExpenseFragment -> {
+                viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack)
+            }
+            else -> finish()
+        }
+    }
 }
 
 @SuppressLint("StaticFieldLeak")
