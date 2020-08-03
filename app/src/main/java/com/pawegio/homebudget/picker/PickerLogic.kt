@@ -20,7 +20,6 @@ suspend fun PickerLogic(
     initMain: suspend () -> Unit,
     navigator: Navigator
 ) = coroutineScope {
-    var newDocumentPicked = false
     loop@ while (isActive) {
         when (val action = actions.awaitFirst()) {
             SelectHowTo -> howToLauncher.launch()
@@ -28,13 +27,12 @@ suspend fun PickerLogic(
             is PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
                 navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
-                newDocumentPicked = true
+                initMain()
                 break@loop
             }
             SelectBack -> break@loop
         }
     }
-    if (newDocumentPicked) initMain()
     navigator.popBackStack()
 }
 

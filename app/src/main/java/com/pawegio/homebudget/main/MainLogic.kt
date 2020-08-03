@@ -50,7 +50,6 @@ suspend fun MainLogic(
                     initNewExpense()
                 }
                 PickDocumentAgain -> {
-                    repository.spreadsheetId = null
                     navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
                     initPicker()
                 }

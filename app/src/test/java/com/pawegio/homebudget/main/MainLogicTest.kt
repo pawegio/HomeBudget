@@ -196,10 +196,6 @@ internal class MainLogicTest : LogicSpec({
             "on pick document again" - {
                 actions.accept(MainAction.PickDocumentAgain)
 
-                "clear spreadsheet id" {
-                    verify(repository).spreadsheetId = null
-                }
-
                 "navigate to picker screen" {
                     verify(navigator).navigate(R.id.action_mainFragment_to_pickerFragment)
                 }
