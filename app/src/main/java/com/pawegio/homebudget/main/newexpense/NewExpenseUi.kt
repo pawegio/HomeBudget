@@ -29,12 +29,15 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
         }
 
+    var onBackClick: (() -> Unit)? = null
+
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
             (ctx as? AppCompatActivity)?.setSupportActionBar(this)
             popupTheme = R.style.AppTheme_PopupOverlay
             setNavigationIcon(R.drawable.ic_close)
             setTitle(R.string.new_expense)
+            setNavigationOnClickListener { onBackClick?.invoke() }
         }, defaultLParams(height = matchParent))
     }
 

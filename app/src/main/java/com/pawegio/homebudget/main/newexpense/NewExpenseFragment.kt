@@ -1,6 +1,5 @@
 package com.pawegio.homebudget.main.newexpense
 
-import android.R
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -30,6 +29,9 @@ class NewExpenseFragment : Fragment() {
         ui.addExpenseButton.onClick {
             viewModel.newExpenseActions.accept(NewExpenseAction.SelectAdd)
         }
+        ui.onBackClick = {
+            viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack)
+        }
     }
 
     private fun updateState(state: NewExpenseState) {
@@ -39,7 +41,7 @@ class NewExpenseFragment : Fragment() {
     private fun updateCategories(categories: List<String>) {
         ui.categorySpinner.adapter = ArrayAdapter(
             requireContext(),
-            R.layout.simple_list_item_1,
+            android.R.layout.simple_list_item_1,
             categories
         )
     }
