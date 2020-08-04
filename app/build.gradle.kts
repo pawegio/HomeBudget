@@ -48,7 +48,8 @@ android {
         jvmTarget = "1.8"
         freeCompilerArgs = listOf(
             "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-            "-Xopt-in=splitties.experimental.InternalSplittiesApi"
+            "-Xopt-in=splitties.experimental.InternalSplittiesApi",
+            "-Xopt-in=splitties.experimental.ExperimentalSplittiesApi"
         )
     }
 }

@@ -1,6 +1,7 @@
 package com.pawegio.homebudget.main.newexpense
 
 import android.content.Context
+import android.text.InputType
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -49,7 +50,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     private val noteImageView = imageView {
         imageResource = R.drawable.ic_note
         setColorFilter(colorAttr(R.attr.colorPrimary))
-        verticalPadding = dip(16)
+        padding = dip(8)
     }
 
     private val noteEditText = editText {
@@ -62,23 +63,34 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     private val dateImageView = imageView {
         imageResource = R.drawable.ic_date
         setColorFilter(colorAttr(R.attr.colorPrimary))
-        horizontalPadding = dip(2)
-        verticalPadding = dip(16)
+        padding = dip(8)
     }
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
-        verticalPadding = dip(8)
     }
 
     private val categoryImageView = imageView {
         imageResource = R.drawable.ic_category
         setColorFilter(colorAttr(R.attr.colorPrimary))
-        verticalPadding = dip(16)
+        padding = dip(8)
     }
 
     val categorySpinner = spinner {
         verticalPadding = dip(8)
+    }
+
+    private val amountImageView = imageView {
+        imageResource = R.drawable.ic_amount
+        setColorFilter(colorAttr(R.attr.colorPrimary))
+        padding = dip(8)
+    }
+
+    private val amountEditText = editText {
+        isSingleLine = true
+        gravity = gravityEnd
+        setHint(R.string.amount_hint)
+        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
     }
 
     val addExpenseButton = button {
@@ -88,35 +100,48 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
-            add(noteImageView, lParams(wrapContent, wrapContent) {
+            add(noteImageView, lParams(dip(40), dip(40)) {
                 topOfParent(dip(8))
                 startOfParent(dip(16))
+                verticalMargin = dip(8)
             })
             add(noteEditText, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(noteImageView)
                 startToEndOf(noteImageView, dip(16))
                 endOfParent(dip(16))
             })
-            add(dateImageView, lParams(wrapContent, wrapContent) {
-                topToBottomOf(noteImageView)
+            add(dateImageView, lParams(dip(40), dip(40)) {
+                topToBottomOf(noteImageView, dip(16))
                 startOfParent(dip(16))
+                verticalMargin = dip(8)
             })
             add(dateTextView, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(dateImageView)
                 startToEndOf(dateImageView, dip(16))
                 endOfParent(dip(16))
             })
-            add(categoryImageView, lParams(wrapContent, wrapContent) {
-                topToBottomOf(dateImageView)
+            add(categoryImageView, lParams(dip(40), dip(40)) {
+                topToBottomOf(dateImageView, dip(16))
                 startOfParent(dip(16))
+                verticalMargin = dip(8)
             })
             add(categorySpinner, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(categoryImageView)
                 startToEndOf(categoryImageView, dip(16))
                 endOfParent(dip(16))
             })
+            add(amountImageView, lParams(dip(40), dip(40)) {
+                topToBottomOf(categoryImageView, dip(16))
+                startOfParent(dip(16))
+                verticalMargin = dip(8)
+            })
+            add(amountEditText, lParams(matchConstraints, wrapContent) {
+                alignVerticallyOn(amountImageView)
+                startToEndOf(amountImageView, dip(16))
+                endOfParent(dip(16))
+            })
             add(addExpenseButton, lParams(wrapContent, wrapContent) {
-                topToBottomOf(categoryImageView)
+                topToBottomOf(amountImageView, dip(16))
                 startOfParent(dip(16))
             })
         }, contentScrollingWithAppBarLParams())
