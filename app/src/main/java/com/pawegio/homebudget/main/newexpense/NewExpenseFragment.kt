@@ -1,20 +1,28 @@
 package com.pawegio.homebudget.main.newexpense
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
+import com.pawegio.homebudget.R
 import org.koin.android.viewmodel.ext.android.sharedViewModel
-import splitties.views.onClick
 
 class NewExpenseFragment : Fragment() {
 
     private val viewModel by sharedViewModel<MainViewModel>()
     private val ui by lazy { NewExpenseUi(requireContext()) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.new_expense_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,12 +34,14 @@ class NewExpenseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.newExpenseState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
-        ui.addExpenseButton.onClick {
-            viewModel.newExpenseActions.accept(NewExpenseAction.SelectAdd)
+        ui.onBackClick = { viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack) }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add -> viewModel.newExpenseActions.accept(NewExpenseAction.SelectAdd)
         }
-        ui.onBackClick = {
-            viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack)
-        }
+        return super.onOptionsItemSelected(item)
     }
 
     private fun updateState(state: NewExpenseState) {

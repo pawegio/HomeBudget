@@ -93,10 +93,6 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
     }
 
-    val addExpenseButton = button {
-        textResource = R.string.add
-    }
-
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
@@ -139,10 +135,6 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 alignVerticallyOn(amountImageView)
                 startToEndOf(amountImageView, dip(16))
                 endOfParent(dip(16))
-            })
-            add(addExpenseButton, lParams(wrapContent, wrapContent) {
-                topToBottomOf(amountImageView, dip(16))
-                startOfParent(dip(16))
             })
         }, contentScrollingWithAppBarLParams())
     }
