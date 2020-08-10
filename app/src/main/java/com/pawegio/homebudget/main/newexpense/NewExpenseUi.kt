@@ -96,6 +96,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
+            backgroundColor = colorAttr(R.attr.colorSurface)
             add(noteImageView, lParams(dip(40), dip(40)) {
                 topOfParent(dip(8))
                 startOfParent(dip(16))

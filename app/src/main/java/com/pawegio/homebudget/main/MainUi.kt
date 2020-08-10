@@ -6,20 +6,20 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.ProgressBar
-import androidx.cardview.widget.CardView
 import androidx.core.view.isVisible
 import androidx.core.widget.NestedScrollView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.android.material.card.MaterialCardView
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
-import com.pawegio.homebudget.util.cardView
 import com.pawegio.homebudget.util.colorAttr
 import splitties.dimensions.dip
 import splitties.dimensions.dp
 import splitties.views.*
 import splitties.views.dsl.constraintlayout.*
 import splitties.views.dsl.core.*
+import splitties.views.dsl.material.materialCardView
 
 class MainUi(override val ctx: Context) : Ui {
 
@@ -95,7 +95,7 @@ class MainUi(override val ctx: Context) : Ui {
         setColorFilter(colorAttr(R.attr.colorOnPrimary))
     }
 
-    private val monthSummarySurface = inflate<CardView>(R.layout.month_summary_surface)
+    private val monthSummarySurface = inflate<MaterialCardView>(R.layout.month_summary_surface)
 
     private val incomesHeaderView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6
@@ -106,7 +106,7 @@ class MainUi(override val ctx: Context) : Ui {
         layoutTransition = LayoutTransition()
     }
 
-    private val allIncomesCardView = cardView {
+    private val allIncomesCardView = materialCardView {
         add(allIncomesLayout, lParams(matchParent, wrapContent) {
             topMargin = dip(8)
             bottomMargin = dip(8)

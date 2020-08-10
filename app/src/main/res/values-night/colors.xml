@@ -5,7 +5,7 @@
     <color name="primaryLightColor">#33efdcd5</color>
     <color name="primaryDarkColor">#338c7b75</color>
     <color name="primaryTextColor">#ffffff</color>
-    <color name="surfaceColor">#121212</color>
+    <color name="surfaceColor">#323232</color>
     <color name="backgroundColor">#121212</color>
     <color name="accentColor">#338c7b75</color>
 </resources>
