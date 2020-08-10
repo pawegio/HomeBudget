@@ -7,7 +7,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.common.DatePickerFragment
 import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.threeten.bp.LocalDate
 
 class NewExpenseFragment : Fragment() {
 
@@ -35,6 +37,17 @@ class NewExpenseFragment : Fragment() {
         viewModel.newExpenseState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
         ui.onBackClick = { viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack) }
+        ui.onDateClick = ::showDatePicker
+    }
+
+    private fun showDatePicker(date: LocalDate?) {
+        DatePickerFragment.withDate(date).apply {
+            dateChanges
+                .takeUntil(dismisses)
+                .subscribe { selectedDate ->
+                    viewModel.newExpenseActions.accept(NewExpenseAction.SelectDate(selectedDate))
+                }
+        }.show(childFragmentManager, "datePicker")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

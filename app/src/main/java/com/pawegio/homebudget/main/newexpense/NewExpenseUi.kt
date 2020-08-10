@@ -36,6 +36,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         }
 
     var onBackClick: (() -> Unit)? = null
+    var onDateClick: ((LocalDate?) -> Unit)? = null
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -68,6 +69,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
+        onClick { onDateClick?.invoke(date) }
     }
 
     private val categoryImageView = imageView {
