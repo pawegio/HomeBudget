@@ -8,6 +8,7 @@ import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.colorAttr
+import com.pawegio.homebudget.util.resourceAttr
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
@@ -69,6 +70,8 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val dateTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
+        setBackgroundResource(resourceAttr(R.attr.selectableItemBackground))
+        padding = dip(8)
         onClick { onDateClick?.invoke(date) }
     }
 
@@ -102,7 +105,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             add(noteImageView, lParams(dip(40), dip(40)) {
                 topOfParent(dip(8))
                 startOfParent(dip(16))
-                verticalMargin = dip(8)
+                verticalMargin = dip(16)
             })
             add(noteEditText, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(noteImageView)
@@ -110,9 +113,9 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 endOfParent(dip(16))
             })
             add(dateImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(noteImageView, dip(16))
+                topToBottomOf(noteImageView)
                 startOfParent(dip(16))
-                verticalMargin = dip(8)
+                verticalMargin = dip(16)
             })
             add(dateTextView, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(dateImageView)
@@ -120,9 +123,9 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 endOfParent(dip(16))
             })
             add(categoryImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(dateImageView, dip(16))
+                topToBottomOf(dateImageView)
                 startOfParent(dip(16))
-                verticalMargin = dip(8)
+                verticalMargin = dip(16)
             })
             add(categorySpinner, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(categoryImageView)
@@ -130,9 +133,9 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 endOfParent(dip(16))
             })
             add(amountImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(categoryImageView, dip(16))
+                topToBottomOf(categoryImageView)
                 startOfParent(dip(16))
-                verticalMargin = dip(8)
+                verticalMargin = dip(16)
             })
             add(amountEditText, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(amountImageView)
