@@ -21,6 +21,7 @@ import splitties.views.dsl.core.*
 import splitties.views.dsl.material.appBarLayout
 import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
+import java.math.BigDecimal
 
 class NewExpenseUi(override val ctx: Context) : Ui {
 
@@ -34,6 +35,12 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         set(value) {
             field = value
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
+        }
+
+    var amount: BigDecimal?
+        get() = BigDecimal(amountEditText.editableText.toString())
+        set(value) {
+            amountEditText.setText(value.toString())
         }
 
     var onBackClick: (() -> Unit)? = null
