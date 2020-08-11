@@ -30,22 +30,10 @@ import java.math.BigDecimal
 
 class NewExpenseUi(override val ctx: Context) : Ui {
 
-    var note: String?
-        get() = noteEditText.editableText.toString()
-        set(value) {
-            noteEditText.setText(value)
-        }
-
     var date: LocalDate? = null
         set(value) {
             field = value
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
-        }
-
-    var amount: BigDecimal?
-        get() = BigDecimal(amountEditText.editableText.toString())
-        set(value) {
-            amountEditText.setText(value.toString())
         }
 
     private val backClicksRelay = PublishRelay.create<Unit>()
