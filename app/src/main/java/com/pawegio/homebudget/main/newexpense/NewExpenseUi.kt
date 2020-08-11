@@ -95,7 +95,14 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         isSingleLine = true
         gravity = gravityEnd
         setHint(R.string.amount_hint)
+        textSize = 24f
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+    }
+
+    private val currencyTextView = textView {
+        textAppearance = R.style.TextAppearance_MaterialComponents_Body1
+        textSize = 24f
+        textResource = R.string.currency
     }
 
     override val root: View = coordinatorLayout {
@@ -140,6 +147,10 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             add(amountEditText, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(amountImageView)
                 startToEndOf(amountImageView, dip(16))
+                endToStartOf(currencyTextView, dip(4))
+            })
+            add(currencyTextView, lParams(wrapContent, wrapContent) {
+                alignVerticallyOn(amountImageView)
                 endOfParent(dip(16))
             })
         }, contentScrollingWithAppBarLParams())

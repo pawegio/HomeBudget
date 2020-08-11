@@ -35,7 +35,8 @@
     <string name="new_expense">Nowy wydatek</string>
     <string name="add">Dodaj</string>
     <string name="note_hint">Dodaj notatkę</string>
-    <string name="amount_hint">0,00 zł</string>
+    <string name="amount_hint">0,00</string>
+    <string name="currency">zł</string>
 
     <!-- ABOUT -->
     <string name="version">Wersja</string>
