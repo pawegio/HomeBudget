@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.colorAttr
@@ -49,9 +50,11 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val backClicksRelay = PublishRelay.create<Unit>()
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
+    private val amountChangesRelay = PublishRelay.create<BigDecimal>()
 
     val backClicks: Observable<Unit> = backClicksRelay
     val dateClicks: Observable<LocalDate> = dateClicksRelay
+    val amountChanges: Observable<BigDecimal> = amountChangesRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -86,7 +89,9 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
         setBackgroundResource(resourceAttr(R.attr.selectableItemBackground))
         padding = dip(8)
-        clicks().map { date }.subscribe(dateClicksRelay)
+        clicks()
+            .map { date }
+            .subscribe(dateClicksRelay)
     }
 
     private val categoryImageView = imageView {
@@ -113,6 +118,10 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
         keyListener = DigitsKeyListener.getInstance("0123456789,")
         filters = arrayOf(AmountInputFilter(10, 2))
+        textChanges()
+            .skipInitialValue()
+            .map { BigDecimal(it.toString().replace(',', '.')) }
+            .subscribe(amountChangesRelay)
     }
 
     private val currencyTextView = textView {

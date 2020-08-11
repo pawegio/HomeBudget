@@ -9,6 +9,8 @@ import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.common.DatePickerFragment
+import com.pawegio.homebudget.main.newexpense.NewExpenseAction.*
+import io.reactivex.Observable
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 
@@ -38,7 +40,10 @@ class NewExpenseFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.newExpenseState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
-        ui.backClicks.map { NewExpenseAction.SelectBack }.subscribe(viewModel.newExpenseActions)
+        Observable.merge(
+            ui.backClicks.map { SelectBack },
+            ui.amountChanges.map(::SelectValue)
+        ).subscribe(viewModel.newExpenseActions)
         ui.dateClicks.subscribe(::showDatePicker)
     }
 
@@ -47,14 +52,14 @@ class NewExpenseFragment : Fragment() {
             dateChanges
                 .takeUntil(dismisses)
                 .subscribe { selectedDate ->
-                    viewModel.newExpenseActions.accept(NewExpenseAction.SelectDate(selectedDate))
+                    viewModel.newExpenseActions.accept(SelectDate(selectedDate))
                 }
         }.show(childFragmentManager, "datePicker")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_add -> viewModel.newExpenseActions.accept(NewExpenseAction.SelectAdd)
+            R.id.action_add -> viewModel.newExpenseActions.accept(SelectAdd)
         }
         return super.onOptionsItemSelected(item)
     }
