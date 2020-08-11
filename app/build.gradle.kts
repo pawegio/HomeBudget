@@ -71,6 +71,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.3.4")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
     implementation("com.jakewharton.rxrelay2:rxrelay:2.1.1")
+    implementation("com.jakewharton.rxbinding3:rxbinding:3.1.0")
     implementation("android.arch.lifecycle:extensions:1.1.1")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.3.0")

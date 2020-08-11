@@ -7,9 +7,12 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.colorAttr
 import com.pawegio.homebudget.util.resourceAttr
+import io.reactivex.Observable
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
@@ -44,8 +47,11 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             amountEditText.setText(value.toString())
         }
 
-    var onBackClick: (() -> Unit)? = null
-    var onDateClick: ((LocalDate?) -> Unit)? = null
+    private val backClicksRelay = PublishRelay.create<Unit>()
+    private val dateClicksRelay = PublishRelay.create<LocalDate>()
+
+    val backClicks: Observable<Unit> = backClicksRelay
+    val dateClicks: Observable<LocalDate> = dateClicksRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -53,7 +59,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             popupTheme = R.style.AppTheme_PopupOverlay
             setNavigationIcon(R.drawable.ic_close)
             setTitle(R.string.new_expense)
-            setNavigationOnClickListener { onBackClick?.invoke() }
+            setNavigationOnClickListener { backClicksRelay.accept(Unit) }
         }, defaultLParams(height = matchParent))
     }
 
@@ -80,7 +86,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
         setBackgroundResource(resourceAttr(R.attr.selectableItemBackground))
         padding = dip(8)
-        onClick { onDateClick?.invoke(date) }
+        clicks().map { date }.subscribe(dateClicksRelay)
     }
 
     private val categoryImageView = imageView {

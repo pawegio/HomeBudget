@@ -1,5 +1,6 @@
 package com.pawegio.homebudget.main.newexpense
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import android.widget.ArrayAdapter
@@ -32,12 +33,13 @@ class NewExpenseFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View = ui.root
 
+    @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel.newExpenseState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
-        ui.onBackClick = { viewModel.newExpenseActions.accept(NewExpenseAction.SelectBack) }
-        ui.onDateClick = ::showDatePicker
+        ui.backClicks.map { NewExpenseAction.SelectBack }.subscribe(viewModel.newExpenseActions)
+        ui.dateClicks.subscribe(::showDatePicker)
     }
 
     private fun showDatePicker(date: LocalDate?) {
