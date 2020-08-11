@@ -2,6 +2,7 @@ package com.pawegio.homebudget.main.newexpense
 
 import android.content.Context
 import android.text.InputType
+import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
 import android.widget.FrameLayout
@@ -102,13 +103,15 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         isSingleLine = true
         gravity = gravityEnd
         setHint(R.string.amount_hint)
-        textSize = 24f
+        textSize = 26f
         inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        keyListener = DigitsKeyListener.getInstance("0123456789,")
+        filters = arrayOf(AmountInputFilter(10, 2))
     }
 
     private val currencyTextView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Body1
-        textSize = 24f
+        textSize = 26f
         textResource = R.string.currency
     }
 
@@ -149,7 +152,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             add(amountImageView, lParams(dip(40), dip(40)) {
                 topToBottomOf(categoryImageView)
                 startOfParent(dip(16))
-                verticalMargin = dip(16)
+                topMargin = dip(36)
             })
             add(amountEditText, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(amountImageView)
