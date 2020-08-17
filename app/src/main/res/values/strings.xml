@@ -37,6 +37,7 @@
     <string name="note_hint">Dodaj notatkę</string>
     <string name="amount_hint">0,00</string>
     <string name="currency">zł</string>
+    <string name="add_expense_error_message">Nie udało się dodać wydatku do budżetu.</string>
 
     <!-- ABOUT -->
     <string name="version">Wersja</string>

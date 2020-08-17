@@ -105,6 +105,7 @@ class MainViewModel(
             categories,
             api,
             clock,
+            toastNotifier,
             navigator
         )
     }

@@ -4,10 +4,14 @@ import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.pawegio.homebudget.HomeBudgetApiException
 import com.pawegio.homebudget.LogicSpec
 import com.pawegio.homebudget.Navigator
+import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.MockHomeBudgetApi
+import com.pawegio.homebudget.util.ToastNotifier
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
@@ -16,6 +20,7 @@ import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import java.math.BigDecimal
 import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
 
 internal class NewExpenseLogicTest : LogicSpec({
     "On new expense logic" - {
@@ -24,6 +29,7 @@ internal class NewExpenseLogicTest : LogicSpec({
         val categories = MutableLiveData(listOf("Jedzenie", "Transport", "Hobby"))
         val api = MockHomeBudgetApi()
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
+        val toastNotifier = mock<ToastNotifier>()
         val navigator = mock<Navigator>()
 
         val logic = launch {
@@ -33,6 +39,7 @@ internal class NewExpenseLogicTest : LogicSpec({
                 categories,
                 api,
                 clock,
+                toastNotifier,
                 navigator
             )
         }
@@ -112,6 +119,22 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                             "complete logic" {
                                 logic.isCompleted shouldBe true
+                            }
+                        }
+
+                        "on add expense failure" - {
+                            api.addExpense.resumeWithException(HomeBudgetApiException())
+
+                            "show add expense error" {
+                                verify(toastNotifier).notify(R.string.add_expense_error_message)
+                            }
+
+                            "do not pop back stack" {
+                                verify(navigator, never()).popBackStack()
+                            }
+
+                            "do not complete logic" {
+                                logic.isCompleted shouldBe false
                             }
                         }
                     }

@@ -4,10 +4,9 @@ package com.pawegio.homebudget.main.newexpense
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.pawegio.homebudget.HomeBudgetApi
-import com.pawegio.homebudget.Navigator
-import com.pawegio.homebudget.NewExpense
+import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.newexpense.NewExpenseAction.*
+import com.pawegio.homebudget.util.ToastNotifier
 import io.reactivex.Observable
 import kotlinx.coroutines.rx2.awaitFirst
 import org.threeten.bp.Clock
@@ -21,6 +20,7 @@ suspend fun NewExpenseLogic(
     categories: LiveData<List<String>>,
     api: HomeBudgetApi,
     clock: Clock,
+    toastNotifier: ToastNotifier,
     navigator: Navigator
 ) {
     var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
@@ -47,8 +47,12 @@ suspend fun NewExpenseLogic(
                     selectedCategory,
                     checkNotNull(selectedValue)
                 )
-                api.addExpense(expense)
-                break@loop
+                try {
+                    api.addExpense(expense)
+                    break@loop
+                } catch (e: HomeBudgetApiException) {
+                    toastNotifier.notify(R.string.add_expense_error_message)
+                }
             }
             SelectBack -> break@loop
         }

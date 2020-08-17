@@ -93,7 +93,9 @@ class HomeBudgetApiImpl(
         }
     }
 
-    override suspend fun addExpense(expense: NewExpense) = Unit
+    override suspend fun addExpense(expense: NewExpense) {
+        println("add expense: $expense")
+    }
 
     private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName
