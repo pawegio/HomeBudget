@@ -15,6 +15,7 @@ import org.threeten.bp.Instant
 import org.threeten.bp.LocalDate
 import org.threeten.bp.ZoneId
 import java.math.BigDecimal
+import kotlin.coroutines.resume
 
 internal class NewExpenseLogicTest : LogicSpec({
     "On new expense logic" - {
@@ -100,6 +101,18 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                         "add expense value" {
                             api.addedExpenseValue shouldBe selectedValue
+                        }
+
+                        "on expense added" - {
+                            api.addExpense.resume(Unit)
+
+                            "pop back stack" {
+                                verify(navigator).popBackStack()
+                            }
+
+                            "complete logic" {
+                                logic.isCompleted shouldBe true
+                            }
                         }
                     }
                 }

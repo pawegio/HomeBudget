@@ -48,13 +48,12 @@ suspend fun NewExpenseLogic(
                     checkNotNull(selectedValue)
                 )
                 api.addExpense(expense)
-            }
-            SelectBack -> {
-                navigator.popBackStack()
                 break@loop
             }
+            SelectBack -> break@loop
         }
     }
+    navigator.popBackStack()
 }
 
 data class NewExpenseState(

@@ -13,7 +13,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
     val signIn = smokk<Unit>()
     val signOut = smokk<Unit>()
     val getMonthlyBudget = smokk<Month, MonthlyBudget>()
-    private val addExpense = smokk<NewExpense, Unit>()
+    val addExpense = smokk<NewExpense, Unit>()
 
     val addExpenseCalled get() = addExpense.invocations.count() > 0
     val addedExpenseDate get() = addExpense.invocations.last().date
