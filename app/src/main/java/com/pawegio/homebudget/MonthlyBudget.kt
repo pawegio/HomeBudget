@@ -12,6 +12,7 @@ data class MonthlyBudget(
 )
 
 data class Category(
+    val index: Int,
     val name: String,
     val type: Type,
     val subcategories: List<Subcategory>,

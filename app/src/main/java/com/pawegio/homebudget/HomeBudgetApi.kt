@@ -128,8 +128,10 @@ class HomeBudgetApiImpl(
             val actual = ranges[1]["values"] as List<List<BigDecimal>>
             val incomes = ranges[2]["values"] as List<List<Any>>
             val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
-            val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
-                    expenses.map { createCategory(it, Category.Type.EXPENSES) }
+            val categories = listOf(createCategory(51, incomes, Category.Type.INCOMES)) +
+                    expenses.mapIndexed { index, expenses ->
+                        createCategory(73 + 12 * index, expenses, Category.Type.EXPENSES)
+                    }
             MonthlyBudget(
                 month = monthName,
                 plannedIncomes = planned[0][0],
@@ -160,7 +162,10 @@ class HomeBudgetApiImpl(
             "B175" to "D185",
             "B187" to "D197",
             "B199" to "D209",
-            "B211" to "D221"
+            "B211" to "D221",
+            "B223" to "B233",
+            "B235" to "B245",
+            "B247" to "B257"
         )
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
         return try {
@@ -173,9 +178,11 @@ class HomeBudgetApiImpl(
             val planned = ranges[0]["values"] as List<List<BigDecimal>>
             val actual = ranges[1]["values"] as List<List<BigDecimal>>
             val incomes = ranges[2]["values"] as List<List<Any>>
-            val expenses = List(12) { ranges[it + 3]["values"] as List<List<Any>> }
-            val categories = listOf(createCategory(incomes, Category.Type.INCOMES)) +
-                    expenses.map { createCategory(it, Category.Type.EXPENSES) }
+            val expenses = List(15) { ranges[it + 3]["values"] as List<List<Any>> }
+            val categories = listOf(createCategory(57, incomes, Category.Type.INCOMES)) +
+                    expenses.mapIndexed { index, expenses ->
+                        createCategory(79 + 12 * index, expenses, Category.Type.EXPENSES)
+                    }
             MonthlyBudget(
                 month = monthName,
                 plannedIncomes = planned[0][0],
@@ -189,8 +196,9 @@ class HomeBudgetApiImpl(
         }
     }
 
-    private fun createCategory(data: List<List<Any>>, type: Category.Type) =
+    private fun createCategory(index: Int, data: List<List<Any>>, type: Category.Type) =
         Category(
+            index = index,
             name = data[0][0] as String,
             type = type,
             subcategories = List(data.size - 1) { index ->
