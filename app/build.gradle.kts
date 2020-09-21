@@ -75,6 +75,7 @@ dependencies {
     implementation("android.arch.lifecycle:extensions:1.1.1")
     implementation("androidx.appcompat:appcompat:1.1.0")
     implementation("androidx.core:core-ktx:1.3.0")
+    implementation("androidx.preference:preference:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta8")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")

@@ -1,8 +1,8 @@
 package com.pawegio.homebudget
 
 import android.content.Context
-import android.preference.PreferenceManager
 import androidx.core.content.edit
+import androidx.preference.PreferenceManager
 
 interface HomeBudgetRepository {
     var spreadsheetId: String?
