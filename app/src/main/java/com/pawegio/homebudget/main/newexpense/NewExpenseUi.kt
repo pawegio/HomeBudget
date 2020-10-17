@@ -92,6 +92,16 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         verticalPadding = dip(8)
     }
 
+    private val subcategoryImageView = imageView {
+        imageResource = R.drawable.ic_subcategory
+        setColorFilter(colorAttr(R.attr.colorPrimary))
+        padding = dip(8)
+    }
+
+    val subcategorySpinner = spinner {
+        verticalPadding = dip(8)
+    }
+
     private val amountImageView = imageView {
         imageResource = R.drawable.ic_amount
         setColorFilter(colorAttr(R.attr.colorPrimary))
@@ -152,8 +162,18 @@ class NewExpenseUi(override val ctx: Context) : Ui {
                 startToEndOf(categoryImageView, dip(16))
                 endOfParent(dip(16))
             })
-            add(amountImageView, lParams(dip(40), dip(40)) {
+            add(subcategoryImageView, lParams(dip(40), dip(40)) {
                 topToBottomOf(categoryImageView)
+                startOfParent(dip(16))
+                verticalMargin = dip(16)
+            })
+            add(subcategorySpinner, lParams(matchConstraints, wrapContent) {
+                alignVerticallyOn(subcategoryImageView)
+                startToEndOf(categoryImageView, dip(16))
+                endOfParent(dip(16))
+            })
+            add(amountImageView, lParams(dip(40), dip(40)) {
+                topToBottomOf(subcategoryImageView)
                 startOfParent(dip(16))
                 topMargin = dip(36)
             })
