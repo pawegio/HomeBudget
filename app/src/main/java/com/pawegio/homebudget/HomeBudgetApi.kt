@@ -193,6 +193,7 @@ class HomeBudgetApiImpl(
                 categories = categories
             ).also(::println)
         } catch (e: Exception) {
+            e.printStackTrace()
             throw HomeBudgetApiException(e)
         }
     }

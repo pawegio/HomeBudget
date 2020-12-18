@@ -6,6 +6,7 @@ import android.view.*
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.common.DatePickerFragment
@@ -68,11 +69,11 @@ class NewExpenseFragment : Fragment() {
         ui.date = state.selectedDate
     }
 
-    private fun updateCategories(categories: List<String>) {
+    private fun updateCategories(categories: List<Category>) {
         ui.categorySpinner.adapter = ArrayAdapter(
             requireContext(),
             android.R.layout.simple_list_item_1,
-            categories
+            categories.map { it.name }
         )
     }
 }

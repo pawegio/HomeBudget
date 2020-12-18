@@ -35,14 +35,8 @@ class MainViewModel(
     val monthType: LiveData<MonthType> get() = _monthType
     val isLoading: LiveData<Boolean> get() = _isLoading
     val newExpenseState: LiveData<NewExpenseState> get() = _newExpenseState
-    val categories: LiveData<List<String>>
-        get() = Transformations.map(monthlyBudget) { budget ->
-            budget.categories.flatMap { category ->
-                category.subcategories.map { subcategory ->
-                    "${category.name}:\n${subcategory.name}"
-                }
-            }
-        }
+    val categories: LiveData<List<Category>>
+        get() = Transformations.map(monthlyBudget) { budget -> budget.categories }
 
     val loginActions = PublishRelay.create<LoginAction>()
     val pickerActions = PublishRelay.create<PickerAction>()
