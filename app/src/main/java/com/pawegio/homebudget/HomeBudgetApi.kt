@@ -1,6 +1,7 @@
 package com.pawegio.homebudget
 
 import android.content.Context
+import com.github.florent37.inlineactivityresult.kotlin.InlineActivityResultException
 import com.github.florent37.inlineactivityresult.kotlin.coroutines.startForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,7 +31,7 @@ interface HomeBudgetApi {
 
 data class NewExpense(
     val date: LocalDate,
-    val category: String,
+    val subcategory: Subcategory,
     val value: BigDecimal
 )
 
@@ -72,7 +73,7 @@ class HomeBudgetApiImpl(
                 GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
             } catch (e: ApiException) {
                 throw HomeBudgetApiException(e)
-            } catch (e: ApiException) {
+            } catch (e: InlineActivityResultException) {
                 throw HomeBudgetApiException(e)
             }
         }
