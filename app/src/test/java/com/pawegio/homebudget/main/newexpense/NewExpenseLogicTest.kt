@@ -12,6 +12,7 @@ import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.ToastNotifier
+import com.pawegio.homebudget.util.createCategory
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
@@ -26,7 +27,11 @@ internal class NewExpenseLogicTest : LogicSpec({
     "On new expense logic" - {
         val actions = PublishRelay.create<NewExpenseAction>()
         val state = MutableLiveData<NewExpenseState>()
-        val categories = MutableLiveData(listOf("Jedzenie", "Transport", "Hobby"))
+        val categories = listOf(
+            createCategory(0, "Jedzenie"),
+            createCategory(1, "Transport"),
+            createCategory(2, "Hobby")
+        )
         val api = MockHomeBudgetApi()
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
         val toastNotifier = mock<ToastNotifier>()
@@ -36,7 +41,7 @@ internal class NewExpenseLogicTest : LogicSpec({
             NewExpenseLogic(
                 actions,
                 state,
-                categories,
+                MutableLiveData(categories),
                 api,
                 clock,
                 toastNotifier,
@@ -48,7 +53,7 @@ internal class NewExpenseLogicTest : LogicSpec({
             state.test().assertValue(
                 NewExpenseState(
                     selectedDate = LocalDate.parse("2020-06-09"),
-                    selectedCategory = "Jedzenie",
+                    selectedCategory = categories.first().subcategories.first(),
                     selectedValue = null
                 )
             )
@@ -84,11 +89,11 @@ internal class NewExpenseLogicTest : LogicSpec({
             }
 
             "on select category" - {
-                val selectedCategory = "Hobby"
+                val selectedCategory = categories[2]
                 actions.accept(NewExpenseAction.SelectCategory(selectedCategory))
 
                 "update category" {
-                    state.test().assertValue { it.selectedCategory == selectedCategory }
+                    state.test().assertValue { it.selectedCategory == selectedCategory.subcategories.first() }
                 }
 
                 "on select value" - {
@@ -103,7 +108,7 @@ internal class NewExpenseLogicTest : LogicSpec({
                         }
 
                         "add expense for selected category" {
-                            api.addedExpenseCategory shouldBe selectedCategory
+                            api.addedExpenseSubcategory shouldBe selectedCategory.subcategories.first()
                         }
 
                         "add expense value" {
@@ -140,12 +145,21 @@ internal class NewExpenseLogicTest : LogicSpec({
                     }
                 }
 
+                "on select subcategory" - {
+                    val selectedSubcategory = selectedCategory.subcategories[1]
+                    actions.accept(NewExpenseAction.SelectSubcategory(selectedSubcategory))
+
+                    "update subcategory" {
+                        state.test().assertValue { it.selectedCategory == selectedSubcategory }
+                    }
+                }
+
                 "on select new date" - {
                     val newSelectedDate = LocalDate.parse("2020-05-07")
                     actions.accept(NewExpenseAction.SelectDate(newSelectedDate))
 
                     "keep selected category" {
-                        state.test().assertValue { it.selectedCategory == selectedCategory }
+                        state.test().assertValue { it.selectedCategory == selectedCategory.subcategories.first() }
                     }
                 }
             }
@@ -170,8 +184,8 @@ internal class NewExpenseLogicTest : LogicSpec({
                     api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
                 }
 
-                "add expense for first category" {
-                    api.addedExpenseCategory shouldBe categories.value?.first()
+                "add expense for first category and first subcategory" {
+                    api.addedExpenseSubcategory shouldBe categories.first().subcategories.first()
                 }
 
                 "add expense value" {
