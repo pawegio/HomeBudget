@@ -5,12 +5,16 @@ import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
+import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.Subcategory
 import com.pawegio.homebudget.util.colorAttr
 import com.pawegio.homebudget.util.resourceAttr
 import io.reactivex.Observable
@@ -29,6 +33,26 @@ import splitties.views.dsl.material.defaultLParams
 import java.math.BigDecimal
 
 class NewExpenseUi(override val ctx: Context) : Ui {
+
+    var categories: List<Category> = emptyList()
+        set(value) {
+            field = value
+            categorySpinner.adapter = ArrayAdapter(
+                ctx,
+                android.R.layout.simple_list_item_1,
+                value.map { it.name }
+            )
+        }
+
+    var subcategories: List<Subcategory> = emptyList()
+        set(value) {
+            field = value
+            subcategorySpinner.adapter = ArrayAdapter(
+                ctx,
+                android.R.layout.simple_list_item_1,
+                value.map { it.name }
+            )
+        }
 
     var date: LocalDate? = null
         set(value) {
@@ -90,6 +114,13 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     val categorySpinner = spinner {
         verticalPadding = dip(8)
+        onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                subcategories = categories[p2].subcategories
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
+        }
     }
 
     private val subcategoryImageView = imageView {

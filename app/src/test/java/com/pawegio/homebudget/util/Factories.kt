@@ -5,13 +5,15 @@ import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.Subcategory
 import java.math.BigDecimal
 
-fun createMonthlyBudget() = MonthlyBudget(
+fun createMonthlyBudget(
+    categories: List<Category> = emptyList()
+) = MonthlyBudget(
     month = "Kwiecień",
     plannedIncomes = BigDecimal(10000),
     plannedExpenses = BigDecimal(10000),
     actualIncomes = BigDecimal(11000),
     actualExpenses = BigDecimal(9000),
-    categories = emptyList()
+    categories = categories
 )
 
 fun createCategory(

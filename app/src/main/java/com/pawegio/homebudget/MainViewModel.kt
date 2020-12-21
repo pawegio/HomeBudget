@@ -96,7 +96,7 @@ class MainViewModel(
         NewExpenseLogic(
             newExpenseActions,
             _newExpenseState,
-            categories,
+            monthlyBudget,
             api,
             clock,
             toastNotifier,

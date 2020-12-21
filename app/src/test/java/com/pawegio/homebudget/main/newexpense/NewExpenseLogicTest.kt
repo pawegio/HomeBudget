@@ -13,6 +13,7 @@ import com.pawegio.homebudget.R
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.ToastNotifier
 import com.pawegio.homebudget.util.createCategory
+import com.pawegio.homebudget.util.createMonthlyBudget
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
@@ -41,7 +42,7 @@ internal class NewExpenseLogicTest : LogicSpec({
             NewExpenseLogic(
                 actions,
                 state,
-                MutableLiveData(categories),
+                MutableLiveData(createMonthlyBudget(categories)),
                 api,
                 clock,
                 toastNotifier,
@@ -53,7 +54,8 @@ internal class NewExpenseLogicTest : LogicSpec({
             state.test().assertValue(
                 NewExpenseState(
                     selectedDate = LocalDate.parse("2020-06-09"),
-                    selectedCategory = categories.first().subcategories.first(),
+                    selectedCategory = categories.first(),
+                    selectedSubcategory = categories.first().subcategories.first(),
                     selectedValue = null
                 )
             )
@@ -93,7 +95,7 @@ internal class NewExpenseLogicTest : LogicSpec({
                 actions.accept(NewExpenseAction.SelectCategory(selectedCategory))
 
                 "update category" {
-                    state.test().assertValue { it.selectedCategory == selectedCategory.subcategories.first() }
+                    state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
                 }
 
                 "on select value" - {
@@ -150,7 +152,7 @@ internal class NewExpenseLogicTest : LogicSpec({
                     actions.accept(NewExpenseAction.SelectSubcategory(selectedSubcategory))
 
                     "update subcategory" {
-                        state.test().assertValue { it.selectedCategory == selectedSubcategory }
+                        state.test().assertValue { it.selectedSubcategory == selectedSubcategory }
                     }
                 }
 
@@ -159,7 +161,7 @@ internal class NewExpenseLogicTest : LogicSpec({
                     actions.accept(NewExpenseAction.SelectDate(newSelectedDate))
 
                     "keep selected category" {
-                        state.test().assertValue { it.selectedCategory == selectedCategory.subcategories.first() }
+                        state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
                     }
                 }
             }

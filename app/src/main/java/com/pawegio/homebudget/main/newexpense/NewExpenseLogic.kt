@@ -17,40 +17,38 @@ import java.math.BigDecimal
 suspend fun NewExpenseLogic(
     actions: Observable<NewExpenseAction>,
     state: MutableLiveData<NewExpenseState>,
-    categories: LiveData<List<Category>>,
+    monthlyBudget: LiveData<MonthlyBudget>,
     api: HomeBudgetApi,
     clock: Clock,
     toastNotifier: ToastNotifier,
     navigator: Navigator
 ) {
-    var selectedDate = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
-    var selectedSubcategory = categories.value!!.first().subcategories.first()
-    var selectedValue: BigDecimal? = null
-    state.value = NewExpenseState(selectedDate, selectedSubcategory, selectedValue)
+    var date = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
+    val category = checkNotNull(monthlyBudget.value)
+        .categories.first { it.type == Category.Type.EXPENSES }
+    var subcategory = category.subcategories.first()
+    var value: BigDecimal? = null
+    state.value = NewExpenseState(date, category, subcategory, value)
     loop@ while (true) {
         when (val action = actions.awaitFirst()) {
             is SelectDate -> {
-                selectedDate = action.date
-                state.value = NewExpenseState(selectedDate, selectedSubcategory, selectedValue)
+                date = action.date
+                state.value = NewExpenseState(date, category, subcategory, value)
             }
             is SelectCategory -> {
-                selectedSubcategory = action.category.subcategories.first()
-                state.value = NewExpenseState(selectedDate, selectedSubcategory, selectedValue)
+                subcategory = action.category.subcategories.first()
+                state.value = NewExpenseState(date, category, subcategory, value)
             }
             is SelectSubcategory -> {
-                selectedSubcategory = action.subcategory
-                state.value = NewExpenseState(selectedDate, selectedSubcategory, selectedValue)
+                subcategory = action.subcategory
+                state.value = NewExpenseState(date, category, subcategory, value)
             }
             is SelectValue -> {
-                selectedValue = action.value
-                state.value = NewExpenseState(selectedDate, selectedSubcategory, selectedValue)
+                value = action.value
+                state.value = NewExpenseState(date, category, subcategory, value)
             }
             SelectAdd -> {
-                val expense = NewExpense(
-                    selectedDate,
-                    selectedSubcategory,
-                    checkNotNull(selectedValue)
-                )
+                val expense = NewExpense(date, subcategory, checkNotNull(value))
                 try {
                     api.addExpense(expense)
                     break@loop
@@ -66,7 +64,8 @@ suspend fun NewExpenseLogic(
 
 data class NewExpenseState(
     val selectedDate: LocalDate,
-    val selectedCategory: Subcategory,
+    val selectedCategory: Category,
+    val selectedSubcategory: Subcategory,
     val selectedValue: BigDecimal?
 )
 

@@ -3,7 +3,6 @@ package com.pawegio.homebudget.main.newexpense
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
-import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.Category
@@ -70,10 +69,6 @@ class NewExpenseFragment : Fragment() {
     }
 
     private fun updateCategories(categories: List<Category>) {
-        ui.categorySpinner.adapter = ArrayAdapter(
-            requireContext(),
-            android.R.layout.simple_list_item_1,
-            categories.map { it.name }
-        )
+        ui.categories = categories
     }
 }
