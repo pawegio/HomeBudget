@@ -164,9 +164,9 @@ class HomeBudgetApiImpl(
             "B187" to "D197",
             "B199" to "D209",
             "B211" to "D221",
-            "B223" to "B233",
-            "B235" to "B245",
-            "B247" to "B257"
+            "B223" to "D233",
+            "B235" to "D245",
+            "B247" to "D257"
         )
         val allRanges = plannedBudgetRange + actualBudgetRange + incomesRange + expensesRanges
         return try {
