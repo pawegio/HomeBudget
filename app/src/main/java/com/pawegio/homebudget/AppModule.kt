@@ -9,7 +9,8 @@ import org.threeten.bp.Clock
 
 val appModule = module {
     single<HomeBudgetRepository> { HomeBudgetRepositoryImpl(androidContext()) }
-    single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get()) }
+    single<ColumnResolver> { ColumnResolverImpl }
+    single<HomeBudgetApi> { HomeBudgetApiImpl(androidContext(), get(), get()) }
     single<Clock> { Clock.systemDefaultZone() }
     single<HowToLauncher> { HowToLauncherImpl(androidContext()) }
     single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }

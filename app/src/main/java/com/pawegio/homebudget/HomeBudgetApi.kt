@@ -12,6 +12,8 @@ import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccoun
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
+import com.google.api.services.sheets.v4.model.ValueRange
+import com.pawegio.homebudget.util.ColumnResolver
 import com.pawegio.homebudget.util.currentActivity
 import com.pawegio.homebudget.util.polishDisplayName
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +39,8 @@ data class NewExpense(
 
 class HomeBudgetApiImpl(
     private val context: Context,
-    private val repository: HomeBudgetRepository
+    private val repository: HomeBudgetRepository,
+    private val columnResolver: ColumnResolver
 ) : HomeBudgetApi {
 
     override val isSignedIn: Boolean get() = account != null
@@ -95,7 +98,21 @@ class HomeBudgetApiImpl(
     }
 
     override suspend fun addExpense(expense: NewExpense) {
-        println("add expense: $expense")
+        val (date, subcategory, value) = expense
+        val month = date.month.polishDisplayName
+        val column = columnResolver.getColumnName(date.dayOfMonth)
+        val range = "'$month'!${column}80"
+        val body = ValueRange().setValues(listOf(listOf(value)))
+        withContext(Dispatchers.IO) {
+            try {
+                sheetsService.spreadsheets().values()
+                    .update(checkNotNull(spreadsheetId), range, body)
+                    .setValueInputOption("USER_ENTERED")
+                    .execute()
+            } catch (e: Exception) {
+                throw HomeBudgetApiException(e)
+            }
+        }
     }
 
     private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
