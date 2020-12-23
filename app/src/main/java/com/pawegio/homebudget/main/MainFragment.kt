@@ -58,7 +58,7 @@ class MainFragment : Fragment() {
             menuInflater.inflate(R.menu.main_popup_menu, menu)
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
-                    R.id.action_add_expense -> MainAction.AddExpense
+                    R.id.action_add_transaction -> MainAction.AddTransaction
                     R.id.action_pick_document -> MainAction.PickDocumentAgain
                     R.id.action_about -> MainAction.SelectAbout
                     R.id.action_sign_out -> MainAction.SignOut

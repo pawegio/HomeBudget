@@ -1,4 +1,4 @@
-package com.pawegio.homebudget.main.newexpense
+package com.pawegio.homebudget.main.transaction
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -9,15 +9,15 @@ import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.common.DatePickerFragment
-import com.pawegio.homebudget.main.newexpense.NewExpenseAction.*
+import com.pawegio.homebudget.main.transaction.TransactionAction.*
 import io.reactivex.Observable
 import org.koin.android.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 
-class NewExpenseFragment : Fragment() {
+class TransactionFragment : Fragment() {
 
     private val viewModel by sharedViewModel<MainViewModel>()
-    private val ui by lazy { NewExpenseUi(requireContext()) }
+    private val ui by lazy { TransactionUi(requireContext()) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +25,7 @@ class NewExpenseFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.new_expense_menu, menu)
+        inflater.inflate(R.menu.transaction_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -38,14 +38,14 @@ class NewExpenseFragment : Fragment() {
     @SuppressLint("CheckResult")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        viewModel.newExpenseState.observe(viewLifecycleOwner, Observer(::updateState))
+        viewModel.transactionState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
         Observable.merge(
             ui.backClicks.map { SelectBack },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
             ui.amountChanges.map(::SelectValue)
-        ).subscribe(viewModel.newExpenseActions)
+        ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
     }
 
@@ -54,19 +54,19 @@ class NewExpenseFragment : Fragment() {
             dateChanges
                 .takeUntil(dismisses)
                 .subscribe { selectedDate ->
-                    viewModel.newExpenseActions.accept(SelectDate(selectedDate))
+                    viewModel.transactionActions.accept(SelectDate(selectedDate))
                 }
         }.show(childFragmentManager, "datePicker")
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.action_add -> viewModel.newExpenseActions.accept(SelectAdd)
+            R.id.action_add -> viewModel.transactionActions.accept(SelectAdd)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun updateState(state: NewExpenseState) {
+    private fun updateState(state: TransactionState) {
         ui.date = state.selectedDate
     }
 

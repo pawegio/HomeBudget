@@ -1,4 +1,4 @@
-package com.pawegio.homebudget.main.newexpense
+package com.pawegio.homebudget.main.transaction
 
 import android.text.InputFilter
 import android.text.Spanned

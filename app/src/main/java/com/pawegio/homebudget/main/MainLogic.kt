@@ -25,7 +25,7 @@ suspend fun MainLogic(
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock,
     initPicker: suspend () -> Unit,
-    initNewExpense: suspend () -> Unit,
+    initTransaction: suspend () -> Unit,
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
@@ -45,9 +45,9 @@ suspend fun MainLogic(
                     month += 1
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
-                AddExpense -> {
-                    navigator.navigate(R.id.action_mainFragment_to_newExpenseFragment)
-                    initNewExpense()
+                AddTransaction -> {
+                    navigator.navigate(R.id.action_mainFragment_to_transactionFragment)
+                    initTransaction()
                 }
                 PickDocumentAgain -> {
                     navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
@@ -98,7 +98,7 @@ sealed class MainAction {
     object SelectPrevMonth : MainAction()
     object SelectNextMonth : MainAction()
     object TryAgain : MainAction()
-    object AddExpense : MainAction()
+    object AddTransaction : MainAction()
     object PickDocumentAgain : MainAction()
     object SelectAbout : MainAction()
     object SignOut : MainAction()

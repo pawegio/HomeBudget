@@ -1,11 +1,10 @@
-package com.pawegio.homebudget.main.newexpense
+package com.pawegio.homebudget.main.transaction
 
 import android.content.Context
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
@@ -33,7 +32,7 @@ import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
 import java.math.BigDecimal
 
-class NewExpenseUi(override val ctx: Context) : Ui {
+class TransactionUi(override val ctx: Context) : Ui {
 
     var categories: List<Category> = emptyList()
         set(value) {
@@ -78,7 +77,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
             (ctx as? AppCompatActivity)?.setSupportActionBar(this)
             popupTheme = R.style.AppTheme_PopupOverlay
             setNavigationIcon(R.drawable.ic_close)
-            setTitle(R.string.new_expense)
+            setTitle(R.string.new_transaction)
             setNavigationOnClickListener { backClicksRelay.accept(Unit) }
         }, defaultLParams(height = matchParent))
     }
@@ -227,7 +226,7 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 }
 
 @Suppress("unused")
-private class NewExpenseUiPreview : FrameLayout {
+private class TransactionUiPreview : FrameLayout {
 
     constructor(context: Context) : this(context, null)
 
@@ -235,7 +234,7 @@ private class NewExpenseUiPreview : FrameLayout {
 
     constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) :
             super(context, attrs, defStyleAttr) {
-        addView(NewExpenseUi(context).apply {
+        addView(TransactionUi(context).apply {
             date = LocalDate.parse("2020-07-21")
         }.root)
     }

@@ -7,9 +7,9 @@ import com.pawegio.homebudget.login.LoginLogic
 import com.pawegio.homebudget.main.MainAction
 import com.pawegio.homebudget.main.MainLogic
 import com.pawegio.homebudget.main.MonthType
-import com.pawegio.homebudget.main.newexpense.NewExpenseAction
-import com.pawegio.homebudget.main.newexpense.NewExpenseLogic
-import com.pawegio.homebudget.main.newexpense.NewExpenseState
+import com.pawegio.homebudget.main.transaction.TransactionAction
+import com.pawegio.homebudget.main.transaction.TransactionLogic
+import com.pawegio.homebudget.main.transaction.TransactionState
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerLogic
 import com.pawegio.homebudget.picker.parseSpreadsheetId
@@ -34,19 +34,19 @@ class MainViewModel(
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
     val monthType: LiveData<MonthType> get() = _monthType
     val isLoading: LiveData<Boolean> get() = _isLoading
-    val newExpenseState: LiveData<NewExpenseState> get() = _newExpenseState
+    val transactionState: LiveData<TransactionState> get() = _transactionState
     val categories: LiveData<List<Category>>
         get() = Transformations.map(monthlyBudget) { budget -> budget.categories }
 
     val loginActions = PublishRelay.create<LoginAction>()
     val pickerActions = PublishRelay.create<PickerAction>()
     val mainActions = PublishRelay.create<MainAction>()
-    val newExpenseActions = PublishRelay.create<NewExpenseAction>()
+    val transactionActions = PublishRelay.create<TransactionAction>()
 
     private val _monthlyBudget = MutableLiveData<MonthlyBudget>()
     private val _monthType = MutableLiveData<MonthType>()
     private val _isLoading = MutableLiveData<Boolean>()
-    private val _newExpenseState = MutableLiveData<NewExpenseState>()
+    private val _transactionState = MutableLiveData<TransactionState>()
 
     init {
         navigator.restart(R.navigation.app_navigation)
@@ -87,15 +87,15 @@ class MainViewModel(
             spreadsheetLauncher,
             clock,
             ::initPicker,
-            ::initNewExpense,
+            ::initTransaction,
             navigator
         )
     }
 
-    private suspend fun initNewExpense() {
-        NewExpenseLogic(
-            newExpenseActions,
-            _newExpenseState,
+    private suspend fun initTransaction() {
+        TransactionLogic(
+            transactionActions,
+            _transactionState,
             monthlyBudget,
             api,
             clock,

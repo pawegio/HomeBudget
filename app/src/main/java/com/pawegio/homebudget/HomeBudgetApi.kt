@@ -28,10 +28,10 @@ interface HomeBudgetApi {
     suspend fun signIn()
     suspend fun signOut()
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
-    suspend fun addExpense(expense: NewExpense)
+    suspend fun addTransaction(transaction: Transaction)
 }
 
-data class NewExpense(
+data class Transaction(
     val date: LocalDate,
     val subcategory: Subcategory,
     val value: BigDecimal
@@ -97,8 +97,8 @@ class HomeBudgetApiImpl(
         }
     }
 
-    override suspend fun addExpense(expense: NewExpense) {
-        val (date, subcategory, value) = expense
+    override suspend fun addTransaction(transaction: Transaction) {
+        val (date, subcategory, value) = transaction
         val month = date.month.polishDisplayName
         val column = columnResolver.getColumnName(date.dayOfMonth)
         val row = subcategory.index

@@ -26,18 +26,18 @@
     <string name="load_error_title">Wystąpił błąd</string>
     <string name="load_error_message">Nie udało się pobrać danych budżetowych z wybranego arkusza. Upewnij się, że wybrałeś odpowiednią wersję szablonu.</string>
     <string name="try_again">Ponów próbę</string>
-    <string name="add_expense">Dodaj wydatek</string>
+    <string name="add_transaction">Dodaj transakcję</string>
     <string name="pick_document">Zmień arkusz</string>
     <string name="about_app">O aplikacji</string>
     <string name="sign_out">Wyloguj się</string>
 
-    <!-- NEW EXPENSE -->
-    <string name="new_expense">Nowy wydatek</string>
+    <!-- TRANSACTION -->
+    <string name="new_transaction">Nowa transakcja</string>
     <string name="add">Dodaj</string>
     <string name="note_hint">Dodaj notatkę</string>
     <string name="amount_hint">0,00</string>
     <string name="currency">zł</string>
-    <string name="add_expense_error_message">Nie udało się dodać wydatku do budżetu.</string>
+    <string name="add_transaction_error_message">Nie udało się dodać transakcji do budżetu.</string>
 
     <!-- ABOUT -->
     <string name="version">Wersja</string>

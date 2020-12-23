@@ -1,4 +1,4 @@
-package com.pawegio.homebudget.main.newexpense
+package com.pawegio.homebudget.main.transaction
 
 import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
@@ -24,10 +24,10 @@ import java.math.BigDecimal
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class NewExpenseLogicTest : LogicSpec({
-    "On new expense logic" - {
-        val actions = PublishRelay.create<NewExpenseAction>()
-        val state = MutableLiveData<NewExpenseState>()
+internal class TransactionLogicTest : LogicSpec({
+    "On transaction logic" - {
+        val actions = PublishRelay.create<TransactionAction>()
+        val state = MutableLiveData<TransactionState>()
         val categories = listOf(
             createCategory(0, "Jedzenie"),
             createCategory(1, "Transport"),
@@ -39,7 +39,7 @@ internal class NewExpenseLogicTest : LogicSpec({
         val navigator = mock<Navigator>()
 
         val logic = launch {
-            NewExpenseLogic(
+            TransactionLogic(
                 actions,
                 state,
                 MutableLiveData(createMonthlyBudget(categories)),
@@ -52,7 +52,7 @@ internal class NewExpenseLogicTest : LogicSpec({
 
         "set default state" {
             state.test().assertValue(
-                NewExpenseState(
+                TransactionState(
                     selectedDate = LocalDate.parse("2020-06-09"),
                     selectedCategory = categories.first(),
                     selectedSubcategory = categories.first().subcategories.first(),
@@ -63,7 +63,7 @@ internal class NewExpenseLogicTest : LogicSpec({
 
         "on select date" - {
             val selectedDate = LocalDate.parse("2020-06-07")
-            actions.accept(NewExpenseAction.SelectDate(selectedDate))
+            actions.accept(TransactionAction.SelectDate(selectedDate))
 
             "update selected date" {
                 state.test().assertValue { it.selectedDate == selectedDate }
@@ -71,28 +71,28 @@ internal class NewExpenseLogicTest : LogicSpec({
 
             "on select value" - {
                 val selectedValue = BigDecimal.valueOf(7.0)
-                actions.accept(NewExpenseAction.SelectValue(selectedValue))
+                actions.accept(TransactionAction.SelectValue(selectedValue))
 
                 "on select add" - {
-                    actions.accept(NewExpenseAction.SelectAdd)
+                    actions.accept(TransactionAction.SelectAdd)
 
-                    "add expense to home budget" {
-                        api.addExpenseCalled shouldBe true
+                    "add transaction to home budget" {
+                        api.addTransactionCalled shouldBe true
                     }
 
-                    "add expense for selected date" {
-                        api.addedExpenseDate shouldBe LocalDate.parse("2020-06-07")
+                    "add transaction for selected date" {
+                        api.addedTransactionDate shouldBe LocalDate.parse("2020-06-07")
                     }
 
-                    "add expense value" {
-                        api.addedExpenseValue shouldBe selectedValue
+                    "add transaction value" {
+                        api.addedTransactionValue shouldBe selectedValue
                     }
                 }
             }
 
             "on select category" - {
                 val selectedCategory = categories[2]
-                actions.accept(NewExpenseAction.SelectCategory(selectedCategory))
+                actions.accept(TransactionAction.SelectCategory(selectedCategory))
 
                 "update category" {
                     state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
@@ -100,25 +100,25 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                 "on select value" - {
                     val selectedValue = BigDecimal.valueOf(300.0)
-                    actions.accept(NewExpenseAction.SelectValue(selectedValue))
+                    actions.accept(TransactionAction.SelectValue(selectedValue))
 
                     "on select add" - {
-                        actions.accept(NewExpenseAction.SelectAdd)
+                        actions.accept(TransactionAction.SelectAdd)
 
-                        "add expense to home budget" {
-                            api.addExpenseCalled shouldBe true
+                        "add transaction to home budget" {
+                            api.addTransactionCalled shouldBe true
                         }
 
-                        "add expense for selected category" {
-                            api.addedExpenseSubcategory shouldBe selectedCategory.subcategories.first()
+                        "add transaction for selected category" {
+                            api.addedTransactionSubcategory shouldBe selectedCategory.subcategories.first()
                         }
 
-                        "add expense value" {
-                            api.addedExpenseValue shouldBe selectedValue
+                        "add transaction value" {
+                            api.addedTransactionValue shouldBe selectedValue
                         }
 
-                        "on expense added" - {
-                            api.addExpense.resume(Unit)
+                        "on transaction added" - {
+                            api.addTransaction.resume(Unit)
 
                             "pop back stack" {
                                 verify(navigator).popBackStack()
@@ -129,11 +129,11 @@ internal class NewExpenseLogicTest : LogicSpec({
                             }
                         }
 
-                        "on add expense failure" - {
-                            api.addExpense.resumeWithException(HomeBudgetApiException())
+                        "on add transaction failure" - {
+                            api.addTransaction.resumeWithException(HomeBudgetApiException())
 
-                            "show add expense error" {
-                                verify(toastNotifier).notify(R.string.add_expense_error_message)
+                            "show add transaction error" {
+                                verify(toastNotifier).notify(R.string.add_transaction_error_message)
                             }
 
                             "do not pop back stack" {
@@ -149,7 +149,7 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                 "on select subcategory" - {
                     val selectedSubcategory = selectedCategory.subcategories[1]
-                    actions.accept(NewExpenseAction.SelectSubcategory(selectedSubcategory))
+                    actions.accept(TransactionAction.SelectSubcategory(selectedSubcategory))
 
                     "update subcategory" {
                         state.test().assertValue { it.selectedSubcategory == selectedSubcategory }
@@ -158,7 +158,7 @@ internal class NewExpenseLogicTest : LogicSpec({
 
                 "on select new date" - {
                     val newSelectedDate = LocalDate.parse("2020-05-07")
-                    actions.accept(NewExpenseAction.SelectDate(newSelectedDate))
+                    actions.accept(TransactionAction.SelectDate(newSelectedDate))
 
                     "keep selected category" {
                         state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
@@ -169,35 +169,35 @@ internal class NewExpenseLogicTest : LogicSpec({
 
         "on select value" - {
             val selectedValue = BigDecimal.valueOf(15.0)
-            actions.accept(NewExpenseAction.SelectValue(selectedValue))
+            actions.accept(TransactionAction.SelectValue(selectedValue))
 
             "update selected value" {
                 state.test().assertValue { it.selectedValue == selectedValue }
             }
 
             "on select add" - {
-                actions.accept(NewExpenseAction.SelectAdd)
+                actions.accept(TransactionAction.SelectAdd)
 
-                "add expense to home budget" {
-                    api.addExpenseCalled shouldBe true
+                "add transaction to home budget" {
+                    api.addTransactionCalled shouldBe true
                 }
 
-                "add expense for current date" {
-                    api.addedExpenseDate shouldBe LocalDate.parse("2020-06-09")
+                "add transaction for current date" {
+                    api.addedTransactionDate shouldBe LocalDate.parse("2020-06-09")
                 }
 
-                "add expense for first category and first subcategory" {
-                    api.addedExpenseSubcategory shouldBe categories.first().subcategories.first()
+                "add transaction for first category and first subcategory" {
+                    api.addedTransactionSubcategory shouldBe categories.first().subcategories.first()
                 }
 
-                "add expense value" {
-                    api.addedExpenseValue shouldBe selectedValue
+                "add transaction value" {
+                    api.addedTransactionValue shouldBe selectedValue
                 }
             }
         }
 
         "on select back" - {
-            actions.accept(NewExpenseAction.SelectBack)
+            actions.accept(TransactionAction.SelectBack)
 
             "pop back stack" {
                 verify(navigator).popBackStack()

@@ -2,7 +2,7 @@ package com.pawegio.homebudget.util
 
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
-import com.pawegio.homebudget.NewExpense
+import com.pawegio.homebudget.Transaction
 import org.threeten.bp.Month
 import pl.mareklangiewicz.smokk.smokk
 
@@ -13,12 +13,12 @@ class MockHomeBudgetApi : HomeBudgetApi {
     val signIn = smokk<Unit>()
     val signOut = smokk<Unit>()
     val getMonthlyBudget = smokk<Month, MonthlyBudget>()
-    val addExpense = smokk<NewExpense, Unit>()
+    val addTransaction = smokk<Transaction, Unit>()
 
-    val addExpenseCalled get() = addExpense.invocations.count() > 0
-    val addedExpenseDate get() = addExpense.invocations.last().date
-    val addedExpenseSubcategory get() = addExpense.invocations.last().subcategory
-    val addedExpenseValue get() = addExpense.invocations.last().value
+    val addTransactionCalled get() = addTransaction.invocations.count() > 0
+    val addedTransactionDate get() = addTransaction.invocations.last().date
+    val addedTransactionSubcategory get() = addTransaction.invocations.last().subcategory
+    val addedTransactionValue get() = addTransaction.invocations.last().value
 
     var isSignInResult = false
 
@@ -29,5 +29,5 @@ class MockHomeBudgetApi : HomeBudgetApi {
     override suspend fun getMonthlyBudget(month: Month): MonthlyBudget =
         getMonthlyBudget.invoke(month)
 
-    override suspend fun addExpense(expense: NewExpense) = addExpense.invoke(expense)
+    override suspend fun addTransaction(transaction: Transaction) = addTransaction.invoke(transaction)
 }

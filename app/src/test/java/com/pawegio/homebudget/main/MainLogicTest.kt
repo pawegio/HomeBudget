@@ -32,7 +32,7 @@ internal class MainLogicTest : LogicSpec({
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
         val initPickerLogic = mock<SuspendFunction<Unit>>()
-        val initNewExpenseLogic = mock<SuspendFunction<Unit>>()
+        val initTransactionLogic = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
@@ -46,7 +46,7 @@ internal class MainLogicTest : LogicSpec({
                 spreadsheetLauncher,
                 clock,
                 initPickerLogic::invokeSuspend,
-                initNewExpenseLogic::invokeSuspend,
+                initTransactionLogic::invokeSuspend,
                 navigator
             )
         }
@@ -181,15 +181,15 @@ internal class MainLogicTest : LogicSpec({
                 }
             }
 
-            "on add expense" - {
-                actions.accept(MainAction.AddExpense)
+            "on add transaction" - {
+                actions.accept(MainAction.AddTransaction)
 
-                "navigate to new expense screen" {
-                    verify(navigator).navigate(R.id.action_mainFragment_to_newExpenseFragment)
+                "navigate to transaction screen" {
+                    verify(navigator).navigate(R.id.action_mainFragment_to_transactionFragment)
                 }
 
-                "init new expense logic" {
-                    verifyBlocking(initNewExpenseLogic) { invokeSuspend() }
+                "init transaction logic" {
+                    verifyBlocking(initTransactionLogic) { invokeSuspend() }
                 }
             }
 

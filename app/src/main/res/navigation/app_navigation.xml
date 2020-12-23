@@ -39,8 +39,8 @@
             android:id="@+id/action_mainFragment_to_aboutFragment"
             app:destination="@id/aboutFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_newExpenseFragment"
-            app:destination="@id/newExpenseFragment" />
+            android:id="@+id/action_mainFragment_to_transactionFragment"
+            app:destination="@id/transactionFragment" />
     </fragment>
 
     <dialog
@@ -54,8 +54,8 @@
         android:label="AboutFragment" />
 
     <fragment
-        android:id="@+id/newExpenseFragment"
-        android:name="com.pawegio.homebudget.main.newexpense.NewExpenseFragment"
-        android:label="NewExpenseFragment" />
+        android:id="@+id/transactionFragment"
+        android:name="com.pawegio.homebudget.main.transaction.TransactionFragment"
+        android:label="TransactionFragment" />
 
 </navigation>
