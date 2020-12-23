@@ -101,7 +101,8 @@ class HomeBudgetApiImpl(
         val (date, subcategory, value) = expense
         val month = date.month.polishDisplayName
         val column = columnResolver.getColumnName(date.dayOfMonth)
-        val range = "'$month'!${column}80"
+        val row = subcategory.index
+        val range = "'$month'!${column}$row"
         val body = ValueRange().setValues(listOf(listOf(value)))
         withContext(Dispatchers.IO) {
             try {
@@ -220,11 +221,12 @@ class HomeBudgetApiImpl(
             index = index,
             name = data[0][0] as String,
             type = type,
-            subcategories = List(data.size - 1) { index ->
+            subcategories = List(data.size - 1) { subcategoryIndex ->
                 Subcategory(
-                    data[index + 1][0] as String,
-                    data[index + 1][1] as BigDecimal,
-                    data[index + 1][2] as BigDecimal,
+                    index = index + 1 + subcategoryIndex,
+                    data[subcategoryIndex + 1][0] as String,
+                    data[subcategoryIndex + 1][1] as BigDecimal,
+                    data[subcategoryIndex + 1][2] as BigDecimal,
                     type
                 )
             }.filter { it.name != "." },

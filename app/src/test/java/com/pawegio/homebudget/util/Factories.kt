@@ -31,6 +31,7 @@ fun createCategory(
 fun createSubcategory(
     name: String = "Jedzenie na mieście"
 ) = Subcategory(
+    index = 0,
     name = name,
     planned = BigDecimal(5),
     actual = BigDecimal(3),
