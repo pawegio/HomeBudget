@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.Category
@@ -62,10 +63,14 @@ class NewExpenseUi(override val ctx: Context) : Ui {
 
     private val backClicksRelay = PublishRelay.create<Unit>()
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
+    private val categorySelectionsRelay = PublishRelay.create<Category>()
+    private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
     private val amountChangesRelay = PublishRelay.create<BigDecimal>()
 
     val backClicks: Observable<Unit> = backClicksRelay
     val dateClicks: Observable<LocalDate> = dateClicksRelay
+    val categorySelections: Observable<Category> = categorySelectionsRelay
+    val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
     val amountChanges: Observable<BigDecimal> = amountChangesRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
@@ -112,15 +117,12 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         padding = dip(8)
     }
 
-    val categorySpinner = spinner {
+    private val categorySpinner = spinner {
         verticalPadding = dip(8)
-        onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                subcategories = categories[p2].subcategories
-            }
-
-            override fun onNothingSelected(p0: AdapterView<*>?) = Unit
-        }
+        itemSelections().skipInitialValue()
+            .map { categories[it] }
+            .doOnNext { subcategories = it.subcategories }
+            .subscribe(categorySelectionsRelay)
     }
 
     private val subcategoryImageView = imageView {
@@ -129,8 +131,11 @@ class NewExpenseUi(override val ctx: Context) : Ui {
         padding = dip(8)
     }
 
-    val subcategorySpinner = spinner {
+    private val subcategorySpinner = spinner {
         verticalPadding = dip(8)
+        itemSelections().skipInitialValue()
+            .map { subcategories[it] }
+            .subscribe(subcategorySelectionsRelay)
     }
 
     private val amountImageView = imageView {

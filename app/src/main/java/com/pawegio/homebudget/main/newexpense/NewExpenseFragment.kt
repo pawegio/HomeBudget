@@ -42,6 +42,8 @@ class NewExpenseFragment : Fragment() {
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
         Observable.merge(
             ui.backClicks.map { SelectBack },
+            ui.categorySelections.map(::SelectCategory),
+            ui.subcategorySelections.map(::SelectSubcategory),
             ui.amountChanges.map(::SelectValue)
         ).subscribe(viewModel.newExpenseActions)
         ui.dateClicks.subscribe(::showDatePicker)
