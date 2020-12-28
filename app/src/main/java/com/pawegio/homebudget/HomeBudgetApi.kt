@@ -113,8 +113,8 @@ class HomeBudgetApiImpl(
                 val oldValues = response.getValues() as List<List<Any>>?
                 val oldTransactions = oldValues?.first()?.first()
                 val newTransactions = when {
-                    oldTransactions is String && oldTransactions.startsWith("=") -> "$oldTransactions+$value"
-                    oldTransactions is BigDecimal -> "=$oldTransactions+$value"
+                    oldTransactions is String && oldTransactions.startsWith("=") -> "$oldTransactions+$value".replace('.', ',')
+                    oldTransactions is BigDecimal -> "=$oldTransactions+$value".replace('.', ',')
                     oldTransactions == null || oldTransactions is String && oldTransactions.isBlank() -> value
                     else -> throw IllegalStateException("Invalid values: $oldValues")
                 }
