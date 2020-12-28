@@ -21,11 +21,11 @@ class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener 
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val date = arguments?.getSerializable(DATE) as LocalDate? ?: LocalDate.now()
-        return DatePickerDialog(requireContext(), this, date.year, date.monthValue, date.dayOfMonth)
+        return DatePickerDialog(requireContext(), this, date.year, date.monthValue - 1, date.dayOfMonth)
     }
 
     override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
-        dateChangesRelay.accept(LocalDate.of(year, month, dayOfMonth))
+        dateChangesRelay.accept(LocalDate.of(year, month + 1, dayOfMonth))
     }
 
     override fun onDismiss(dialog: DialogInterface) {
