@@ -103,14 +103,28 @@ class HomeBudgetApiImpl(
         val column = columnResolver.getColumnName(date.dayOfMonth)
         val row = subcategory.index
         val range = "'$month'!${column}$row"
-        val body = ValueRange().setValues(listOf(listOf(value)))
+        val spreadsheetId = checkNotNull(spreadsheetId)
         withContext(Dispatchers.IO) {
             try {
+                val response = sheetsService.spreadsheets().values()
+                    .get(spreadsheetId, range)
+                    .setValueRenderOption("FORMULA")
+                    .execute()
+                val oldValues = response.getValues() as List<List<Any>>?
+                val oldTransactions = oldValues?.first()?.first()
+                val newTransactions = when {
+                    oldTransactions is String && oldTransactions.startsWith("=") -> "$oldTransactions+$value"
+                    oldTransactions is BigDecimal -> "=$oldTransactions+$value"
+                    oldTransactions == null || oldTransactions is String && oldTransactions.isBlank() -> value
+                    else -> throw IllegalStateException("Invalid values: $oldValues")
+                }
+                val body = ValueRange().setValues(listOf(listOf(newTransactions)))
                 sheetsService.spreadsheets().values()
-                    .update(checkNotNull(spreadsheetId), range, body)
+                    .update(spreadsheetId, range, body)
                     .setValueInputOption("USER_ENTERED")
                     .execute()
             } catch (e: Exception) {
+                e.printStackTrace()
                 throw HomeBudgetApiException(e)
             }
         }
