@@ -38,8 +38,9 @@ internal class TransactionLogicTest : LogicSpec({
         val toastNotifier = mock<ToastNotifier>()
         val navigator = mock<Navigator>()
 
+        lateinit var result: TransactionResult
         val logic = launch {
-            TransactionLogic(
+            result = TransactionLogic(
                 actions,
                 state,
                 MutableLiveData(createMonthlyBudget(categories)),
@@ -127,6 +128,10 @@ internal class TransactionLogicTest : LogicSpec({
                             "complete logic" {
                                 logic.isCompleted shouldBe true
                             }
+
+                            "return success result" {
+                                result shouldBe TransactionResult.SUCCESS
+                            }
                         }
 
                         "on add transaction failure" - {
@@ -205,6 +210,10 @@ internal class TransactionLogicTest : LogicSpec({
 
             "complete logic" {
                 logic.isCompleted shouldBe true
+            }
+
+            "return canceled result" {
+                result shouldBe TransactionResult.CANCELED
             }
         }
     }

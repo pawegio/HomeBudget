@@ -22,13 +22,14 @@ suspend fun TransactionLogic(
     clock: Clock,
     toastNotifier: ToastNotifier,
     navigator: Navigator
-) {
+) : TransactionResult {
     var date = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
     val category = checkNotNull(monthlyBudget.value)
         .categories.first { it.type == Category.Type.EXPENSES }
     var subcategory = category.subcategories.first()
     var value: BigDecimal? = null
     state.value = TransactionState(date, category, subcategory, value)
+    var result = TransactionResult.CANCELED
     loop@ while (true) {
         when (val action = actions.awaitFirst()) {
             is SelectDate -> {
@@ -51,6 +52,7 @@ suspend fun TransactionLogic(
                 val transaction = Transaction(date, subcategory, checkNotNull(value))
                 try {
                     api.addTransaction(transaction)
+                    result = TransactionResult.SUCCESS
                     break@loop
                 } catch (e: HomeBudgetApiException) {
                     toastNotifier.notify(R.string.add_transaction_error_message)
@@ -60,6 +62,7 @@ suspend fun TransactionLogic(
         }
     }
     navigator.popBackStack()
+    return result
 }
 
 data class TransactionState(
@@ -76,4 +79,8 @@ sealed class TransactionAction {
     data class SelectValue(val value: BigDecimal?) : TransactionAction()
     object SelectAdd : TransactionAction()
     object SelectBack : TransactionAction()
+}
+
+enum class TransactionResult {
+    SUCCESS, CANCELED
 }
