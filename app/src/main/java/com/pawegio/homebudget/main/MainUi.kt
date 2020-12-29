@@ -19,6 +19,7 @@ import splitties.dimensions.dp
 import splitties.views.*
 import splitties.views.dsl.constraintlayout.*
 import splitties.views.dsl.core.*
+import splitties.views.dsl.material.floatingActionButton
 import splitties.views.dsl.material.materialCardView
 
 class MainUi(override val ctx: Context) : Ui {
@@ -127,6 +128,10 @@ class MainUi(override val ctx: Context) : Ui {
         elevation = dp(4)
     }
 
+    val floatingActionButton = floatingActionButton {
+        imageResource = R.drawable.ic_add
+    }
+
     private val constraintLayout = constraintLayout {
         add(headerView, lParams(matchConstraints, dip(100)) {
             topOfParent()
@@ -192,7 +197,13 @@ class MainUi(override val ctx: Context) : Ui {
         })
     }
 
-    override val root: View = swipeRefreshLayout
+    override val root: View = frameLayout {
+        add(swipeRefreshLayout, lParams(matchParent, matchParent))
+        add(floatingActionButton, lParams {
+            gravity = gravityBottomEnd
+            margin = dip(16)
+        })
+    }
 }
 
 @Suppress("unused")

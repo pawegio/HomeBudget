@@ -51,6 +51,9 @@ class MainFragment : Fragment() {
             viewModel.mainActions.accept(MainAction.OpenSpreadsheet)
         }
         ui.moreButton.onClick { openPopupMenu() }
+        ui.floatingActionButton.onClick {
+            viewModel.mainActions.accept(MainAction.AddTransaction)
+        }
     }
 
     private fun openPopupMenu() {
