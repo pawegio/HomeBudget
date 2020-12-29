@@ -56,6 +56,7 @@ class MainFragment : Fragment() {
     private fun openPopupMenu() {
         PopupMenu(requireContext(), ui.moreButton).apply {
             menuInflater.inflate(R.menu.main_popup_menu, menu)
+            menu.findItem(R.id.action_add_transaction).isEnabled = !ui.isLoading
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.action_add_transaction -> MainAction.AddTransaction
