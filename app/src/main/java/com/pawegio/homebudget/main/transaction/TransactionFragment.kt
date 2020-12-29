@@ -18,6 +18,7 @@ class TransactionFragment : Fragment() {
 
     private val viewModel by sharedViewModel<MainViewModel>()
     private val ui by lazy { TransactionUi(requireContext()) }
+    private var isTransactionReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +27,7 @@ class TransactionFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.transaction_menu, menu)
+        menu.findItem(R.id.action_add).isEnabled = isTransactionReady
         super.onCreateOptionsMenu(menu, inflater)
     }
 
@@ -44,7 +46,7 @@ class TransactionFragment : Fragment() {
             ui.backClicks.map { SelectBack },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
-            ui.amountChanges.map(::SelectValue)
+            ui.amountChanges.map { SelectValue(it.value) }
         ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
     }
@@ -68,6 +70,8 @@ class TransactionFragment : Fragment() {
 
     private fun updateState(state: TransactionState) {
         ui.date = state.selectedDate
+        isTransactionReady = state.selectedValue != null
+        activity?.invalidateOptionsMenu()
     }
 
     private fun updateCategories(categories: List<Category>) {

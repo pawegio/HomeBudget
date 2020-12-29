@@ -15,7 +15,9 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
+import com.pawegio.homebudget.util.Optional
 import com.pawegio.homebudget.util.colorAttr
+import com.pawegio.homebudget.util.optional
 import com.pawegio.homebudget.util.resourceAttr
 import io.reactivex.Observable
 import org.threeten.bp.LocalDate
@@ -64,13 +66,13 @@ class TransactionUi(override val ctx: Context) : Ui {
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
-    private val amountChangesRelay = PublishRelay.create<BigDecimal>()
+    private val amountChangesRelay = PublishRelay.create<Optional<BigDecimal>>()
 
     val backClicks: Observable<Unit> = backClicksRelay
     val dateClicks: Observable<LocalDate> = dateClicksRelay
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
-    val amountChanges: Observable<BigDecimal> = amountChangesRelay
+    val amountChanges: Observable<Optional<BigDecimal>> = amountChangesRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -153,7 +155,12 @@ class TransactionUi(override val ctx: Context) : Ui {
         filters = arrayOf(AmountInputFilter(10, 2))
         textChanges()
             .skipInitialValue()
-            .map { BigDecimal(it.toString().replace(',', '.')) }
+            .map {
+                it.toString()
+                    .replace(',', '.')
+                    .takeIf(String::isNotEmpty)
+                    ?.let(::BigDecimal).optional
+            }
             .subscribe(amountChangesRelay)
     }
 

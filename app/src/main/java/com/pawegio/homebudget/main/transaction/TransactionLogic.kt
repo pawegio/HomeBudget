@@ -73,7 +73,7 @@ sealed class TransactionAction {
     data class SelectDate(val date: LocalDate) : TransactionAction()
     data class SelectCategory(val category: Category) : TransactionAction()
     data class SelectSubcategory(val subcategory: Subcategory) : TransactionAction()
-    data class SelectValue(val value: BigDecimal) : TransactionAction()
+    data class SelectValue(val value: BigDecimal?) : TransactionAction()
     object SelectAdd : TransactionAction()
     object SelectBack : TransactionAction()
 }
