@@ -51,7 +51,7 @@ class HomeBudgetApiImpl(
 
     private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
-        .requestScopes(Scope(SheetsScopes.SPREADSHEETS))
+        .requestScopes(Scope(SheetsScopes.SPREADSHEETS_READONLY))
         .build()
 
     private val signInClient by lazy { GoogleSignIn.getClient(context, gso) }
