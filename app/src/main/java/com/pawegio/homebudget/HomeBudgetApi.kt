@@ -164,7 +164,7 @@ class HomeBudgetApiImpl(
             val categories = listOf(createCategory(51, incomes, Category.Type.INCOMES)) +
                     expenses.mapIndexed { index, expenses ->
                         createCategory(73 + 12 * index, expenses, Category.Type.EXPENSES)
-                    }
+                    }.filter { it.subcategories.isNotEmpty() }
             MonthlyBudget(
                 month = monthName,
                 plannedIncomes = planned[0][0],
@@ -215,7 +215,7 @@ class HomeBudgetApiImpl(
             val categories = listOf(createCategory(57, incomes, Category.Type.INCOMES)) +
                     expenses.mapIndexed { index, expenses ->
                         createCategory(79 + 12 * index, expenses, Category.Type.EXPENSES)
-                    }
+                    }.filter { it.subcategories.isNotEmpty() }
             MonthlyBudget(
                 month = monthName,
                 plannedIncomes = planned[0][0],
