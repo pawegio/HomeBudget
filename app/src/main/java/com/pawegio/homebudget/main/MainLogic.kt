@@ -53,6 +53,7 @@ suspend fun MainLogic(
                     val result = initTransaction()
                     if (result == TransactionResult.SUCCESS) {
                         toastNotifier.notify(R.string.transaction_added_message)
+                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                     }
                 }
                 PickDocumentAgain -> {

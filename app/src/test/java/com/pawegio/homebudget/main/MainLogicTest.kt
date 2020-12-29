@@ -200,6 +200,13 @@ internal class MainLogicTest : LogicSpec({
                     "show transaction added message" {
                         verify(toastNotifier).notify(R.string.transaction_added_message)
                     }
+
+                    "get refreshed monthly budget for current month" {
+                        api.getMonthlyBudget.invocations.run {
+                            count() shouldBe 2
+                            last() shouldBe Month.APRIL
+                        }
+                    }
                 }
             }
 
