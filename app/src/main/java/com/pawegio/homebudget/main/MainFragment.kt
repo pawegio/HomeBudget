@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.pawegio.homebudget.MainViewModel
@@ -93,5 +94,6 @@ class MainFragment : Fragment() {
 
     private fun updateProgress(isLoading: Boolean?) {
         ui.isLoading = isLoading == true
+        ui.floatingActionButton.isVisible = isLoading == false
     }
 }
