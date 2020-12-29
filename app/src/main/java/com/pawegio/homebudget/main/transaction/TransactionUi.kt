@@ -174,7 +174,7 @@ class TransactionUi(override val ctx: Context) : Ui {
         add(appBar, appBarLParams())
         add(constraintLayout {
             backgroundColor = colorAttr(R.attr.colorSurface)
-            add(noteImageView, lParams(dip(40), dip(40)) {
+            /*add(noteImageView, lParams(dip(40), dip(40)) {
                 topOfParent(dip(8))
                 startOfParent(dip(16))
                 verticalMargin = dip(16)
@@ -183,9 +183,9 @@ class TransactionUi(override val ctx: Context) : Ui {
                 alignVerticallyOn(noteImageView)
                 startToEndOf(noteImageView, dip(16))
                 endOfParent(dip(16))
-            })
+            })*/
             add(dateImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(noteImageView)
+                topOfParent(dip(8))
                 startOfParent(dip(16))
                 verticalMargin = dip(16)
             })
