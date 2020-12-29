@@ -9,6 +9,7 @@ import com.pawegio.homebudget.main.MainLogic
 import com.pawegio.homebudget.main.MonthType
 import com.pawegio.homebudget.main.transaction.TransactionAction
 import com.pawegio.homebudget.main.transaction.TransactionLogic
+import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.main.transaction.TransactionState
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerLogic
@@ -85,6 +86,7 @@ class MainViewModel(
             repository,
             api,
             spreadsheetLauncher,
+            toastNotifier,
             clock,
             ::initPicker,
             ::initTransaction,
@@ -92,8 +94,8 @@ class MainViewModel(
         )
     }
 
-    private suspend fun initTransaction() {
-        TransactionLogic(
+    private suspend fun initTransaction(): TransactionResult {
+        return TransactionLogic(
             transactionActions,
             _transactionState,
             monthlyBudget,

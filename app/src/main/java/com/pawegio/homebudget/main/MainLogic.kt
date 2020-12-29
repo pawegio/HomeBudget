@@ -5,7 +5,9 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.MainAction.*
+import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.SpreadsheetLauncher
+import com.pawegio.homebudget.util.ToastNotifier
 import io.reactivex.Observable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
@@ -23,9 +25,10 @@ suspend fun MainLogic(
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
+    toastNotifier: ToastNotifier,
     clock: Clock,
     initPicker: suspend () -> Unit,
-    initTransaction: suspend () -> Unit,
+    initTransaction: suspend () -> TransactionResult,
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
@@ -47,7 +50,10 @@ suspend fun MainLogic(
                 }
                 AddTransaction -> {
                     navigator.navigate(R.id.action_mainFragment_to_transactionFragment)
-                    initTransaction()
+                    val result = initTransaction()
+                    if (result == TransactionResult.SUCCESS) {
+                        toastNotifier.notify(R.string.transaction_added_message)
+                    }
                 }
                 PickDocumentAgain -> {
                     navigator.navigate(R.id.action_mainFragment_to_pickerFragment)

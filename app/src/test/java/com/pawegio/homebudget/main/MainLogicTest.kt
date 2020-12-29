@@ -3,14 +3,13 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
+import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.pawegio.homebudget.*
-import com.pawegio.homebudget.util.MockHomeBudgetApi
-import com.pawegio.homebudget.util.SpreadsheetLauncher
-import com.pawegio.homebudget.util.SuspendFunction
-import com.pawegio.homebudget.util.createMonthlyBudget
+import com.pawegio.homebudget.main.transaction.TransactionResult
+import com.pawegio.homebudget.util.*
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
@@ -30,9 +29,12 @@ internal class MainLogicTest : LogicSpec({
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
+        val toastNotifier = mock<ToastNotifier>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
         val initPickerLogic = mock<SuspendFunction<Unit>>()
-        val initTransactionLogic = mock<SuspendFunction<Unit>>()
+        val initTransactionLogic = mock<SuspendFunction<TransactionResult>> {
+            onBlocking { invokeSuspend() } doReturn TransactionResult.SUCCESS
+        }
         val navigator = mock<Navigator>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
@@ -44,6 +46,7 @@ internal class MainLogicTest : LogicSpec({
                 repository,
                 api,
                 spreadsheetLauncher,
+                toastNotifier,
                 clock,
                 initPickerLogic::invokeSuspend,
                 initTransactionLogic::invokeSuspend,
@@ -190,6 +193,13 @@ internal class MainLogicTest : LogicSpec({
 
                 "init transaction logic" {
                     verifyBlocking(initTransactionLogic) { invokeSuspend() }
+                }
+
+                "on transaction success result" - {
+
+                    "show transaction added message" {
+                        verify(toastNotifier).notify(R.string.transaction_added_message)
+                    }
                 }
             }
 
