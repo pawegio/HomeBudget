@@ -18,7 +18,7 @@ class HomeBudgetRepositoryImpl(context: Context) : HomeBudgetRepository {
         set(value) = sharedPreferences.edit(commit = true) { putString(SPREADSHEET_ID, value) }
 
     override var spreadsheetTemplate: Int
-        get() = sharedPreferences.getInt(SPREADSHEET_TEMPLATE, 2020)
+        get() = sharedPreferences.getInt(SPREADSHEET_TEMPLATE, 2021)
         set(value) = sharedPreferences.edit(commit = true) { putInt(SPREADSHEET_TEMPLATE, value) }
 
     companion object {

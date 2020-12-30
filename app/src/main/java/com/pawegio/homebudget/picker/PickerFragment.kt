@@ -43,7 +43,11 @@ class PickerFragment : Fragment(), TextWatcher {
                 position: Int,
                 id: Long
             ) {
-                val template = if (position == 0) 2020 else 2019
+                val template = when (position) {
+                    0 -> 2021
+                    1 -> 2020
+                    else -> 2019
+                }
                 viewModel.pickerActions.accept(PickerAction.SelectTemplate(template))
             }
 
