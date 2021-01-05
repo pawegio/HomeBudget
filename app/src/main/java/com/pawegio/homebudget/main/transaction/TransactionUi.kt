@@ -1,6 +1,8 @@
 package com.pawegio.homebudget.main.transaction
 
 import android.content.Context
+import android.icu.text.DecimalFormatSymbols
+import android.os.Build
 import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
@@ -154,8 +156,16 @@ class TransactionUi(override val ctx: Context) : Ui {
         gravity = gravityEnd
         setHint(R.string.amount_hint)
         textSize = 26f
-        inputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        keyListener = DigitsKeyListener.getInstance("0123456789,")
+        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+        val digitsKeyListener = DigitsKeyListener.getInstance("0123456789$separator")
+        val amountInputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        if (Build.BRAND == "google") {
+            inputType = amountInputType
+            keyListener = digitsKeyListener
+        } else {
+            keyListener = digitsKeyListener
+            inputType = amountInputType
+        }
         filters = arrayOf(AmountInputFilter(10, 2))
         textChanges()
             .skipInitialValue()
