@@ -5,10 +5,12 @@ import android.text.InputType
 import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.editorActions
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
@@ -67,12 +69,14 @@ class TransactionUi(override val ctx: Context) : Ui {
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
     private val amountChangesRelay = PublishRelay.create<Optional<BigDecimal>>()
+    private val doneClicksRelay = PublishRelay.create<Unit>()
 
     val backClicks: Observable<Unit> = backClicksRelay
     val dateClicks: Observable<LocalDate> = dateClicksRelay
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
     val amountChanges: Observable<Optional<BigDecimal>> = amountChangesRelay
+    val doneClicks: Observable<Unit> = doneClicksRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -162,6 +166,9 @@ class TransactionUi(override val ctx: Context) : Ui {
                     ?.let(::BigDecimal).optional
             }
             .subscribe(amountChangesRelay)
+        editorActions { it == EditorInfo.IME_ACTION_DONE }
+            .map { }
+            .subscribe(doneClicksRelay)
     }
 
     private val currencyTextView = textView {

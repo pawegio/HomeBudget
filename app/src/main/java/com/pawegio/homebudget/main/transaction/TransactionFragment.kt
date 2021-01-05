@@ -42,11 +42,12 @@ class TransactionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel.transactionState.observe(viewLifecycleOwner, Observer(::updateState))
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
-        Observable.merge(
+        Observable.mergeArray(
             ui.backClicks.map { SelectBack },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
-            ui.amountChanges.map { SelectValue(it.value) }
+            ui.amountChanges.map { SelectValue(it.value) },
+            ui.doneClicks.filter { isTransactionReady }.map { SelectAdd }
         ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
     }
