@@ -13,6 +13,7 @@ import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.google.api.services.sheets.v4.model.ValueRange
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pawegio.homebudget.util.ColumnResolver
 import com.pawegio.homebudget.util.currentActivity
 import com.pawegio.homebudget.util.polishDisplayName
@@ -124,8 +125,10 @@ class HomeBudgetApiImpl(
                     .setValueInputOption("USER_ENTERED")
                     .execute()
             } catch (e: Exception) {
-                e.printStackTrace()
-                throw HomeBudgetApiException(e)
+                val apiException = HomeBudgetApiException(e)
+                apiException.printStackTrace()
+                FirebaseCrashlytics.getInstance().recordException(apiException)
+                throw apiException
             }
         }
     }
@@ -174,7 +177,10 @@ class HomeBudgetApiImpl(
                 categories = categories
             ).also(::println)
         } catch (e: Exception) {
-            throw HomeBudgetApiException(e)
+            val apiException = HomeBudgetApiException(e)
+            apiException.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(apiException)
+            throw apiException
         }
     }
 
@@ -225,8 +231,10 @@ class HomeBudgetApiImpl(
                 categories = categories
             ).also(::println)
         } catch (e: Exception) {
-            e.printStackTrace()
-            throw HomeBudgetApiException(e)
+            val apiException = HomeBudgetApiException(e)
+            apiException.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(apiException)
+            throw apiException
         }
     }
 
