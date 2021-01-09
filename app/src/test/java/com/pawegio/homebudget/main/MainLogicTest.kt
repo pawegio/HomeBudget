@@ -169,6 +169,10 @@ internal class MainLogicTest : LogicSpec({
                 isLoading.test().assertValue(false)
             }
 
+            "clear monthly budget" {
+                monthlyBudget.test().assertNullValue()
+            }
+
             "show error dialog" {
                 verify(navigator).navigate(R.id.action_mainFragment_to_loadErrorFragment)
             }

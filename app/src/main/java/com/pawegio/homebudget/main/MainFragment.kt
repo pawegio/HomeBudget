@@ -70,7 +70,7 @@ class MainFragment : Fragment() {
     private fun openPopupMenu() {
         PopupMenu(requireContext(), ui.moreButton).apply {
             menuInflater.inflate(R.menu.main_popup_menu, menu)
-            menu.findItem(R.id.action_add_transaction).isEnabled = !ui.isLoading
+            menu.findItem(R.id.action_add_transaction).isEnabled = ui.floatingActionButton.isVisible
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.action_add_transaction -> tryToAddTransaction()
@@ -99,11 +99,11 @@ class MainFragment : Fragment() {
             ui.incomes = categories.first().subcategories
             ui.expenses = categories.drop(1)
         }
+        ui.floatingActionButton.isVisible = monthlyBudget != null
     }
 
     private fun updateProgress(isLoading: Boolean?) {
         ui.isLoading = isLoading == true
-        ui.floatingActionButton.isVisible = isLoading == false
     }
 
     private fun tryToAddTransaction() {

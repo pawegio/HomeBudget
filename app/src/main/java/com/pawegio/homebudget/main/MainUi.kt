@@ -130,6 +130,7 @@ class MainUi(override val ctx: Context) : Ui {
 
     val floatingActionButton = floatingActionButton {
         imageResource = R.drawable.ic_add
+        isVisible = false
     }
 
     private val constraintLayout = constraintLayout {

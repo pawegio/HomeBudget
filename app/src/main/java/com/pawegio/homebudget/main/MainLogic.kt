@@ -89,6 +89,7 @@ private suspend fun loadMonth(
     try {
         monthlyBudget.value = api.getMonthlyBudget(month)
     } catch (e: HomeBudgetApiException) {
+        monthlyBudget.value = null
         navigator.navigate(R.id.action_mainFragment_to_loadErrorFragment)
     } finally {
         isLoading.value = false
