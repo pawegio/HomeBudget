@@ -60,7 +60,7 @@ class HomeBudgetApiImpl(
     private val account get() = GoogleSignIn.getLastSignedInAccount(context)
 
     private val sheetsService by lazy {
-        credential.selectedAccount = account?.account
+        credential.selectedAccount = account?.account?.takeIf { it.name != null } ?: repository.account
         Sheets.Builder(
             AndroidHttp.newCompatibleTransport(),
             JacksonFactory.getDefaultInstance(),
@@ -74,7 +74,8 @@ class HomeBudgetApiImpl(
         if (!isSignedIn) {
             try {
                 val result = currentActivity?.startForResult(signInClient.signInIntent)
-                GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
+                val signInAccount = GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
+                repository.account = signInAccount.account
             } catch (e: ApiException) {
                 throw HomeBudgetApiException(e)
             } catch (e: InlineActivityResultException) {
@@ -88,6 +89,8 @@ class HomeBudgetApiImpl(
             signInClient.signOut().await()
         } catch (e: ApiException) {
             throw HomeBudgetApiException(e)
+        } finally {
+            repository.account = null
         }
     }
 
