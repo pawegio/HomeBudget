@@ -1,6 +1,7 @@
 package com.pawegio.homebudget
 
 import android.content.Context
+import android.content.Intent
 import com.github.florent37.inlineactivityresult.kotlin.InlineActivityResultException
 import com.github.florent37.inlineactivityresult.kotlin.coroutines.startForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -9,6 +10,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
 import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
@@ -117,7 +119,9 @@ class HomeBudgetApiImpl(
                 val oldValues = response.getValues() as List<List<Any>>?
                 val oldTransactions = oldValues?.first()?.first()
                 val newTransactions = when {
-                    oldTransactions is String && oldTransactions.startsWith("=") -> "$oldTransactions+$value".replace('.', ',')
+                    oldTransactions is String && oldTransactions.startsWith("=") -> {
+                        "$oldTransactions+$value".replace('.', ',')
+                    }
                     oldTransactions is BigDecimal -> "=$oldTransactions+$value".replace('.', ',')
                     oldTransactions == null || oldTransactions is String && oldTransactions.isBlank() -> value
                     else -> throw IllegalStateException("Invalid values: $oldValues")
@@ -136,7 +140,7 @@ class HomeBudgetApiImpl(
         }
     }
 
-    private fun getMonthlyBudget2019(month: Month): MonthlyBudget {
+    private suspend fun getMonthlyBudget2019(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName
         val plannedBudgetRange = mapOf("D9" to "D10")
         val actualBudgetRange = mapOf("D16" to "D17")
@@ -179,6 +183,10 @@ class HomeBudgetApiImpl(
                 actualExpenses = actual[1][0],
                 categories = categories
             ).also(::println)
+        } catch (e: UserRecoverableAuthIOException) {
+            recoverAndRetry(e.intent) {
+                getMonthlyBudget2019(month)
+            }
         } catch (e: Exception) {
             val apiException = HomeBudgetApiException(e)
             apiException.printStackTrace()
@@ -187,7 +195,7 @@ class HomeBudgetApiImpl(
         }
     }
 
-    private fun getMonthlyBudget2020(month: Month): MonthlyBudget {
+    private suspend fun getMonthlyBudget2020(month: Month): MonthlyBudget {
         val monthName = month.polishDisplayName
         val plannedBudgetRange = mapOf("D9" to "D10")
         val actualBudgetRange = mapOf("D16" to "D17")
@@ -233,6 +241,10 @@ class HomeBudgetApiImpl(
                 actualExpenses = actual[1][0],
                 categories = categories
             ).also(::println)
+        } catch (e: UserRecoverableAuthIOException) {
+            recoverAndRetry(e.intent) {
+                getMonthlyBudget2020(month)
+            }
         } catch (e: Exception) {
             val apiException = HomeBudgetApiException(e)
             apiException.printStackTrace()
@@ -240,6 +252,14 @@ class HomeBudgetApiImpl(
             throw apiException
         }
     }
+
+    private suspend fun <T> recoverAndRetry(intent: Intent, block: suspend () -> T): T =
+        try {
+            currentActivity?.startForResult(intent)
+            block()
+        } catch (e: InlineActivityResultException) {
+            throw HomeBudgetApiException(e)
+        }
 
     private fun createCategory(index: Int, data: List<List<Any>>, type: Category.Type) =
         Category(
