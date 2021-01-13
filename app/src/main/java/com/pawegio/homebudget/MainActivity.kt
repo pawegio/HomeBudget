@@ -9,8 +9,8 @@ import com.pawegio.homebudget.main.transaction.TransactionAction
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.util.CurrentActivityObserver
 import kotlinx.android.synthetic.main.main_activity.*
-import org.koin.android.viewmodel.ext.android.getViewModel
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity) {
 

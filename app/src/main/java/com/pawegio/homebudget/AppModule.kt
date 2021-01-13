@@ -4,6 +4,8 @@ import com.pawegio.homebudget.util.*
 import org.koin.android.experimental.dsl.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
+import org.koin.androidx.viewmodel.dsl.viewModel
+import org.koin.core.context.GlobalContext.get
 import org.koin.dsl.module
 import org.threeten.bp.Clock
 
@@ -16,5 +18,5 @@ val appModule = module {
     single<SpreadsheetLauncher> { SpreadsheetLauncherImpl(androidContext(), get()) }
     single<Navigator> { NavigatorImpl(androidApplication(), ::appNavController) }
     single<ToastNotifier> { ToastNotifierImpl(androidContext()) }
-    viewModel<MainViewModel>()
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get(), get()) }
 }
