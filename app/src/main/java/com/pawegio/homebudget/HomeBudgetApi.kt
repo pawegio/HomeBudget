@@ -270,8 +270,8 @@ class HomeBudgetApiImpl(
                 Subcategory(
                     index = index + 1 + subcategoryIndex,
                     data[subcategoryIndex + 1][0] as String,
-                    data[subcategoryIndex + 1][1] as BigDecimal,
-                    data[subcategoryIndex + 1][2] as BigDecimal,
+                    data[subcategoryIndex + 1].getOrNull(1) as? BigDecimal ?: BigDecimal.ZERO,
+                    data[subcategoryIndex + 1].getOrNull(2) as? BigDecimal ?: BigDecimal.ZERO,
                     type
                 )
             }.filter { it.name != "." },
