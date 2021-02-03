@@ -11,7 +11,7 @@ import com.pawegio.homebudget.R
 import com.pawegio.homebudget.common.DatePickerFragment
 import com.pawegio.homebudget.main.transaction.TransactionAction.*
 import io.reactivex.Observable
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 
 class TransactionFragment : Fragment() {

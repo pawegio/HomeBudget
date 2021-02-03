@@ -5,9 +5,7 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.FlowPreview
-import org.koin.android.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import splitties.alertdialog.appcompat.*
 
 class LoadErrorFragment : DialogFragment() {

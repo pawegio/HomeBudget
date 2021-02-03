@@ -80,8 +80,8 @@ dependencies {
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
     implementation("androidx.navigation:navigation-fragment-ktx:2.3.2")
     implementation("androidx.navigation:navigation-ui-ktx:2.3.2")
-    implementation("org.koin:koin-androidx-viewmodel:2.2.0")
-    implementation("org.koin:koin-android-ext:2.0.1")
+    implementation("org.koin:koin-core:2.2.2")
+    implementation("org.koin:koin-androidx-viewmodel:2.2.2")
     implementation("com.google.android.material:material:1.3.0-beta01")
     implementation("com.google.android.gms:play-services-auth:19.0.0")
     implementation("com.google.api-client:google-api-client-android:1.23.0") {
