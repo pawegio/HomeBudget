@@ -94,8 +94,8 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
-    implementation("com.google.firebase:firebase-crashlytics:17.3.0")
-    implementation("com.google.firebase:firebase-analytics:18.0.0")
+    implementation("com.google.firebase:firebase-crashlytics:17.3.1")
+    implementation("com.google.firebase:firebase-analytics:18.0.2")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-alpha06")
 
     testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
