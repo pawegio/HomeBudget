@@ -34,10 +34,10 @@ private suspend fun proceed(
     initPickerFlow: suspend () -> Unit
 ) {
     if (repository.spreadsheetId != null) {
-        navigator.navigate(R.id.action_loginFragment_to_mainFragment)
+        navigator.navigate(NavGraph.Action.toMain)
         initMainFlow()
     } else {
-        navigator.navigate(R.id.action_loginFragment_to_pickerFragment)
+        navigator.navigate(NavGraph.Action.toPicker)
         initPickerFlow()
     }
 }

@@ -10,7 +10,6 @@ import androidx.lifecycle.ProcessLifecycleOwner
 import androidx.navigation.NavController
 
 interface Navigator {
-    fun restart(graphId: Int)
     fun popBackStack()
     fun navigate(destinationId: Int)
 }
@@ -40,10 +39,6 @@ class NavigatorImpl(
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onAppInBackground() {
         isAppInForeground = false
-    }
-
-    override fun restart(graphId: Int) = tryToInvoke {
-        getNavController()?.run { setGraph(graphId) }
     }
 
     override fun navigate(destinationId: Int) = tryToInvoke {

@@ -157,7 +157,7 @@ internal class MainLogicTest : LogicSpec({
                 actions.accept(MainAction.SelectAbout)
 
                 "navigate to about screen" {
-                    verify(navigator).navigate(R.id.action_mainFragment_to_aboutFragment)
+                    verify(navigator).navigate(NavGraph.Action.toAbout)
                 }
             }
         }
@@ -174,7 +174,7 @@ internal class MainLogicTest : LogicSpec({
             }
 
             "show error dialog" {
-                verify(navigator).navigate(R.id.action_mainFragment_to_loadErrorFragment)
+                verify(navigator).navigate(NavGraph.Action.toLoadError)
             }
 
             "on try again" - {
@@ -192,7 +192,7 @@ internal class MainLogicTest : LogicSpec({
                 actions.accept(MainAction.AddTransaction)
 
                 "navigate to transaction screen" {
-                    verify(navigator).navigate(R.id.action_mainFragment_to_transactionFragment)
+                    verify(navigator).navigate(NavGraph.Action.toTransaction)
                 }
 
                 "init transaction logic" {
@@ -218,7 +218,7 @@ internal class MainLogicTest : LogicSpec({
                 actions.accept(MainAction.PickDocumentAgain)
 
                 "navigate to picker screen" {
-                    verify(navigator).navigate(R.id.action_mainFragment_to_pickerFragment)
+                    verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
 
                 "init picker logic" {

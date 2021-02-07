@@ -49,7 +49,7 @@ suspend fun MainLogic(
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
                 AddTransaction -> {
-                    navigator.navigate(R.id.action_mainFragment_to_transactionFragment)
+                    navigator.navigate(NavGraph.Action.toTransaction)
                     val result = initTransaction()
                     if (result == TransactionResult.SUCCESS) {
                         toastNotifier.notify(R.string.transaction_added_message)
@@ -57,10 +57,10 @@ suspend fun MainLogic(
                     }
                 }
                 PickDocumentAgain -> {
-                    navigator.navigate(R.id.action_mainFragment_to_pickerFragment)
+                    navigator.navigate(NavGraph.Action.toPicker)
                     initPicker()
                 }
-                SelectAbout -> navigator.navigate(R.id.action_mainFragment_to_aboutFragment)
+                SelectAbout -> navigator.navigate(NavGraph.Action.toAbout)
                 SignOut -> {
                     repository.spreadsheetId = null
                     api.signOut()
@@ -90,7 +90,7 @@ private suspend fun loadMonth(
         monthlyBudget.value = api.getMonthlyBudget(month)
     } catch (e: HomeBudgetApiException) {
         monthlyBudget.value = null
-        navigator.navigate(R.id.action_mainFragment_to_loadErrorFragment)
+        navigator.navigate(NavGraph.Action.toLoadError)
     } finally {
         isLoading.value = false
     }

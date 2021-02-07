@@ -50,7 +50,6 @@ class MainViewModel(
     private val _transactionState = MutableLiveData<TransactionState>()
 
     init {
-        navigator.restart(R.navigation.app_navigation)
         launch { initLogin() }
     }
 

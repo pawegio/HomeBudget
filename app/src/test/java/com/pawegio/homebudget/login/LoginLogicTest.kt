@@ -44,7 +44,7 @@ internal class LoginLogicTest : LogicSpec({
             }
 
             "do not navigate to main screen" {
-                verify(navigator, never()).navigate(R.id.action_loginFragment_to_mainFragment)
+                verify(navigator, never()).navigate(NavGraph.Action.toMain)
             }
 
             "do not init main flow" {
@@ -63,7 +63,7 @@ internal class LoginLogicTest : LogicSpec({
                     api.signIn.resume(Unit)
 
                     "navigate to picker screen" {
-                        verify(navigator).navigate(R.id.action_loginFragment_to_pickerFragment)
+                        verify(navigator).navigate(NavGraph.Action.toPicker)
                     }
 
                     "init picker flow" {
@@ -76,7 +76,7 @@ internal class LoginLogicTest : LogicSpec({
                     api.signIn.resume(Unit)
 
                     "do not navigate to main screen" {
-                        verify(navigator, never()).navigate(R.id.action_loginFragment_to_mainFragment)
+                        verify(navigator, never()).navigate(NavGraph.Action.toMain)
                     }
 
                     "do not init main flow" {
@@ -89,10 +89,7 @@ internal class LoginLogicTest : LogicSpec({
                     api.signIn.resumeWithException(HomeBudgetApiException())
 
                     "do not navigate to main screen" {
-                        verify(
-                            navigator,
-                            never()
-                        ).navigate(R.id.action_loginFragment_to_mainFragment)
+                        verify(navigator, never()).navigate(NavGraph.Action.toMain)
                     }
 
                     "do not init main flow" {
@@ -114,7 +111,7 @@ internal class LoginLogicTest : LogicSpec({
                 logic.start()
 
                 "navigate to picker screen" {
-                    verify(navigator).navigate(R.id.action_loginFragment_to_pickerFragment)
+                    verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
 
                 "init picker flow" {
@@ -128,7 +125,7 @@ internal class LoginLogicTest : LogicSpec({
                 logic.start()
 
                 "navigate to main screen" {
-                    verify(navigator).navigate(R.id.action_loginFragment_to_mainFragment)
+                    verify(navigator).navigate(NavGraph.Action.toMain)
                 }
 
                 "init main flow" {

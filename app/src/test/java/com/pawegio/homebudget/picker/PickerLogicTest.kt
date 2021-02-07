@@ -2,10 +2,7 @@ package com.pawegio.homebudget.picker
 
 import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
-import com.pawegio.homebudget.HomeBudgetRepository
-import com.pawegio.homebudget.LogicSpec
-import com.pawegio.homebudget.Navigator
-import com.pawegio.homebudget.R
+import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SuspendFunction
 import io.kotlintest.shouldBe
@@ -40,7 +37,7 @@ internal class PickerLogicTest : LogicSpec({
             }
 
             "do not navigate to main screen" {
-                verify(navigator, never()).navigate(R.id.action_pickerFragment_to_mainFragment)
+                verify(navigator, never()).navigate(NavGraph.Action.toMain)
             }
 
             "do not init main flow" {
@@ -72,7 +69,7 @@ internal class PickerLogicTest : LogicSpec({
             }
 
             "navigate to main screen" {
-                verify(navigator).navigate(R.id.action_pickerFragment_to_mainFragment)
+                verify(navigator).navigate(NavGraph.Action.toMain)
             }
 
             "init main flow" {

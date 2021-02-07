@@ -3,8 +3,8 @@
 package com.pawegio.homebudget.picker
 
 import com.pawegio.homebudget.HomeBudgetRepository
+import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.Navigator
-import com.pawegio.homebudget.R
 import com.pawegio.homebudget.picker.PickerAction.*
 import com.pawegio.homebudget.util.HowToLauncher
 import io.reactivex.Observable
@@ -26,7 +26,7 @@ suspend fun PickerLogic(
             is SelectTemplate -> repository.spreadsheetTemplate = action.template
             is PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
-                navigator.navigate(R.id.action_pickerFragment_to_mainFragment)
+                navigator.navigate(NavGraph.Action.toMain)
                 initMain()
                 break@loop
             }
