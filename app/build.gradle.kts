@@ -90,7 +90,7 @@ dependencies {
     implementation("com.google.apis:google-api-services-sheets:v4-rev581-1.25.0") {
         exclude("org.apache.httpcomponents")
     }
-    implementation("com.github.florent37:inline-activity-result-kotlin:1.0.2")
+    implementation("com.github.florent37:inline-activity-result-kotlin:1.0.4")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
