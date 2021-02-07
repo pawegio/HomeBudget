@@ -255,7 +255,9 @@ class HomeBudgetApiImpl(
 
     private suspend fun <T> recoverAndRetry(intent: Intent, block: suspend () -> T): T =
         try {
-            currentActivity?.startForResult(intent)
+            withContext(Dispatchers.Main) {
+                currentActivity?.startForResult(intent)
+            }
             block()
         } catch (e: InlineActivityResultException) {
             throw HomeBudgetApiException(e)
