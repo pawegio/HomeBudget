@@ -54,7 +54,7 @@ suspend fun TransactionLogic(
                 state.value = TransactionState(note, date, category, subcategory, value)
             }
             SelectAdd -> {
-                val transaction = Transaction(date, subcategory, checkNotNull(value))
+                val transaction = Transaction(note, date, subcategory, checkNotNull(value))
                 try {
                     api.addTransaction(transaction)
                     result = TransactionResult.SUCCESS

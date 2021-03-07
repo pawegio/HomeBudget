@@ -16,6 +16,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
     val addTransaction = smokk<Transaction, Unit>()
 
     val addTransactionCalled get() = addTransaction.invocations.count() > 0
+    val addedTransactionNote get() = addTransaction.invocations.last().note
     val addedTransactionDate get() = addTransaction.invocations.last().date
     val addedTransactionSubcategory get() = addTransaction.invocations.last().subcategory
     val addedTransactionValue get() = addTransaction.invocations.last().value

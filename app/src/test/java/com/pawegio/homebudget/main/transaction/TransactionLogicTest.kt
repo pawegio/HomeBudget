@@ -180,6 +180,27 @@ internal class TransactionLogicTest : LogicSpec({
             "update entered note" {
                 state.test().assertValue { it.enteredNote == note }
             }
+
+            "on select value" - {
+                val selectedValue = BigDecimal.valueOf(4.0)
+                actions.accept(TransactionAction.SelectValue(selectedValue))
+
+                "update selected value" {
+                    state.test().assertValue { it.selectedValue == selectedValue }
+                }
+
+                "on select add" - {
+                    actions.accept(TransactionAction.SelectAdd)
+
+                    "add transaction to home budget" {
+                        api.addTransactionCalled shouldBe true
+                    }
+
+                    "add transaction with entered note" {
+                        api.addedTransactionNote shouldBe note
+                    }
+                }
+            }
         }
 
         "on select value" - {

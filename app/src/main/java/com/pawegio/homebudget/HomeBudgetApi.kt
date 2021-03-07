@@ -35,6 +35,7 @@ interface HomeBudgetApi {
 }
 
 data class Transaction(
+    val note: String?,
     val date: LocalDate,
     val subcategory: Subcategory,
     val value: BigDecimal
@@ -105,7 +106,7 @@ class HomeBudgetApiImpl(
     }
 
     override suspend fun addTransaction(transaction: Transaction) {
-        val (date, subcategory, value) = transaction
+        val (note, date, subcategory, value) = transaction
         val month = date.month.polishDisplayName
         val column = columnResolver.getColumnName(date.dayOfMonth)
         val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
