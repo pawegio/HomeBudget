@@ -54,6 +54,7 @@ internal class TransactionLogicTest : LogicSpec({
         "set default state" {
             state.test().assertValue(
                 TransactionState(
+                    enteredNote = null,
                     selectedDate = LocalDate.parse("2020-06-09"),
                     selectedCategory = categories.first(),
                     selectedSubcategory = categories.first().subcategories.first(),
@@ -169,6 +170,15 @@ internal class TransactionLogicTest : LogicSpec({
                         state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
                     }
                 }
+            }
+        }
+
+        "on enter note" - {
+            val note = "Bread"
+            actions.accept(TransactionAction.EnterNote(note))
+
+            "update entered note" {
+                state.test().assertValue { it.enteredNote == note }
             }
         }
 

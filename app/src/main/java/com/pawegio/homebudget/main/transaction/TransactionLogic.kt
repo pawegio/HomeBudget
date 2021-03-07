@@ -23,30 +23,35 @@ suspend fun TransactionLogic(
     toastNotifier: ToastNotifier,
     navigator: Navigator
 ) : TransactionResult {
+    var note: String? = null
     var date = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
     val category = checkNotNull(monthlyBudget.value)
         .categories.first { it.type == Category.Type.EXPENSES }
     var subcategory = category.subcategories.first()
     var value: BigDecimal? = null
-    state.value = TransactionState(date, category, subcategory, value)
+    state.value = TransactionState(note, date, category, subcategory, value)
     var result = TransactionResult.CANCELED
     loop@ while (true) {
         when (val action = actions.awaitFirst()) {
+            is EnterNote -> {
+                note = action.note
+                state.value = TransactionState(note, date, category, subcategory, value)
+            }
             is SelectDate -> {
                 date = action.date
-                state.value = TransactionState(date, category, subcategory, value)
+                state.value = TransactionState(note, date, category, subcategory, value)
             }
             is SelectCategory -> {
                 subcategory = action.category.subcategories.first()
-                state.value = TransactionState(date, category, subcategory, value)
+                state.value = TransactionState(note, date, category, subcategory, value)
             }
             is SelectSubcategory -> {
                 subcategory = action.subcategory
-                state.value = TransactionState(date, category, subcategory, value)
+                state.value = TransactionState(note, date, category, subcategory, value)
             }
             is SelectValue -> {
                 value = action.value
-                state.value = TransactionState(date, category, subcategory, value)
+                state.value = TransactionState(note, date, category, subcategory, value)
             }
             SelectAdd -> {
                 val transaction = Transaction(date, subcategory, checkNotNull(value))
@@ -66,6 +71,7 @@ suspend fun TransactionLogic(
 }
 
 data class TransactionState(
+    val enteredNote: String?,
     val selectedDate: LocalDate,
     val selectedCategory: Category,
     val selectedSubcategory: Subcategory,
@@ -73,7 +79,7 @@ data class TransactionState(
 )
 
 sealed class TransactionAction {
-    data class EditNote(val note: String?) : TransactionAction()
+    data class EnterNote(val note: String?) : TransactionAction()
     data class SelectDate(val date: LocalDate) : TransactionAction()
     data class SelectCategory(val category: Category) : TransactionAction()
     data class SelectSubcategory(val subcategory: Subcategory) : TransactionAction()
