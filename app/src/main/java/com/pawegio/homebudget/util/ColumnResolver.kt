@@ -2,6 +2,7 @@ package com.pawegio.homebudget.util
 
 interface ColumnResolver {
     fun getColumnName(dayOfMonth: Int): String
+    fun getColumnIndex(dayOfMonth: Int): Int
 }
 
 object ColumnResolverImpl : ColumnResolver {
@@ -12,4 +13,6 @@ object ColumnResolverImpl : ColumnResolver {
             in 19..31 -> ("A" + ('A' + dayOfMonth - 19))
             else -> throw IllegalStateException()
         }
+
+    override fun getColumnIndex(dayOfMonth: Int): Int = dayOfMonth + 7
 }
