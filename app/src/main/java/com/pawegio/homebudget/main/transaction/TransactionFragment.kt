@@ -44,6 +44,7 @@ class TransactionFragment : Fragment() {
         viewModel.categories.observe(viewLifecycleOwner, Observer(::updateCategories))
         Observable.mergeArray(
             ui.backClicks.map { SelectBack },
+            ui.noteChanges.map { EditNote(it.value) },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
             ui.amountChanges.map { SelectValue(it.value) },

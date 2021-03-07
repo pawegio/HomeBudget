@@ -67,6 +67,7 @@ class TransactionUi(override val ctx: Context) : Ui {
         }
 
     private val backClicksRelay = PublishRelay.create<Unit>()
+    private val noteChangesRelay = PublishRelay.create<Optional<String>>()
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
@@ -74,6 +75,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     private val doneClicksRelay = PublishRelay.create<Unit>()
 
     val backClicks: Observable<Unit> = backClicksRelay
+    val noteChanges: Observable<Optional<String>> = noteChangesRelay
     val dateClicks: Observable<LocalDate> = dateClicksRelay
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
@@ -101,6 +103,10 @@ class TransactionUi(override val ctx: Context) : Ui {
         isSingleLine = true
         setHint(R.string.note_hint)
         verticalPadding = dip(8)
+        textChanges()
+            .skipInitialValue()
+            .map { it.toString().takeIf(String::isNotBlank).optional }
+            .subscribe(noteChangesRelay)
     }
 
     private val dateImageView = imageView {

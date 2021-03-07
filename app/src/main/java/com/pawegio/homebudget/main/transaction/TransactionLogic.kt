@@ -73,6 +73,7 @@ data class TransactionState(
 )
 
 sealed class TransactionAction {
+    data class EditNote(val note: String?) : TransactionAction()
     data class SelectDate(val date: LocalDate) : TransactionAction()
     data class SelectCategory(val category: Category) : TransactionAction()
     data class SelectSubcategory(val subcategory: Subcategory) : TransactionAction()
