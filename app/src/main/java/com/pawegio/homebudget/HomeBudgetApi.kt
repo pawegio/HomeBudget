@@ -109,17 +109,11 @@ class HomeBudgetApiImpl(
         val (note, date, subcategory, value) = transaction
         val month = date.month.polishDisplayName
         val column = columnResolver.getColumnName(date.dayOfMonth)
-        val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
         val row = subcategory.index
         val range = "'$month'!${column}$row"
         val spreadsheetId = checkNotNull(spreadsheetId)
         withContext(Dispatchers.IO) {
             try {
-                val spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
-                    .setFields("sheets(properties(sheetId,title))")
-                    .execute()
-                val sheets = spreadsheet.sheets
-                val sheetId = sheets.first { it.properties["title"] == month }.properties["sheetId"] as? Int
                 val response = sheetsService.spreadsheets().values()
                     .get(spreadsheetId, range)
                     .setValueRenderOption("FORMULA")
@@ -139,22 +133,30 @@ class HomeBudgetApiImpl(
                     .update(spreadsheetId, range, body)
                     .setValueInputOption("USER_ENTERED")
                     .execute()
-                val addNoteRequest = Request().setRepeatCell(
-                    RepeatCellRequest()
-                        .setRange(
-                            GridRange()
-                                .setSheetId(sheetId)
-                                .setStartRowIndex(row - 1)
-                                .setEndRowIndex(row)
-                                .setStartColumnIndex(columnIndex)
-                                .setEndColumnIndex(columnIndex + 1)
-                        )
-                        .setCell(CellData().setNote("This is a note"))
-                        .setFields("note")
-                )
-                sheetsService.spreadsheets()
-                    .batchUpdate(spreadsheetId, BatchUpdateSpreadsheetRequest().setRequests(listOf(addNoteRequest)))
-                    .execute()
+                if (note != null) {
+                    val spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
+                        .setFields("sheets(properties(sheetId,title))")
+                        .execute()
+                    val sheets = spreadsheet.sheets
+                    val sheetId = sheets.first { it.properties["title"] == month }.properties["sheetId"] as? Int
+                    val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
+                    val addNoteRequest = Request().setRepeatCell(
+                        RepeatCellRequest()
+                            .setRange(
+                                GridRange()
+                                    .setSheetId(sheetId)
+                                    .setStartRowIndex(row - 1)
+                                    .setEndRowIndex(row)
+                                    .setStartColumnIndex(columnIndex)
+                                    .setEndColumnIndex(columnIndex + 1)
+                            )
+                            .setCell(CellData().setNote(note))
+                            .setFields("note")
+                    )
+                    sheetsService.spreadsheets()
+                        .batchUpdate(spreadsheetId, BatchUpdateSpreadsheetRequest().setRequests(listOf(addNoteRequest)))
+                        .execute()
+                }
             } catch (e: Exception) {
                 val apiException = HomeBudgetApiException(e)
                 apiException.printStackTrace()
