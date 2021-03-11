@@ -150,14 +150,27 @@ class HomeBudgetApiImpl(
     }
 
     private fun addNote(month: String, date: LocalDate, subcategory: Subcategory, note: String) {
+        val column = columnResolver.getColumnName(date.dayOfMonth)
         val row = subcategory.index
-        val spreadsheetId = checkNotNull(spreadsheetId)
         val spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
             .setFields("sheets(properties(sheetId,title))")
             .execute()
         val sheets = spreadsheet.sheets
         val sheetId = sheets.first { it.properties["title"] == month }.properties["sheetId"] as? Int
         val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
+        val range = "'$month'!${column}$row"
+        val cell = sheetsService.spreadsheets().get(spreadsheetId)
+            .setRanges(listOf(range))
+            .setFields("sheets/data/rowData/values/note")
+            .execute()
+        val oldNote = cell.sheets.firstOrNull()?.data?.get(0)?.rowData?.get(0)?.getValues()?.get(0)?.note
+        val newNote = buildString {
+            if (oldNote != null) {
+                append(oldNote)
+                append('\n')
+            }
+            append(note)
+        }
         val addNoteRequest = Request().setRepeatCell(
             RepeatCellRequest()
                 .setRange(
@@ -168,7 +181,7 @@ class HomeBudgetApiImpl(
                         .setStartColumnIndex(columnIndex)
                         .setEndColumnIndex(columnIndex + 1)
                 )
-                .setCell(CellData().setNote(note))
+                .setCell(CellData().setNote(newNote))
                 .setFields("note")
         )
         sheetsService.spreadsheets()
