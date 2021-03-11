@@ -114,48 +114,9 @@ class HomeBudgetApiImpl(
         val spreadsheetId = checkNotNull(spreadsheetId)
         withContext(Dispatchers.IO) {
             try {
-                val response = sheetsService.spreadsheets().values()
-                    .get(spreadsheetId, range)
-                    .setValueRenderOption("FORMULA")
-                    .execute()
-                val oldValues = response.getValues() as List<List<Any>>?
-                val oldTransactions = oldValues?.first()?.first()
-                val newTransactions = when {
-                    oldTransactions is String && oldTransactions.startsWith("=") -> {
-                        "$oldTransactions+$value".replace('.', ',')
-                    }
-                    oldTransactions is BigDecimal -> "=$oldTransactions+$value".replace('.', ',')
-                    oldTransactions == null || oldTransactions is String && oldTransactions.isBlank() -> value
-                    else -> throw IllegalStateException("Invalid values: $oldValues")
-                }
-                val body = ValueRange().setValues(listOf(listOf(newTransactions)))
-                sheetsService.spreadsheets().values()
-                    .update(spreadsheetId, range, body)
-                    .setValueInputOption("USER_ENTERED")
-                    .execute()
+                addTransaction(spreadsheetId, range, value)
                 if (note != null) {
-                    val spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
-                        .setFields("sheets(properties(sheetId,title))")
-                        .execute()
-                    val sheets = spreadsheet.sheets
-                    val sheetId = sheets.first { it.properties["title"] == month }.properties["sheetId"] as? Int
-                    val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
-                    val addNoteRequest = Request().setRepeatCell(
-                        RepeatCellRequest()
-                            .setRange(
-                                GridRange()
-                                    .setSheetId(sheetId)
-                                    .setStartRowIndex(row - 1)
-                                    .setEndRowIndex(row)
-                                    .setStartColumnIndex(columnIndex)
-                                    .setEndColumnIndex(columnIndex + 1)
-                            )
-                            .setCell(CellData().setNote(note))
-                            .setFields("note")
-                    )
-                    sheetsService.spreadsheets()
-                        .batchUpdate(spreadsheetId, BatchUpdateSpreadsheetRequest().setRequests(listOf(addNoteRequest)))
-                        .execute()
+                    addNote(month, date, subcategory, note)
                 }
             } catch (e: Exception) {
                 val apiException = HomeBudgetApiException(e)
@@ -164,6 +125,55 @@ class HomeBudgetApiImpl(
                 throw apiException
             }
         }
+    }
+
+    private fun addTransaction(spreadsheetId: String, range: String, value: BigDecimal) {
+        val response = sheetsService.spreadsheets().values()
+            .get(spreadsheetId, range)
+            .setValueRenderOption("FORMULA")
+            .execute()
+        val oldValues = response.getValues() as List<List<Any>>?
+        val oldTransactions = oldValues?.first()?.first()
+        val newTransactions = when {
+            oldTransactions is String && oldTransactions.startsWith("=") -> {
+                "$oldTransactions+$value".replace('.', ',')
+            }
+            oldTransactions is BigDecimal -> "=$oldTransactions+$value".replace('.', ',')
+            oldTransactions == null || oldTransactions is String && oldTransactions.isBlank() -> value
+            else -> throw IllegalStateException("Invalid values: $oldValues")
+        }
+        val body = ValueRange().setValues(listOf(listOf(newTransactions)))
+        sheetsService.spreadsheets().values()
+            .update(spreadsheetId, range, body)
+            .setValueInputOption("USER_ENTERED")
+            .execute()
+    }
+
+    private fun addNote(month: String, date: LocalDate, subcategory: Subcategory, note: String) {
+        val row = subcategory.index
+        val spreadsheetId = checkNotNull(spreadsheetId)
+        val spreadsheet = sheetsService.spreadsheets().get(spreadsheetId)
+            .setFields("sheets(properties(sheetId,title))")
+            .execute()
+        val sheets = spreadsheet.sheets
+        val sheetId = sheets.first { it.properties["title"] == month }.properties["sheetId"] as? Int
+        val columnIndex = columnResolver.getColumnIndex(date.dayOfMonth)
+        val addNoteRequest = Request().setRepeatCell(
+            RepeatCellRequest()
+                .setRange(
+                    GridRange()
+                        .setSheetId(sheetId)
+                        .setStartRowIndex(row - 1)
+                        .setEndRowIndex(row)
+                        .setStartColumnIndex(columnIndex)
+                        .setEndColumnIndex(columnIndex + 1)
+                )
+                .setCell(CellData().setNote(note))
+                .setFields("note")
+        )
+        sheetsService.spreadsheets()
+            .batchUpdate(spreadsheetId, BatchUpdateSpreadsheetRequest().setRequests(listOf(addNoteRequest)))
+            .execute()
     }
 
     private suspend fun getMonthlyBudget(adapter: HomeBudgetAdapter, month: Month): MonthlyBudget {
