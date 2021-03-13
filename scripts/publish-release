@@ -28,5 +28,3 @@ checkResult
 git tag v${VERSION_NAME}
 checkResult
 git push --tags
-checkResult
-./gradlew :app:publishReleaseBundle
