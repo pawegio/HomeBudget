@@ -11,11 +11,11 @@ plugins {
 apply("../gradle/app-version.gradle")
 
 android {
-    compileSdkVersion(29)
+    compileSdkVersion(30)
     defaultConfig {
         applicationId = "com.pawegio.homebudget"
         minSdkVersion(24)
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     signingConfigs {
