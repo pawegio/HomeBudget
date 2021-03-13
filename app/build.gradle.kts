@@ -68,8 +68,8 @@ tasks.withType<Test> {
 
 dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
