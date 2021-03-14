@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.maltaisn.calcdialog.CalcDialog
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
@@ -13,11 +14,13 @@ import com.pawegio.homebudget.main.transaction.TransactionAction.*
 import io.reactivex.Observable
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
+import java.math.BigDecimal
 
-class TransactionFragment : Fragment() {
+class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 
     private val viewModel by sharedViewModel<MainViewModel>()
     private val ui by lazy { TransactionUi(requireContext()) }
+    private val calcDialog = CalcDialog()
     private var isTransactionReady = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,10 +50,10 @@ class TransactionFragment : Fragment() {
             ui.noteChanges.map { EnterNote(it.value) },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
-            ui.amountChanges.map { SelectValue(it.value) },
             ui.doneClicks.filter { isTransactionReady }.map { SelectAdd }
         ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
+        ui.amountClicks.subscribe { showCalcDialog() }
     }
 
     private fun showDatePicker(date: LocalDate?) {
@@ -63,6 +66,23 @@ class TransactionFragment : Fragment() {
         }.show(childFragmentManager, "datePicker")
     }
 
+    private fun showCalcDialog() {
+        calcDialog.settings.run {
+            requestCode = CALC_DIALOG_REQUEST_CODE
+            initialValue = ui.amount
+            isExpressionShown = true
+            isExpressionEditable = true
+            isSignBtnShown = false
+        }
+        calcDialog.show(childFragmentManager, "calc_dialog")
+    }
+
+    override fun onValueEntered(requestCode: Int, value: BigDecimal?) {
+        if (requestCode == CALC_DIALOG_REQUEST_CODE) {
+            viewModel.transactionActions.accept(SelectValue(value))
+        }
+    }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_add -> viewModel.transactionActions.accept(SelectAdd)
@@ -72,6 +92,7 @@ class TransactionFragment : Fragment() {
 
     private fun updateState(state: TransactionState) {
         ui.date = state.selectedDate
+        ui.amount = state.selectedValue
         isTransactionReady = state.selectedValue != null
         activity?.invalidateOptionsMenu()
     }
@@ -80,3 +101,5 @@ class TransactionFragment : Fragment() {
         ui.categories = categories
     }
 }
+
+private const val CALC_DIALOG_REQUEST_CODE = 759

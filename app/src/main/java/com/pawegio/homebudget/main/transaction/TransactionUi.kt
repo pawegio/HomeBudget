@@ -1,18 +1,12 @@
 package com.pawegio.homebudget.main.transaction
 
 import android.content.Context
-import android.icu.text.DecimalFormatSymbols
-import android.os.Build
-import android.text.InputType
-import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
-import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
 import com.jakewharton.rxbinding3.view.clicks
-import com.jakewharton.rxbinding3.widget.editorActions
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
@@ -66,12 +60,18 @@ class TransactionUi(override val ctx: Context) : Ui {
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
         }
 
+    var amount: BigDecimal? = null
+        set(value) {
+            field = value
+            amountTextView.text = (value?.toString() ?: "0,00")
+        }
+
     private val backClicksRelay = PublishRelay.create<Unit>()
     private val noteChangesRelay = PublishRelay.create<Optional<String>>()
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
-    private val amountChangesRelay = PublishRelay.create<Optional<BigDecimal>>()
+    private val amountClicksRelay = PublishRelay.create<Unit>()
     private val doneClicksRelay = PublishRelay.create<Unit>()
 
     val backClicks: Observable<Unit> = backClicksRelay
@@ -79,7 +79,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     val dateClicks: Observable<LocalDate> = dateClicksRelay
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
-    val amountChanges: Observable<Optional<BigDecimal>> = amountChangesRelay
+    val amountClicks: Observable<Unit> = amountClicksRelay
     val doneClicks: Observable<Unit> = doneClicksRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
@@ -157,34 +157,14 @@ class TransactionUi(override val ctx: Context) : Ui {
         padding = dip(8)
     }
 
-    private val amountEditText = editText {
+    private val amountTextView = textView {
         isSingleLine = true
+        setBackgroundResource(resourceAttr(R.attr.selectableItemBackground))
+        padding = dip(8)
         gravity = gravityEnd
-        setHint(R.string.amount_hint)
         textSize = 26f
-        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
-        val digitsKeyListener = DigitsKeyListener.getInstance("0123456789$separator")
-        val amountInputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
-        if (Build.BRAND == "google") {
-            inputType = amountInputType
-            keyListener = digitsKeyListener
-        } else {
-            keyListener = digitsKeyListener
-            inputType = amountInputType
-        }
-        filters = arrayOf(AmountInputFilter(10, 2))
-        textChanges()
-            .skipInitialValue()
-            .map {
-                it.toString()
-                    .replace(',', '.')
-                    .takeIf(String::isNotEmpty)
-                    ?.let(::BigDecimal).optional
-            }
-            .subscribe(amountChangesRelay)
-        editorActions { it == EditorInfo.IME_ACTION_DONE }
-            .map { }
-            .subscribe(doneClicksRelay)
+        clicks()
+            .subscribe(amountClicksRelay)
     }
 
     private val currencyTextView = textView {
@@ -242,7 +222,7 @@ class TransactionUi(override val ctx: Context) : Ui {
                 startOfParent(dip(16))
                 topMargin = dip(36)
             })
-            add(amountEditText, lParams(matchConstraints, wrapContent) {
+            add(amountTextView, lParams(matchConstraints, wrapContent) {
                 alignVerticallyOn(amountImageView)
                 startToEndOf(amountImageView, dip(16))
                 endToStartOf(currencyTextView, dip(4))

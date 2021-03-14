@@ -1,0 +1,4 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="calc_dialog_clear">Wymaż</string>
+    <string name="calc_dialog_erase">Wymaż</string>
+</resources>
