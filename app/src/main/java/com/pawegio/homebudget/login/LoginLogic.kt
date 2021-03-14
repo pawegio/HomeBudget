@@ -16,29 +16,21 @@ suspend fun LoginLogic(
     initMain: suspend () -> Unit,
     navigator: Navigator
 ) {
-    if (api.isSignedIn) proceed(repository, navigator, initMain, initPicker)
     actions.collect {
         try {
             api.signIn()
         } catch (e: HomeBudgetApiException) {
             toastNotifier.notify(R.string.sign_in_error)
         }
-        if (api.isSignedIn) proceed(repository, navigator, initMain, initPicker)
-    }
-}
-
-private suspend fun proceed(
-    repository: HomeBudgetRepository,
-    navigator: Navigator,
-    initMainFlow: suspend () -> Unit,
-    initPickerFlow: suspend () -> Unit
-) {
-    if (repository.spreadsheetId != null) {
-        navigator.navigate(NavGraph.Action.toMain)
-        initMainFlow()
-    } else {
-        navigator.navigate(NavGraph.Action.toPicker)
-        initPickerFlow()
+        if (api.isSignedIn) {
+            if (repository.spreadsheetId != null) {
+                navigator.navigate(NavGraph.Action.toMain)
+                initMain()
+            } else {
+                navigator.navigate(NavGraph.Action.toPicker)
+                initPicker()
+            }
+        }
     }
 }
 

@@ -22,7 +22,7 @@ internal class LoginLogicTest : LogicSpec({
         val navigator = mock<Navigator>()
         val toastNotifier = mock<ToastNotifier>()
 
-        val logic = launch(start = CoroutineStart.LAZY) {
+        launch {
             LoginLogic(
                 actions,
                 repository,
@@ -34,80 +34,16 @@ internal class LoginLogicTest : LogicSpec({
             )
         }
 
-        "on user not signed in" - {
-            api.isSignInResult = false
-            logic.start()
+        "on select sign in" - {
+            actions.accept(LoginAction.SelectSignIn)
 
-            "do not sign in" {
-                api.signIn.invocations shouldBe 0
+            "sign in" {
+                api.signIn.invocations shouldBe 1
             }
 
-            "do not navigate to main screen" {
-                verify(navigator, never()).navigate(NavGraph.Action.toMain)
-            }
-
-            "do not init main logic" {
-                verifyBlocking(initMain, never()) { invokeSuspend() }
-            }
-
-            "on select sign in" - {
-                actions.accept(LoginAction.SelectSignIn)
-
-                "sign in" {
-                    api.signIn.invocations shouldBe 1
-                }
-
-                "on sign in success" - {
-                    api.isSignInResult = true
-                    api.signIn.resume(Unit)
-
-                    "navigate to picker screen" {
-                        verify(navigator).navigate(NavGraph.Action.toPicker)
-                    }
-
-                    "init picker logic" {
-                        verifyBlocking(initPicker) { invokeSuspend() }
-                    }
-                }
-
-                "on sign in failure" - {
-                    api.isSignInResult = false
-                    api.signIn.resume(Unit)
-
-                    "do not navigate to main screen" {
-                        verify(navigator, never()).navigate(NavGraph.Action.toMain)
-                    }
-
-                    "do not init main flow" {
-                        verifyBlocking(initMain, never()) { invokeSuspend() }
-                    }
-                }
-
-                "on sign in failure with exception" - {
-                    api.isSignInResult = false
-                    api.signIn.resumeWithException(HomeBudgetApiException())
-
-                    "do not navigate to main screen" {
-                        verify(navigator, never()).navigate(NavGraph.Action.toMain)
-                    }
-
-                    "do not init main logic" {
-                        verifyBlocking(initMain, never()) { invokeSuspend() }
-                    }
-
-                    "show sign in error" {
-                        verify(toastNotifier).notify(R.string.sign_in_error)
-                    }
-                }
-            }
-        }
-
-        "on user signed in" - {
-            api.isSignInResult = true
-
-            "on spreadsheet not picked" - {
-                whenever(repository.spreadsheetId) doReturn null
-                logic.start()
+            "on sign in success" - {
+                api.isSignInResult = true
+                api.signIn.resume(Unit)
 
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
@@ -118,16 +54,33 @@ internal class LoginLogicTest : LogicSpec({
                 }
             }
 
-            "on spreadsheet picked" - {
-                whenever(repository.spreadsheetId) doReturn "id"
-                logic.start()
+            "on sign in failure" - {
+                api.isSignInResult = false
+                api.signIn.resume(Unit)
 
-                "navigate to main screen" {
-                    verify(navigator).navigate(NavGraph.Action.toMain)
+                "do not navigate to main screen" {
+                    verify(navigator, never()).navigate(NavGraph.Action.toMain)
                 }
 
-                "init main logic" {
-                    verifyBlocking(initMain) { invokeSuspend() }
+                "do not init main flow" {
+                    verifyBlocking(initMain, never()) { invokeSuspend() }
+                }
+            }
+
+            "on sign in failure with exception" - {
+                api.isSignInResult = false
+                api.signIn.resumeWithException(HomeBudgetApiException())
+
+                "do not navigate to main screen" {
+                    verify(navigator, never()).navigate(NavGraph.Action.toMain)
+                }
+
+                "do not init main logic" {
+                    verifyBlocking(initMain, never()) { invokeSuspend() }
+                }
+
+                "show sign in error" {
+                    verify(toastNotifier).notify(R.string.sign_in_error)
                 }
             }
         }
