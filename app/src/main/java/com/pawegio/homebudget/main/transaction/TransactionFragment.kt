@@ -1,6 +1,7 @@
 package com.pawegio.homebudget.main.transaction
 
 import android.annotation.SuppressLint
+import android.icu.util.UniversalTimeScale
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -15,6 +16,9 @@ import io.reactivex.Observable
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 import org.threeten.bp.LocalDate
 import java.math.BigDecimal
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.text.NumberFormat
 
 class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 
@@ -73,6 +77,11 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
             isExpressionShown = true
             isExpressionEditable = true
             isSignBtnShown = false
+            numberFormat = (DecimalFormat.getInstance() as DecimalFormat).apply {
+                decimalFormatSymbols = DecimalFormatSymbols().apply {
+                    decimalSeparator = ','
+                }
+            }
         }
         calcDialog.show(childFragmentManager, "calc_dialog")
     }

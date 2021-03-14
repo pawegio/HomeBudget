@@ -63,7 +63,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     var amount: BigDecimal? = null
         set(value) {
             field = value
-            amountTextView.text = (value?.toString() ?: "0,00")
+            amountTextView.text = "%.2f".format((value ?: BigDecimal.ZERO).toFloat()).replace('.', ',')
         }
 
     private val backClicksRelay = PublishRelay.create<Unit>()
