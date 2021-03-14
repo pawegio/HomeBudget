@@ -57,10 +57,6 @@ android {
     }
 }
 
-play {
-    serviceAccountCredentials.set(file("../play_account.json"))
-}
-
 tasks.withType<Test> {
     @Suppress("UnstableApiUsage")
     useJUnitPlatform()
