@@ -14,6 +14,7 @@ import com.pawegio.homebudget.main.transaction.TransactionState
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.picker.PickerLogic
 import com.pawegio.homebudget.picker.parseSpreadsheetId
+import com.pawegio.homebudget.start.StartLogic
 import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.ToastNotifier
@@ -50,7 +51,18 @@ class MainViewModel(
     private val _transactionState = MutableLiveData<TransactionState>()
 
     init {
-        launch { initLogin() }
+        launch { initStart() }
+    }
+
+    private suspend fun initStart() {
+        StartLogic(
+            repository,
+            api,
+            ::initLogin,
+            ::initPicker,
+            ::initMain,
+            navigator
+        )
     }
 
     private suspend fun initLogin() {

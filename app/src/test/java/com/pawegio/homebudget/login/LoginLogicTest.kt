@@ -17,20 +17,19 @@ internal class LoginLogicTest : LogicSpec({
         val actions = PublishRelay.create<LoginAction>()
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
-        val initPickerFlow = mock<SuspendFunction<Unit>>()
-        val initMainFlow = mock<SuspendFunction<Unit>>()
+        val initPicker = mock<SuspendFunction<Unit>>()
+        val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
         val toastNotifier = mock<ToastNotifier>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
-            @Suppress("EXPERIMENTAL_API_USAGE")
             LoginLogic(
                 actions,
                 repository,
                 api,
                 toastNotifier,
-                initPickerFlow::invokeSuspend,
-                initMainFlow::invokeSuspend,
+                initPicker::invokeSuspend,
+                initMain::invokeSuspend,
                 navigator
             )
         }
@@ -47,8 +46,8 @@ internal class LoginLogicTest : LogicSpec({
                 verify(navigator, never()).navigate(NavGraph.Action.toMain)
             }
 
-            "do not init main flow" {
-                verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+            "do not init main logic" {
+                verifyBlocking(initMain, never()) { invokeSuspend() }
             }
 
             "on select sign in" - {
@@ -66,8 +65,8 @@ internal class LoginLogicTest : LogicSpec({
                         verify(navigator).navigate(NavGraph.Action.toPicker)
                     }
 
-                    "init picker flow" {
-                        verifyBlocking(initPickerFlow) { invokeSuspend() }
+                    "init picker logic" {
+                        verifyBlocking(initPicker) { invokeSuspend() }
                     }
                 }
 
@@ -80,7 +79,7 @@ internal class LoginLogicTest : LogicSpec({
                     }
 
                     "do not init main flow" {
-                        verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+                        verifyBlocking(initMain, never()) { invokeSuspend() }
                     }
                 }
 
@@ -92,8 +91,8 @@ internal class LoginLogicTest : LogicSpec({
                         verify(navigator, never()).navigate(NavGraph.Action.toMain)
                     }
 
-                    "do not init main flow" {
-                        verifyBlocking(initMainFlow, never()) { invokeSuspend() }
+                    "do not init main logic" {
+                        verifyBlocking(initMain, never()) { invokeSuspend() }
                     }
 
                     "show sign in error" {
@@ -104,32 +103,31 @@ internal class LoginLogicTest : LogicSpec({
         }
 
         "on user signed in" - {
+            api.isSignInResult = true
 
             "on spreadsheet not picked" - {
                 whenever(repository.spreadsheetId) doReturn null
-                api.isSignInResult = true
                 logic.start()
 
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
 
-                "init picker flow" {
-                    verifyBlocking(initPickerFlow) { invokeSuspend() }
+                "init picker logic" {
+                    verifyBlocking(initPicker) { invokeSuspend() }
                 }
             }
 
             "on spreadsheet picked" - {
                 whenever(repository.spreadsheetId) doReturn "id"
-                api.isSignInResult = true
                 logic.start()
 
                 "navigate to main screen" {
                     verify(navigator).navigate(NavGraph.Action.toMain)
                 }
 
-                "init main flow" {
-                    verifyBlocking(initMainFlow) { invokeSuspend() }
+                "init main logic" {
+                    verifyBlocking(initMain) { invokeSuspend() }
                 }
             }
         }

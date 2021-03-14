@@ -10,11 +10,13 @@ import com.pawegio.homebudget.main.LoadErrorFragment
 import com.pawegio.homebudget.main.MainFragment
 import com.pawegio.homebudget.main.transaction.TransactionFragment
 import com.pawegio.homebudget.picker.PickerFragment
+import com.pawegio.homebudget.start.StartFragment
 
 object NavGraph {
     const val id = 1
 
     object Dest {
+        const val start = 100
         const val login = 101
         const val picker = 102
         const val main = 103
@@ -34,7 +36,7 @@ object NavGraph {
 }
 
 fun createNavGraph(navController: NavController) {
-    navController.graph = navController.createGraph(NavGraph.id, NavGraph.Dest.login) {
+    navController.graph = navController.createGraph(NavGraph.id, NavGraph.Dest.start) {
         action(NavGraph.Action.toLogin) { destinationId = NavGraph.Dest.login }
         action(NavGraph.Action.toPicker) { destinationId = NavGraph.Dest.picker }
         action(NavGraph.Action.toMain) { destinationId = NavGraph.Dest.main }
@@ -42,6 +44,7 @@ fun createNavGraph(navController: NavController) {
         action(NavGraph.Action.toAbout) { destinationId = NavGraph.Dest.about }
         action(NavGraph.Action.toTransaction) { destinationId = NavGraph.Dest.transaction }
 
+        fragment<StartFragment>(NavGraph.Dest.start)
         fragment<LoginFragment>(NavGraph.Dest.login)
         fragment<PickerFragment>(NavGraph.Dest.picker)
         fragment<MainFragment>(NavGraph.Dest.main)
