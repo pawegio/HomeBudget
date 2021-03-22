@@ -37,3 +37,12 @@ jobs:
             -Pandroid.injected.signing.store.password=$KEY_STORE_PASSWORD \
             -Pandroid.injected.signing.key.alias=$ALIAS \
             -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
