@@ -8,7 +8,6 @@ import androidx.navigation.fragment.NavHostFragment
 import com.pawegio.homebudget.main.transaction.TransactionAction
 import com.pawegio.homebudget.picker.PickerAction
 import com.pawegio.homebudget.util.CurrentActivityObserver
-import org.koin.androidx.viewmodel.ext.android.getViewModel
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.main_activity) {
@@ -20,7 +19,7 @@ class MainActivity : AppCompatActivity(R.layout.main_activity) {
         lifecycle.addObserver(CurrentActivityObserver)
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHost) as NavHostFragment
         appNavController = navHostFragment.navController.also(::createNavGraph)
-        lifecycle.addObserver(getViewModel<MainViewModel>())
+        lifecycle.addObserver(viewModel)
     }
 
     override fun onBackPressed() =

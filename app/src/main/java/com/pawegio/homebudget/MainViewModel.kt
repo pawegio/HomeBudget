@@ -19,6 +19,7 @@ import com.pawegio.homebudget.util.HowToLauncher
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
@@ -50,8 +51,11 @@ class MainViewModel(
     private val _isLoading = MutableLiveData<Boolean>()
     private val _transactionState = MutableLiveData<TransactionState>()
 
-    init {
-        launch { initStart() }
+    private var logicJob: Job? = null
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun onCreate() {
+        logicJob = logicJob ?: launch { initStart() }
     }
 
     private suspend fun initStart() {
@@ -115,5 +119,10 @@ class MainViewModel(
             toastNotifier,
             navigator
         )
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        logicJob?.cancel()
     }
 }
