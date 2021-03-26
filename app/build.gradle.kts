@@ -57,6 +57,10 @@ android {
     }
 }
 
+play {
+    enabled.set(System.getenv("CI") == "true")
+}
+
 tasks.withType<Test> {
     @Suppress("UnstableApiUsage")
     useJUnitPlatform()
