@@ -1,7 +1,6 @@
 package com.pawegio.homebudget.main.transaction
 
 import android.annotation.SuppressLint
-import android.icu.util.UniversalTimeScale
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -18,7 +17,6 @@ import org.threeten.bp.LocalDate
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
-import java.text.NumberFormat
 
 class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 
@@ -30,12 +28,6 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.transaction_menu, menu)
-        menu.findItem(R.id.action_add).isEnabled = isTransactionReady
-        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onCreateView(
@@ -54,7 +46,7 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
             ui.noteChanges.map { EnterNote(it.value) },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
-            ui.doneClicks.filter { isTransactionReady }.map { SelectAdd }
+            ui.addClicks.filter { isTransactionReady }.map { SelectAdd }
         ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
         ui.amountClicks.subscribe { showCalcDialog() }
@@ -90,13 +82,6 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
         if (requestCode == CALC_DIALOG_REQUEST_CODE) {
             viewModel.transactionActions.accept(SelectValue(value))
         }
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_add -> viewModel.transactionActions.accept(SelectAdd)
-        }
-        return super.onOptionsItemSelected(item)
     }
 
     private fun updateState(state: TransactionState) {

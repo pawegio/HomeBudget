@@ -72,7 +72,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
     private val amountClicksRelay = PublishRelay.create<Unit>()
-    private val doneClicksRelay = PublishRelay.create<Unit>()
+    private val addClicksRelay = PublishRelay.create<Unit>()
 
     val backClicks: Observable<Unit> = backClicksRelay
     val noteChanges: Observable<Optional<String>> = noteChangesRelay
@@ -80,7 +80,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
     val amountClicks: Observable<Unit> = amountClicksRelay
-    val doneClicks: Observable<Unit> = doneClicksRelay
+    val addClicks: Observable<Unit> = addClicksRelay
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -173,6 +173,12 @@ class TransactionUi(override val ctx: Context) : Ui {
         textResource = R.string.currency
     }
 
+    private val addButton = button {
+        textResource = R.string.add
+        clicks()
+            .subscribe(addClicksRelay)
+    }
+
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
         add(constraintLayout {
@@ -230,6 +236,10 @@ class TransactionUi(override val ctx: Context) : Ui {
             add(currencyTextView, lParams(wrapContent, wrapContent) {
                 alignVerticallyOn(amountImageView)
                 endOfParent(dip(16))
+            })
+            add(addButton, lParams(matchConstraints, wrapContent) {
+                centerHorizontally(dip(16))
+                topToBottomOf(amountImageView, dip(16))
             })
         }, contentScrollingWithAppBarLParams())
     }
