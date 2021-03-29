@@ -41,6 +41,10 @@ internal class LoginLogicTest : LogicSpec({
                 api.isSignInResult = true
                 api.signIn.resume(Unit)
 
+                "pop back stack" {
+                    verify(navigator).popBackStack()
+                }
+
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }

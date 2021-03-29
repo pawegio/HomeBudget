@@ -7,6 +7,7 @@ import android.os.Parcelable
 import androidx.core.os.bundleOf
 import androidx.lifecycle.LifecycleObserver
 import androidx.navigation.NavController
+import androidx.navigation.navOptions
 
 interface Navigator {
     fun popBackStack()

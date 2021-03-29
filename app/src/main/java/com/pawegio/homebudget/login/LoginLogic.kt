@@ -22,8 +22,10 @@ suspend fun LoginLogic(
         }
         if (api.isSignedIn) {
             if (repository.spreadsheetId != null) {
+                navigator.popBackStack()
                 navigator.navigate(NavGraph.Action.toMain)
             } else {
+                navigator.popBackStack()
                 navigator.navigate(NavGraph.Action.toPicker)
             }
         }

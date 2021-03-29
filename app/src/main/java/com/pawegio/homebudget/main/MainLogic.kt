@@ -54,12 +54,13 @@ suspend fun MainLogic(
                 SignOut -> {
                     repository.spreadsheetId = null
                     api.signOut()
+                    navigator.popBackStack()
+                    navigator.navigate(NavGraph.Action.toLogin)
                     break@loop
                 }
             }
         }
     }
-    navigator.popBackStack()
 }
 
 private suspend fun loadMonth(

@@ -162,6 +162,10 @@ internal class MainLogicTest : LogicSpec({
                     "pop back stack" {
                         verify(navigator).popBackStack()
                     }
+
+                    "navigate to login" {
+                        navigator.navigate(NavGraph.Action.toLogin)
+                    }
                 }
             }
 

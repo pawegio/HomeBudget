@@ -31,6 +31,10 @@ internal class StartLogicTest : LogicSpec({
                 whenever(repository.spreadsheetId) doReturn null
                 logic.start()
 
+                "pop back stack" {
+                    verify(navigator).popBackStack()
+                }
+
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
@@ -39,6 +43,10 @@ internal class StartLogicTest : LogicSpec({
             "on spreadsheet picked" - {
                 whenever(repository.spreadsheetId) doReturn "id"
                 logic.start()
+
+                "pop back stack" {
+                    verify(navigator).popBackStack()
+                }
 
                 "navigate to main screen" {
                     verify(navigator).navigate(NavGraph.Action.toMain)
@@ -49,6 +57,10 @@ internal class StartLogicTest : LogicSpec({
         "on user not signed in" - {
             api.isSignInResult = false
             logic.start()
+
+            "pop back stack" {
+                verify(navigator).popBackStack()
+            }
 
             "navigate to login screen" {
                 verify(navigator).navigate(NavGraph.Action.toLogin)

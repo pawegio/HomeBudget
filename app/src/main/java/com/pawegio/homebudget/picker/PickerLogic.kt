@@ -25,13 +25,13 @@ suspend fun PickerLogic(
             is SelectTemplate -> repository.spreadsheetTemplate = action.template
             is PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
+                navigator.popBackStack()
                 navigator.navigate(NavGraph.Action.toMain)
                 break@loop
             }
             SelectBack -> break@loop
         }
     }
-    navigator.popBackStack()
 }
 
 sealed class PickerAction {

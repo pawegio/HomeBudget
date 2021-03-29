@@ -12,7 +12,16 @@ fun StartLogic(
     api: HomeBudgetApi,
     navigator: Navigator
 ) = when {
-    api.isSignedIn && repository.spreadsheetId != null -> navigator.navigate(NavGraph.Action.toMain)
-    api.isSignedIn -> navigator.navigate(NavGraph.Action.toPicker)
-    else -> navigator.navigate(NavGraph.Action.toLogin)
+    api.isSignedIn && repository.spreadsheetId != null -> {
+        navigator.popBackStack()
+        navigator.navigate(NavGraph.Action.toMain)
+    }
+    api.isSignedIn -> {
+        navigator.popBackStack()
+        navigator.navigate(NavGraph.Action.toPicker)
+    }
+    else -> {
+        navigator.popBackStack()
+        navigator.navigate(NavGraph.Action.toLogin)
+    }
 }
