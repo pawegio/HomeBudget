@@ -28,11 +28,10 @@ suspend fun MainLogic(
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     coroutineScope {
-        //TODO: reload on resume
         launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
         loop@ while (isActive) {
             when (actions.awaitFirst()) {
-                Refresh, TryAgain -> {
+                Resume, Refresh, TryAgain -> {
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
                 OpenSpreadsheet -> spreadsheetLauncher.launch()
@@ -92,6 +91,7 @@ enum class MonthType {
 }
 
 sealed class MainAction {
+    object Resume : MainAction()
     object Refresh : MainAction()
     object OpenSpreadsheet : MainAction()
     object SelectPrevMonth : MainAction()

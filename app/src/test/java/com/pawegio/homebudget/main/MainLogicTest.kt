@@ -132,6 +132,17 @@ internal class MainLogicTest : LogicSpec({
                         NavGraph.Args.monthlyBudget to loadedMonthlyBudget
                     )
                 }
+
+                "on resume" - {
+                    actions.accept(MainAction.Resume)
+
+                    "get refreshed monthly budget for current month" {
+                        api.getMonthlyBudget.invocations.run {
+                            count() shouldBe 2
+                            last() shouldBe Month.APRIL
+                        }
+                    }
+                }
             }
 
             "on sign out" - {

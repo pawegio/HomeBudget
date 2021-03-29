@@ -48,6 +48,11 @@ class MainFragment : Fragment() {
         subscribeToActions()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.actions.accept(MainAction.Resume)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SHEETS_EDIT_PERMISSION) {
