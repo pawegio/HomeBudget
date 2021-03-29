@@ -29,7 +29,10 @@ suspend fun PickerLogic(
                 navigator.navigate(NavGraph.Action.toMain)
                 break@loop
             }
-            SelectBack -> break@loop
+            SelectBack -> {
+                navigator.popBackStack()
+                break@loop
+            }
         }
     }
 }
