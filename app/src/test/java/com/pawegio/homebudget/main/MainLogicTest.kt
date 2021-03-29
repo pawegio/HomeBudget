@@ -99,6 +99,17 @@ internal class MainLogicTest : LogicSpec({
                 }
             }
 
+            "on resume" - {
+                actions.accept(MainAction.Resume)
+
+                "do not get refreshed monthly budget for current month" {
+                    api.getMonthlyBudget.invocations.run {
+                        count() shouldBe 1
+                        last() shouldBe Month.APRIL
+                    }
+                }
+            }
+
             "on open spreadsheet" - {
                 actions.accept(MainAction.OpenSpreadsheet)
 

@@ -27,10 +27,17 @@ suspend fun MainLogic(
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
+    var afterTransaction = false
     coroutineScope {
         launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
         loop@ while (isActive) {
             when (actions.awaitFirst()) {
+                Resume -> {
+                    if (afterTransaction) {
+                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
+                        afterTransaction = false
+                    }
+                }
                 Resume, Refresh, TryAgain -> {
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
@@ -44,6 +51,7 @@ suspend fun MainLogic(
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
                 AddTransaction -> {
+                    afterTransaction = true
                     navigator.navigate(
                         NavGraph.Action.toTransaction,
                         NavGraph.Args.monthlyBudget to monthlyBudget.value
