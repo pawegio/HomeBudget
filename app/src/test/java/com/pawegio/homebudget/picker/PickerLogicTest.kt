@@ -14,7 +14,6 @@ internal class PickerLogicTest : LogicSpec({
         val howToLauncher = mock<HowToLauncher>()
         val repository = mock<HomeBudgetRepository>()
         val parseSpreadsheetId = mock<(String) -> String>()
-        val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
         val logic = launch {
@@ -24,7 +23,6 @@ internal class PickerLogicTest : LogicSpec({
                 howToLauncher,
                 repository,
                 parseSpreadsheetId,
-                initMain::invokeSuspend,
                 navigator
             )
         }
@@ -38,10 +36,6 @@ internal class PickerLogicTest : LogicSpec({
 
             "do not navigate to main screen" {
                 verify(navigator, never()).navigate(NavGraph.Action.toMain)
-            }
-
-            "do not init main flow" {
-                verifyBlocking(initMain, never()) { invokeSuspend() }
             }
         }
 
@@ -71,10 +65,6 @@ internal class PickerLogicTest : LogicSpec({
             "navigate to main screen" {
                 verify(navigator).navigate(NavGraph.Action.toMain)
             }
-
-            "init main flow" {
-                verifyBlocking(initMain) { invokeSuspend() }
-            }
         }
 
         "on select back" - {
@@ -86,10 +76,6 @@ internal class PickerLogicTest : LogicSpec({
 
             "complete logic" {
                 logic.isCompleted shouldBe true
-            }
-
-            "do not init main flow" {
-                verifyBlocking(initMain, never()) { invokeSuspend() }
             }
         }
     }

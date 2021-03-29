@@ -5,9 +5,7 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.MainAction.*
-import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.SpreadsheetLauncher
-import com.pawegio.homebudget.util.ToastNotifier
 import io.reactivex.Observable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
@@ -25,14 +23,12 @@ suspend fun MainLogic(
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
-    toastNotifier: ToastNotifier,
     clock: Clock,
-    initPicker: suspend () -> Unit,
-    initTransaction: suspend () -> TransactionResult,
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     coroutineScope {
+        //TODO: reload on resume
         launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
         loop@ while (isActive) {
             when (actions.awaitFirst()) {
@@ -49,17 +45,12 @@ suspend fun MainLogic(
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
                 AddTransaction -> {
-                    navigator.navigate(NavGraph.Action.toTransaction)
-                    val result = initTransaction()
-                    if (result == TransactionResult.SUCCESS) {
-                        toastNotifier.notify(R.string.transaction_added_message)
-                        loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
-                    }
+                    navigator.navigate(
+                        NavGraph.Action.toTransaction,
+                        NavGraph.Args.monthlyBudget to monthlyBudget.value
+                    )
                 }
-                PickDocumentAgain -> {
-                    navigator.navigate(NavGraph.Action.toPicker)
-                    initPicker()
-                }
+                PickDocumentAgain -> navigator.navigate(NavGraph.Action.toPicker)
                 SelectAbout -> navigator.navigate(NavGraph.Action.toAbout)
                 SignOut -> {
                     repository.spreadsheetId = null

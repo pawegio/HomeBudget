@@ -7,12 +7,12 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.maltaisn.calcdialog.CalcDialog
 import com.pawegio.homebudget.Category
-import com.pawegio.homebudget.MainViewModel
-import com.pawegio.homebudget.R
+import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.common.DatePickerFragment
 import com.pawegio.homebudget.main.transaction.TransactionAction.*
 import io.reactivex.Observable
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import org.threeten.bp.LocalDate
 import java.math.BigDecimal
 import java.text.DecimalFormat
@@ -20,7 +20,10 @@ import java.text.DecimalFormatSymbols
 
 class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 
-    private val viewModel by sharedViewModel<MainViewModel>()
+    private val viewModel by viewModel<TransactionViewModel> {
+        parametersOf(requireArguments()[NavGraph.Args.monthlyBudget])
+    }
+
     private val ui by lazy { TransactionUi(requireContext()) }
     private val calcDialog = CalcDialog()
     private var isTransactionReady = false

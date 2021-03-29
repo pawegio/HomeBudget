@@ -7,26 +7,12 @@ import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.Navigator
 
-suspend fun StartLogic(
+fun StartLogic(
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
-    initLogin: suspend () -> Unit,
-    initPicker: suspend () -> Unit,
-    initMain: suspend () -> Unit,
     navigator: Navigator
-) {
-    when {
-        api.isSignedIn && repository.spreadsheetId != null -> {
-            navigator.navigate(NavGraph.Action.toMain)
-            initMain()
-        }
-        api.isSignedIn -> {
-            navigator.navigate(NavGraph.Action.toPicker)
-            initPicker()
-        }
-        else -> {
-            navigator.navigate(NavGraph.Action.toLogin)
-            initLogin()
-        }
-    }
+) = when {
+    api.isSignedIn && repository.spreadsheetId != null -> navigator.navigate(NavGraph.Action.toMain)
+    api.isSignedIn -> navigator.navigate(NavGraph.Action.toPicker)
+    else -> navigator.navigate(NavGraph.Action.toLogin)
 }

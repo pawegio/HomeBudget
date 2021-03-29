@@ -14,18 +14,12 @@ internal class StartLogicTest : LogicSpec({
     "On start logic" - {
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
-        val initLogin = mock<SuspendFunction<Unit>>()
-        val initPicker = mock<SuspendFunction<Unit>>()
-        val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
             StartLogic(
                 repository,
                 api,
-                initLogin::invokeSuspend,
-                initPicker::invokeSuspend,
-                initMain::invokeSuspend,
                 navigator,
             )
         }
@@ -40,10 +34,6 @@ internal class StartLogicTest : LogicSpec({
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
-
-                "init picker logic" {
-                    verifyBlocking(initPicker) { invokeSuspend() }
-                }
             }
 
             "on spreadsheet picked" - {
@@ -52,10 +42,6 @@ internal class StartLogicTest : LogicSpec({
 
                 "navigate to main screen" {
                     verify(navigator).navigate(NavGraph.Action.toMain)
-                }
-
-                "init main logic" {
-                    verifyBlocking(initMain) { invokeSuspend() }
                 }
             }
         }
@@ -66,10 +52,6 @@ internal class StartLogicTest : LogicSpec({
 
             "navigate to login screen" {
                 verify(navigator).navigate(NavGraph.Action.toLogin)
-            }
-
-            "init login logic" {
-                verifyBlocking(initLogin) { invokeSuspend() }
             }
         }
     }

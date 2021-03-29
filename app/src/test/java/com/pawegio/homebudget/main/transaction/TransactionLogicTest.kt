@@ -26,24 +26,24 @@ import kotlin.coroutines.resumeWithException
 
 internal class TransactionLogicTest : LogicSpec({
     "On transaction logic" - {
-        val actions = PublishRelay.create<TransactionAction>()
-        val state = MutableLiveData<TransactionState>()
         val categories = listOf(
             createCategory(0, "Jedzenie"),
             createCategory(1, "Transport"),
             createCategory(2, "Hobby")
         )
+        val monthlyBudget = createMonthlyBudget(categories)
+        val actions = PublishRelay.create<TransactionAction>()
+        val state = MutableLiveData<TransactionState>()
         val api = MockHomeBudgetApi()
         val clock = Clock.fixed(Instant.parse("2020-06-09T17:23:04.00Z"), ZoneId.systemDefault())
         val toastNotifier = mock<ToastNotifier>()
         val navigator = mock<Navigator>()
 
-        lateinit var result: TransactionResult
         val logic = launch {
-            result = TransactionLogic(
+            TransactionLogic(
+                monthlyBudget,
                 actions,
                 state,
-                MutableLiveData(createMonthlyBudget(categories)),
                 api,
                 clock,
                 toastNotifier,
@@ -122,16 +122,16 @@ internal class TransactionLogicTest : LogicSpec({
                         "on transaction added" - {
                             api.addTransaction.resume(Unit)
 
+                            "show add transaction error" {
+                                verify(toastNotifier).notify(R.string.transaction_added_message)
+                            }
+
                             "pop back stack" {
                                 verify(navigator).popBackStack()
                             }
 
                             "complete logic" {
                                 logic.isCompleted shouldBe true
-                            }
-
-                            "return success result" {
-                                result shouldBe TransactionResult.SUCCESS
                             }
                         }
 
@@ -241,10 +241,6 @@ internal class TransactionLogicTest : LogicSpec({
 
             "complete logic" {
                 logic.isCompleted shouldBe true
-            }
-
-            "return canceled result" {
-                result shouldBe TransactionResult.CANCELED
             }
         }
     }

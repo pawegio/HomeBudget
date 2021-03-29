@@ -2,7 +2,6 @@
 
 package com.pawegio.homebudget.main.transaction
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.transaction.TransactionAction.*
@@ -15,22 +14,20 @@ import org.threeten.bp.ZoneId
 import java.math.BigDecimal
 
 suspend fun TransactionLogic(
+    monthlyBudget: MonthlyBudget,
     actions: Observable<TransactionAction>,
     state: MutableLiveData<TransactionState>,
-    monthlyBudget: LiveData<MonthlyBudget>,
     api: HomeBudgetApi,
     clock: Clock,
     toastNotifier: ToastNotifier,
     navigator: Navigator
-) : TransactionResult {
+) {
     var note: String? = null
     var date = clock.instant().atZone(ZoneId.systemDefault()).toLocalDate()
-    val category = checkNotNull(monthlyBudget.value)
-        .categories.first { it.type == Category.Type.EXPENSES }
+    val category = monthlyBudget.categories.first { it.type == Category.Type.EXPENSES }
     var subcategory = category.subcategories.first()
     var value: BigDecimal? = null
     state.value = TransactionState(note, date, category, subcategory, value)
-    var result = TransactionResult.CANCELED
     loop@ while (true) {
         when (val action = actions.awaitFirst()) {
             is EnterNote -> {
@@ -57,7 +54,7 @@ suspend fun TransactionLogic(
                 val transaction = Transaction(note, date, subcategory, checkNotNull(value))
                 try {
                     api.addTransaction(transaction)
-                    result = TransactionResult.SUCCESS
+                    toastNotifier.notify(R.string.transaction_added_message)
                     break@loop
                 } catch (e: HomeBudgetApiException) {
                     toastNotifier.notify(R.string.add_transaction_error_message)
@@ -67,7 +64,6 @@ suspend fun TransactionLogic(
         }
     }
     navigator.popBackStack()
-    return result
 }
 
 data class TransactionState(

@@ -1,6 +1,8 @@
 package com.pawegio.homebudget
 
 import androidx.navigation.NavController
+import androidx.navigation.NavType
+import androidx.navigation.NavType.ReferenceType
 import androidx.navigation.createGraph
 import androidx.navigation.fragment.dialog
 import androidx.navigation.fragment.fragment
@@ -9,6 +11,7 @@ import com.pawegio.homebudget.login.LoginFragment
 import com.pawegio.homebudget.main.LoadErrorFragment
 import com.pawegio.homebudget.main.MainFragment
 import com.pawegio.homebudget.main.transaction.TransactionFragment
+import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.picker.PickerFragment
 import com.pawegio.homebudget.start.StartFragment
 
@@ -33,6 +36,11 @@ object NavGraph {
         const val toAbout = 1005
         const val toTransaction = 1006
     }
+
+    object Args {
+        const val transactionResult = "transaction_result"
+        const val monthlyBudget = "monthly_budget"
+    }
 }
 
 fun createNavGraph(navController: NavController) {
@@ -47,9 +55,18 @@ fun createNavGraph(navController: NavController) {
         fragment<StartFragment>(NavGraph.Dest.start)
         fragment<LoginFragment>(NavGraph.Dest.login)
         fragment<PickerFragment>(NavGraph.Dest.picker)
-        fragment<MainFragment>(NavGraph.Dest.main)
+        fragment<MainFragment>(NavGraph.Dest.main) {
+            argument(NavGraph.Args.transactionResult) {
+                type = NavType.EnumType(TransactionResult::class.java)
+                defaultValue = TransactionResult.CANCELED
+            }
+        }
         dialog<LoadErrorFragment>(NavGraph.Dest.loadError)
         dialog<AboutFragment>(NavGraph.Dest.about)
-        fragment<TransactionFragment>(NavGraph.Dest.transaction)
+        fragment<TransactionFragment>(NavGraph.Dest.transaction) {
+            argument(NavGraph.Args.monthlyBudget) {
+                type = NavType.ParcelableType(MonthlyBudget::class.java)
+            }
+        }
     }
 }

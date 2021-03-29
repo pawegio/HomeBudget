@@ -5,13 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.pawegio.homebudget.MainViewModel
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import splitties.views.onClick
 
 class LoginFragment : Fragment() {
 
-    private val viewModel by sharedViewModel<MainViewModel>()
     private val ui by lazy { LoginUi(requireContext()) }
 
     override fun onCreateView(
@@ -22,6 +20,7 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ui.signInButton.onClick { viewModel.loginActions.accept(LoginAction.SelectSignIn) }
+        val viewModel = getViewModel<LoginViewModel>()
+        ui.signInButton.onClick { viewModel.actions.accept(LoginAction.SelectSignIn) }
     }
 }

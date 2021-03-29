@@ -17,7 +17,6 @@ suspend fun PickerLogic(
     howToLauncher: HowToLauncher,
     repository: HomeBudgetRepository,
     parseSpreadsheetId: (String) -> String,
-    initMain: suspend () -> Unit,
     navigator: Navigator
 ) = coroutineScope {
     loop@ while (isActive) {
@@ -27,7 +26,6 @@ suspend fun PickerLogic(
             is PickDocument -> {
                 repository.spreadsheetId = parseSpreadsheetId(action.url)
                 navigator.navigate(NavGraph.Action.toMain)
-                initMain()
                 break@loop
             }
             SelectBack -> break@loop

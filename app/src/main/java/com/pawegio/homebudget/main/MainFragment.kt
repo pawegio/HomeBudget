@@ -12,20 +12,26 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.navArgs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.sheets.v4.SheetsScopes
-import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.MonthlyBudget
+import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.month_summary_surface.*
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
+import org.koin.core.parameter.parametersOf
 import splitties.views.onClick
 
 class MainFragment : Fragment() {
 
-    private val viewModel by sharedViewModel<MainViewModel>()
+    private val viewModel by viewModel<MainViewModel> {
+        parametersOf(requireArguments()[NavGraph.Args.transactionResult])
+    }
+
     private val ui by lazy { MainUi(requireContext()) }
 
     override fun onCreateView(
@@ -45,23 +51,23 @@ class MainFragment : Fragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SHEETS_EDIT_PERMISSION) {
-            viewModel.mainActions.accept(MainAction.AddTransaction)
+            viewModel.actions.accept(MainAction.AddTransaction)
         }
     }
 
     private fun subscribeToActions() {
         ui.swipeRefreshLayout.setOnRefreshListener {
-            viewModel.mainActions.accept(MainAction.Refresh)
+            viewModel.actions.accept(MainAction.Refresh)
             ui.swipeRefreshLayout.isRefreshing = false
         }
         ui.prevMonthButton.onClick {
-            viewModel.mainActions.accept(MainAction.SelectPrevMonth)
+            viewModel.actions.accept(MainAction.SelectPrevMonth)
         }
         ui.nextMonthButton.onClick {
-            viewModel.mainActions.accept(MainAction.SelectNextMonth)
+            viewModel.actions.accept(MainAction.SelectNextMonth)
         }
         ui.openSpreadsheetButton.onClick {
-            viewModel.mainActions.accept(MainAction.OpenSpreadsheet)
+            viewModel.actions.accept(MainAction.OpenSpreadsheet)
         }
         ui.moreButton.onClick { openPopupMenu() }
         ui.floatingActionButton.onClick { tryToAddTransaction() }
@@ -74,9 +80,9 @@ class MainFragment : Fragment() {
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.action_add_transaction -> tryToAddTransaction()
-                    R.id.action_pick_document -> viewModel.mainActions.accept(MainAction.PickDocumentAgain)
-                    R.id.action_about -> viewModel.mainActions.accept(MainAction.SelectAbout)
-                    R.id.action_sign_out -> viewModel.mainActions.accept(MainAction.SignOut)
+                    R.id.action_pick_document -> viewModel.actions.accept(MainAction.PickDocumentAgain)
+                    R.id.action_about -> viewModel.actions.accept(MainAction.SelectAbout)
+                    R.id.action_sign_out -> viewModel.actions.accept(MainAction.SignOut)
                 }
                 true
             }
@@ -118,7 +124,7 @@ class MainFragment : Fragment() {
                 Scope(SheetsScopes.SPREADSHEETS)
             )
         } else {
-            viewModel.mainActions.accept(MainAction.AddTransaction)
+            viewModel.actions.accept(MainAction.AddTransaction)
         }
     }
 }

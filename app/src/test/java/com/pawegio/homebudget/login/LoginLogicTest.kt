@@ -17,8 +17,6 @@ internal class LoginLogicTest : LogicSpec({
         val actions = PublishRelay.create<LoginAction>()
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
-        val initPicker = mock<SuspendFunction<Unit>>()
-        val initMain = mock<SuspendFunction<Unit>>()
         val navigator = mock<Navigator>()
         val toastNotifier = mock<ToastNotifier>()
 
@@ -28,8 +26,6 @@ internal class LoginLogicTest : LogicSpec({
                 repository,
                 api,
                 toastNotifier,
-                initPicker::invokeSuspend,
-                initMain::invokeSuspend,
                 navigator
             )
         }
@@ -48,10 +44,6 @@ internal class LoginLogicTest : LogicSpec({
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
-
-                "init picker logic" {
-                    verifyBlocking(initPicker) { invokeSuspend() }
-                }
             }
 
             "on sign in failure" - {
@@ -61,10 +53,6 @@ internal class LoginLogicTest : LogicSpec({
                 "do not navigate to main screen" {
                     verify(navigator, never()).navigate(NavGraph.Action.toMain)
                 }
-
-                "do not init main flow" {
-                    verifyBlocking(initMain, never()) { invokeSuspend() }
-                }
             }
 
             "on sign in failure with exception" - {
@@ -73,10 +61,6 @@ internal class LoginLogicTest : LogicSpec({
 
                 "do not navigate to main screen" {
                     verify(navigator, never()).navigate(NavGraph.Action.toMain)
-                }
-
-                "do not init main logic" {
-                    verifyBlocking(initMain, never()) { invokeSuspend() }
                 }
 
                 "show sign in error" {

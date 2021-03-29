@@ -12,8 +12,6 @@ suspend fun LoginLogic(
     repository: HomeBudgetRepository,
     api: HomeBudgetApi,
     toastNotifier: ToastNotifier,
-    initPicker: suspend () -> Unit,
-    initMain: suspend () -> Unit,
     navigator: Navigator
 ) {
     actions.collect {
@@ -25,10 +23,8 @@ suspend fun LoginLogic(
         if (api.isSignedIn) {
             if (repository.spreadsheetId != null) {
                 navigator.navigate(NavGraph.Action.toMain)
-                initMain()
             } else {
                 navigator.navigate(NavGraph.Action.toPicker)
-                initPicker()
             }
         }
     }

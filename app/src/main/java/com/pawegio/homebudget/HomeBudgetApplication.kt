@@ -5,7 +5,9 @@ package com.pawegio.homebudget
 import android.app.Application
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class HomeBudgetApplication : Application() {
 
@@ -14,6 +16,7 @@ class HomeBudgetApplication : Application() {
         AndroidThreeTen.init(this)
         startKoin {
             androidContext(this@HomeBudgetApplication)
+            androidLogger(Level.DEBUG)
             modules(appModule)
         }
     }

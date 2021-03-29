@@ -9,14 +9,12 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
-import com.pawegio.homebudget.MainViewModel
 import com.pawegio.homebudget.R
-import org.koin.androidx.viewmodel.ext.android.sharedViewModel
+import org.koin.androidx.viewmodel.ext.android.getViewModel
 import splitties.views.onClick
 
 class PickerFragment : Fragment(), TextWatcher {
 
-    private val viewModel by sharedViewModel<MainViewModel>()
     private val ui by lazy { PickerUi(requireContext()) }
 
     override fun onCreateView(
@@ -28,13 +26,14 @@ class PickerFragment : Fragment(), TextWatcher {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupTemplateSpinner()
+        val viewModel = getViewModel<PickerViewModel>()
         ui.spreadsheetUrlEditText.addTextChangedListener(this)
         ui.connectSpreadsheetButton.onClick {
             val url = ui.spreadsheetUrlEditText.editableText.toString()
-            viewModel.pickerActions.accept(PickerAction.PickDocument(url))
+            viewModel.actions.accept(PickerAction.PickDocument(url))
         }
         ui.howToButton.onClick {
-            viewModel.pickerActions.accept(PickerAction.SelectHowTo)
+            viewModel.actions.accept(PickerAction.SelectHowTo)
         }
         ui.templateSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
@@ -48,7 +47,7 @@ class PickerFragment : Fragment(), TextWatcher {
                     1 -> 2020
                     else -> 2019
                 }
-                viewModel.pickerActions.accept(PickerAction.SelectTemplate(template))
+                viewModel.actions.accept(PickerAction.SelectTemplate(template))
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) = Unit

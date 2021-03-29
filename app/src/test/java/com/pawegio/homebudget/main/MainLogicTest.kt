@@ -3,12 +3,10 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
-import com.nhaarman.mockitokotlin2.doReturn
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.pawegio.homebudget.*
-import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.*
 import io.kotlintest.shouldBe
 import kotlinx.coroutines.CoroutineStart
@@ -29,12 +27,7 @@ internal class MainLogicTest : LogicSpec({
         val repository = mock<HomeBudgetRepository>()
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
-        val toastNotifier = mock<ToastNotifier>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
-        val initPickerLogic = mock<SuspendFunction<Unit>>()
-        val initTransactionLogic = mock<SuspendFunction<TransactionResult>> {
-            onBlocking { invokeSuspend() } doReturn TransactionResult.SUCCESS
-        }
         val navigator = mock<Navigator>()
 
         val logic = launch(start = CoroutineStart.LAZY) {
@@ -46,10 +39,7 @@ internal class MainLogicTest : LogicSpec({
                 repository,
                 api,
                 spreadsheetLauncher,
-                toastNotifier,
                 clock,
-                initPickerLogic::invokeSuspend,
-                initTransactionLogic::invokeSuspend,
                 navigator
             )
         }
@@ -133,6 +123,17 @@ internal class MainLogicTest : LogicSpec({
                 }
             }
 
+            "on add transaction" - {
+                actions.accept(MainAction.AddTransaction)
+
+                "navigate to transaction screen" {
+                    verify(navigator).navigate(
+                        NavGraph.Action.toTransaction,
+                        NavGraph.Args.monthlyBudget to loadedMonthlyBudget
+                    )
+                }
+            }
+
             "on sign out" - {
                 actions.accept(MainAction.SignOut)
 
@@ -188,41 +189,11 @@ internal class MainLogicTest : LogicSpec({
                 }
             }
 
-            "on add transaction" - {
-                actions.accept(MainAction.AddTransaction)
-
-                "navigate to transaction screen" {
-                    verify(navigator).navigate(NavGraph.Action.toTransaction)
-                }
-
-                "init transaction logic" {
-                    verifyBlocking(initTransactionLogic) { invokeSuspend() }
-                }
-
-                "on transaction success result" - {
-
-                    "show transaction added message" {
-                        verify(toastNotifier).notify(R.string.transaction_added_message)
-                    }
-
-                    "get refreshed monthly budget for current month" {
-                        api.getMonthlyBudget.invocations.run {
-                            count() shouldBe 2
-                            last() shouldBe Month.APRIL
-                        }
-                    }
-                }
-            }
-
             "on pick document again" - {
                 actions.accept(MainAction.PickDocumentAgain)
 
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
-                }
-
-                "init picker logic" {
-                    verifyBlocking(initPickerLogic) { invokeSuspend() }
                 }
             }
         }
