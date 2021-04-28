@@ -27,36 +27,38 @@ suspend fun TransactionLogic(
     val category = monthlyBudget.categories.first { it.type == Category.Type.EXPENSES }
     var subcategory = category.subcategories.first()
     var value: BigDecimal? = null
-    state.value = TransactionState(note, date, category, subcategory, value)
+    state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
     loop@ while (true) {
         when (val action = actions.awaitFirst()) {
             is EnterNote -> {
                 note = action.note
-                state.value = TransactionState(note, date, category, subcategory, value)
+                state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
             }
             is SelectDate -> {
                 date = action.date
-                state.value = TransactionState(note, date, category, subcategory, value)
+                state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
             }
             is SelectCategory -> {
                 subcategory = action.category.subcategories.first()
-                state.value = TransactionState(note, date, category, subcategory, value)
+                state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
             }
             is SelectSubcategory -> {
                 subcategory = action.subcategory
-                state.value = TransactionState(note, date, category, subcategory, value)
+                state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
             }
             is SelectValue -> {
                 value = action.value
-                state.value = TransactionState(note, date, category, subcategory, value)
+                state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
             }
             SelectAdd -> {
+                state.value = TransactionState.InProgress
                 val transaction = Transaction(note, date, subcategory, checkNotNull(value))
                 try {
                     api.addTransaction(transaction)
                     toastNotifier.notify(R.string.transaction_added_message)
                     break@loop
                 } catch (e: HomeBudgetApiException) {
+                    state.value = TransactionState.InFillOut(note, date, category, subcategory, value)
                     toastNotifier.notify(R.string.add_transaction_error_message)
                 }
             }
@@ -66,13 +68,16 @@ suspend fun TransactionLogic(
     navigator.popBackStack()
 }
 
-data class TransactionState(
-    val enteredNote: String?,
-    val selectedDate: LocalDate,
-    val selectedCategory: Category,
-    val selectedSubcategory: Subcategory,
-    val selectedValue: BigDecimal?
-)
+sealed class TransactionState {
+    data class InFillOut(
+        val enteredNote: String?,
+        val selectedDate: LocalDate,
+        val selectedCategory: Category,
+        val selectedSubcategory: Subcategory,
+        val selectedValue: BigDecimal?
+    ) : TransactionState()
+    object InProgress : TransactionState()
+}
 
 sealed class TransactionAction {
     data class EnterNote(val note: String?) : TransactionAction()

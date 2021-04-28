@@ -51,9 +51,9 @@ internal class TransactionLogicTest : LogicSpec({
             )
         }
 
-        "set default state" {
+        "set in fill out state" {
             state.test().assertValue(
-                TransactionState(
+                TransactionState.InFillOut(
                     enteredNote = null,
                     selectedDate = LocalDate.parse("2020-06-09"),
                     selectedCategory = categories.first(),
@@ -68,7 +68,7 @@ internal class TransactionLogicTest : LogicSpec({
             actions.accept(TransactionAction.SelectDate(selectedDate))
 
             "update selected date" {
-                state.test().assertValue { it.selectedDate == selectedDate }
+                state.test().assertValue { it is TransactionState.InFillOut && it.selectedDate == selectedDate }
             }
 
             "on select value" - {
@@ -97,7 +97,7 @@ internal class TransactionLogicTest : LogicSpec({
                 actions.accept(TransactionAction.SelectCategory(selectedCategory))
 
                 "update category" {
-                    state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
+                    state.test().assertValue { it is TransactionState.InFillOut && it.selectedSubcategory == selectedCategory.subcategories.first() }
                 }
 
                 "on select value" - {
@@ -158,7 +158,7 @@ internal class TransactionLogicTest : LogicSpec({
                     actions.accept(TransactionAction.SelectSubcategory(selectedSubcategory))
 
                     "update subcategory" {
-                        state.test().assertValue { it.selectedSubcategory == selectedSubcategory }
+                        state.test().assertValue { it is TransactionState.InFillOut && it.selectedSubcategory == selectedSubcategory }
                     }
                 }
 
@@ -167,7 +167,7 @@ internal class TransactionLogicTest : LogicSpec({
                     actions.accept(TransactionAction.SelectDate(newSelectedDate))
 
                     "keep selected category" {
-                        state.test().assertValue { it.selectedSubcategory == selectedCategory.subcategories.first() }
+                        state.test().assertValue { it is TransactionState.InFillOut && it.selectedSubcategory == selectedCategory.subcategories.first() }
                     }
                 }
             }
@@ -178,7 +178,7 @@ internal class TransactionLogicTest : LogicSpec({
             actions.accept(TransactionAction.EnterNote(note))
 
             "update entered note" {
-                state.test().assertValue { it.enteredNote == note }
+                state.test().assertValue { it is TransactionState.InFillOut && it.enteredNote == note }
             }
 
             "on select value" - {
@@ -186,11 +186,15 @@ internal class TransactionLogicTest : LogicSpec({
                 actions.accept(TransactionAction.SelectValue(selectedValue))
 
                 "update selected value" {
-                    state.test().assertValue { it.selectedValue == selectedValue }
+                    state.test().assertValue { it is TransactionState.InFillOut && it.selectedValue == selectedValue }
                 }
 
                 "on select add" - {
                     actions.accept(TransactionAction.SelectAdd)
+
+                    "set in progress state" {
+                        state.test().assertValue(TransactionState.InProgress)
+                    }
 
                     "add transaction to home budget" {
                         api.addTransactionCalled shouldBe true
@@ -208,7 +212,7 @@ internal class TransactionLogicTest : LogicSpec({
             actions.accept(TransactionAction.SelectValue(selectedValue))
 
             "update selected value" {
-                state.test().assertValue { it.selectedValue == selectedValue }
+                state.test().assertValue { it is TransactionState.InFillOut && it.selectedValue == selectedValue }
             }
 
             "on select add" - {

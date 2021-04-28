@@ -88,10 +88,14 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
     }
 
     private fun updateState(state: TransactionState) {
-        ui.date = state.selectedDate
-        ui.amount = state.selectedValue
-        isTransactionReady = state.selectedValue != null
-        activity?.invalidateOptionsMenu()
+        when (state) {
+            is TransactionState.InFillOut -> {
+                ui.date = state.selectedDate
+                ui.amount = state.selectedValue
+                isTransactionReady = state.selectedValue != null
+            }
+            TransactionState.InProgress -> TODO()
+        }
     }
 
     private fun updateCategories(categories: List<Category>) {
