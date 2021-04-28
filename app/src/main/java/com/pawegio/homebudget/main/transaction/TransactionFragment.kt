@@ -90,11 +90,14 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
     private fun updateState(state: TransactionState) {
         when (state) {
             is TransactionState.InFillOut -> {
+                ui.isInProgress = false
                 ui.date = state.selectedDate
                 ui.amount = state.selectedValue
                 isTransactionReady = state.selectedValue != null
             }
-            TransactionState.InProgress -> TODO()
+            TransactionState.InProgress -> {
+                ui.isInProgress = true
+            }
         }
     }
 

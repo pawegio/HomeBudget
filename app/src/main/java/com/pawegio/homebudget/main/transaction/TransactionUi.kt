@@ -5,7 +5,9 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
+import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.view.clicks
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
@@ -21,6 +23,7 @@ import io.reactivex.Observable
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
+import splitties.dimensions.dp
 import splitties.views.*
 import splitties.views.dsl.appcompat.toolbar
 import splitties.views.dsl.constraintlayout.*
@@ -33,6 +36,13 @@ import splitties.views.dsl.material.defaultLParams
 import java.math.BigDecimal
 
 class TransactionUi(override val ctx: Context) : Ui {
+
+    var isInProgress: Boolean = false
+        set(value) {
+            field = value
+            progressLayout.isVisible = value
+            formLayout.isVisible = !value
+        }
 
     var categories: List<Category> = emptyList()
         set(value) {
@@ -179,69 +189,83 @@ class TransactionUi(override val ctx: Context) : Ui {
             .subscribe(addClicksRelay)
     }
 
+    private val progressBar = view(::ProgressBar) {
+        elevation = dp(4)
+    }
+
+    private val formLayout = constraintLayout {
+        backgroundColor = colorAttr(R.attr.colorSurface)
+        add(noteImageView, lParams(dip(40), dip(40)) {
+            topOfParent(dip(8))
+            startOfParent(dip(16))
+            verticalMargin = dip(16)
+        })
+        add(noteEditText, lParams(matchConstraints, wrapContent) {
+            alignVerticallyOn(noteImageView)
+            startToEndOf(noteImageView, dip(16))
+            endOfParent(dip(16))
+        })
+        add(dateImageView, lParams(dip(40), dip(40)) {
+            topToBottomOf(noteImageView)
+            startOfParent(dip(16))
+            verticalMargin = dip(16)
+        })
+        add(dateTextView, lParams(matchConstraints, wrapContent) {
+            alignVerticallyOn(dateImageView)
+            startToEndOf(dateImageView, dip(16))
+            endOfParent(dip(16))
+        })
+        add(categoryImageView, lParams(dip(40), dip(40)) {
+            topToBottomOf(dateImageView)
+            startOfParent(dip(16))
+            verticalMargin = dip(16)
+        })
+        add(categorySpinner, lParams(matchConstraints, wrapContent) {
+            alignVerticallyOn(categoryImageView)
+            startToEndOf(categoryImageView, dip(16))
+            endOfParent(dip(16))
+        })
+        add(subcategoryImageView, lParams(dip(40), dip(40)) {
+            topToBottomOf(categoryImageView)
+            startOfParent(dip(16))
+            verticalMargin = dip(16)
+        })
+        add(subcategorySpinner, lParams(matchConstraints, wrapContent) {
+            alignVerticallyOn(subcategoryImageView)
+            startToEndOf(categoryImageView, dip(16))
+            endOfParent(dip(16))
+        })
+        add(amountImageView, lParams(dip(40), dip(40)) {
+            topToBottomOf(subcategoryImageView)
+            startOfParent(dip(16))
+            topMargin = dip(36)
+        })
+        add(amountTextView, lParams(matchConstraints, wrapContent) {
+            alignVerticallyOn(amountImageView)
+            startToEndOf(amountImageView, dip(16))
+            endToStartOf(currencyTextView, dip(4))
+        })
+        add(currencyTextView, lParams(wrapContent, wrapContent) {
+            alignVerticallyOn(amountImageView)
+            endOfParent(dip(16))
+        })
+        add(addButton, lParams(matchConstraints, wrapContent) {
+            centerHorizontally(dip(16))
+            topToBottomOf(amountImageView, dip(16))
+        })
+    }
+
+    private val progressLayout = constraintLayout {
+        add(progressBar, lParams(wrapContent, wrapContent) {
+            centerInParent()
+        })
+        isVisible = false
+    }
+
     override val root: View = coordinatorLayout {
         add(appBar, appBarLParams())
-        add(constraintLayout {
-            backgroundColor = colorAttr(R.attr.colorSurface)
-            add(noteImageView, lParams(dip(40), dip(40)) {
-                topOfParent(dip(8))
-                startOfParent(dip(16))
-                verticalMargin = dip(16)
-            })
-            add(noteEditText, lParams(matchConstraints, wrapContent) {
-                alignVerticallyOn(noteImageView)
-                startToEndOf(noteImageView, dip(16))
-                endOfParent(dip(16))
-            })
-            add(dateImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(noteImageView)
-                startOfParent(dip(16))
-                verticalMargin = dip(16)
-            })
-            add(dateTextView, lParams(matchConstraints, wrapContent) {
-                alignVerticallyOn(dateImageView)
-                startToEndOf(dateImageView, dip(16))
-                endOfParent(dip(16))
-            })
-            add(categoryImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(dateImageView)
-                startOfParent(dip(16))
-                verticalMargin = dip(16)
-            })
-            add(categorySpinner, lParams(matchConstraints, wrapContent) {
-                alignVerticallyOn(categoryImageView)
-                startToEndOf(categoryImageView, dip(16))
-                endOfParent(dip(16))
-            })
-            add(subcategoryImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(categoryImageView)
-                startOfParent(dip(16))
-                verticalMargin = dip(16)
-            })
-            add(subcategorySpinner, lParams(matchConstraints, wrapContent) {
-                alignVerticallyOn(subcategoryImageView)
-                startToEndOf(categoryImageView, dip(16))
-                endOfParent(dip(16))
-            })
-            add(amountImageView, lParams(dip(40), dip(40)) {
-                topToBottomOf(subcategoryImageView)
-                startOfParent(dip(16))
-                topMargin = dip(36)
-            })
-            add(amountTextView, lParams(matchConstraints, wrapContent) {
-                alignVerticallyOn(amountImageView)
-                startToEndOf(amountImageView, dip(16))
-                endToStartOf(currencyTextView, dip(4))
-            })
-            add(currencyTextView, lParams(wrapContent, wrapContent) {
-                alignVerticallyOn(amountImageView)
-                endOfParent(dip(16))
-            })
-            add(addButton, lParams(matchConstraints, wrapContent) {
-                centerHorizontally(dip(16))
-                topToBottomOf(amountImageView, dip(16))
-            })
-        }, contentScrollingWithAppBarLParams())
+        add(formLayout, contentScrollingWithAppBarLParams())
+        add(progressLayout, contentScrollingWithAppBarLParams())
     }
 }
 
