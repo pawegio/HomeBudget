@@ -83,7 +83,3 @@ sealed class TransactionAction {
     object SelectAdd : TransactionAction()
     object SelectBack : TransactionAction()
 }
-
-enum class TransactionResult {
-    SUCCESS, CANCELED
-}

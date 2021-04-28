@@ -3,9 +3,7 @@ package com.pawegio.homebudget.main
 import androidx.lifecycle.*
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.*
-import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.SpreadsheetLauncher
-import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 

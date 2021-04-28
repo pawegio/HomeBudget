@@ -12,14 +12,12 @@ import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import androidx.navigation.fragment.navArgs
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.Scope
 import com.google.api.services.sheets.v4.SheetsScopes
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.R
-import com.pawegio.homebudget.main.transaction.TransactionResult
 import com.pawegio.homebudget.util.currencyValue
 import kotlinx.android.synthetic.main.month_summary_surface.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -28,9 +26,7 @@ import splitties.views.onClick
 
 class MainFragment : Fragment() {
 
-    private val viewModel by viewModel<MainViewModel> {
-        parametersOf(requireArguments()[NavGraph.Args.transactionResult])
-    }
+    private val viewModel by viewModel<MainViewModel>()
 
     private val ui by lazy { MainUi(requireContext()) }
 
