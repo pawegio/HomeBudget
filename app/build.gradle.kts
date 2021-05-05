@@ -67,10 +67,10 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.31")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.32")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
     implementation("com.jakewharton.rxrelay2:rxrelay:2.1.1")
@@ -81,8 +81,8 @@ dependencies {
     implementation("androidx.preference:preference-ktx:1.1.1")
     implementation("androidx.constraintlayout:constraintlayout:2.0.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
     implementation("org.koin:koin-core:2.2.2")
     implementation("org.koin:koin-androidx-viewmodel:2.2.2")
     implementation("com.google.android.material:material:1.3.0")
@@ -97,8 +97,8 @@ dependencies {
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0-alpha06")
-    implementation("com.google.firebase:firebase-crashlytics:17.4.0")
-    implementation("com.google.firebase:firebase-analytics:18.0.2")
+    implementation("com.google.firebase:firebase-crashlytics:17.4.1")
+    implementation("com.google.firebase:firebase-analytics:18.0.3")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0-alpha06")
     implementation("com.maltaisn:calcdialog:2.2.1")
 
