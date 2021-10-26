@@ -16,7 +16,7 @@ internal class StartLogicTest : LogicSpec({
         val api = MockHomeBudgetApi()
         val navigator = mock<Navigator>()
 
-        val logic = launch(start = CoroutineStart.LAZY) {
+        val logic = logicScope.launch(start = CoroutineStart.LAZY) {
             StartLogic(
                 repository,
                 api,

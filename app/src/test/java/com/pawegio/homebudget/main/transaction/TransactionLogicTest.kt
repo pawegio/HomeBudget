@@ -14,7 +14,7 @@ import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.ToastNotifier
 import com.pawegio.homebudget.util.createCategory
 import com.pawegio.homebudget.util.createMonthlyBudget
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 import org.threeten.bp.Instant
@@ -39,7 +39,7 @@ internal class TransactionLogicTest : LogicSpec({
         val toastNotifier = mock<ToastNotifier>()
         val navigator = mock<Navigator>()
 
-        val logic = launch {
+        val logic = logicScope.launch {
             TransactionLogic(
                 monthlyBudget,
                 actions,

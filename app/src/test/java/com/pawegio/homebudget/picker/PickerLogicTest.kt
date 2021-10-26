@@ -4,8 +4,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.HowToLauncher
-import com.pawegio.homebudget.util.SuspendFunction
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.launch
 
 internal class PickerLogicTest : LogicSpec({
@@ -16,7 +15,7 @@ internal class PickerLogicTest : LogicSpec({
         val parseSpreadsheetId = mock<(String) -> String>()
         val navigator = mock<Navigator>()
 
-        val logic = launch {
+        val logic = logicScope.launch {
             @Suppress("EXPERIMENTAL_API_USAGE")
             PickerLogic(
                 actions,

@@ -102,7 +102,7 @@ dependencies {
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0")
     implementation("com.maltaisn:calcdialog:2.2.1")
 
-    testImplementation("io.kotlintest:kotlintest-runner-junit5:3.4.2")
+    testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.1.1")
     testImplementation("com.github.langara:SMokK:0.0.4")

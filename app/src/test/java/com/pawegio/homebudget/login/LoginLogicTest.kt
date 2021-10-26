@@ -4,10 +4,8 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.MockHomeBudgetApi
-import com.pawegio.homebudget.util.SuspendFunction
 import com.pawegio.homebudget.util.ToastNotifier
-import io.kotlintest.shouldBe
-import kotlinx.coroutines.CoroutineStart
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
@@ -20,7 +18,7 @@ internal class LoginLogicTest : LogicSpec({
         val navigator = mock<Navigator>()
         val toastNotifier = mock<ToastNotifier>()
 
-        launch {
+        logicScope.launch {
             LoginLogic(
                 actions,
                 repository,

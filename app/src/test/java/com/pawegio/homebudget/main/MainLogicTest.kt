@@ -8,7 +8,7 @@ import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.*
-import io.kotlintest.shouldBe
+import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
@@ -30,7 +30,7 @@ internal class MainLogicTest : LogicSpec({
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
         val navigator = mock<Navigator>()
 
-        val logic = launch(start = CoroutineStart.LAZY) {
+        val logic = logicScope.launch(start = CoroutineStart.LAZY) {
             MainLogic(
                 actions,
                 monthType,

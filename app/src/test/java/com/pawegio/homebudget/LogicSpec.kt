@@ -1,25 +1,25 @@
 package com.pawegio.homebudget
 
 import com.pawegio.homebudget.util.InstantTaskUtils
-import io.kotlintest.IsolationMode
-import io.kotlintest.Spec
-import io.kotlintest.TestCase
-import io.kotlintest.TestResult
-import io.kotlintest.specs.AbstractFreeSpec
-import io.kotlintest.specs.FreeSpec
+import io.kotest.core.spec.IsolationMode
+import io.kotest.core.spec.Spec
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.core.test.TestCase
+import io.kotest.core.test.TestResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlin.coroutines.CoroutineContext
 
 @Suppress("UNCHECKED_CAST")
-abstract class LogicSpec constructor(body: LogicSpec.() -> Unit) :
-    FreeSpec(body as AbstractFreeSpec.() -> Unit), CoroutineScope {
+abstract class LogicSpec constructor(body: LogicSpec.() -> Unit) : FreeSpec(body as FreeSpec.() -> Unit) {
 
-    override val coroutineContext: CoroutineContext
-        get() = Dispatchers.Unconfined + job
+    private val logicCoroutineContext: CoroutineContext
+        get() = Dispatchers.Unconfined + logicJob
 
-    private val job = Job()
+    private val logicJob = Job()
+
+    val logicScope = CoroutineScope(logicCoroutineContext)
 
     override fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
@@ -32,7 +32,7 @@ abstract class LogicSpec constructor(body: LogicSpec.() -> Unit) :
     }
 
     override fun afterTest(testCase: TestCase, result: TestResult) {
-        job.cancel()
+        logicJob.cancel()
         super.afterTest(testCase, result)
     }
 

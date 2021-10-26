@@ -1,7 +1,7 @@
 package com.pawegio.homebudget.picker
 
-import io.kotlintest.shouldBe
-import io.kotlintest.specs.FreeSpec
+import io.kotest.core.spec.style.FreeSpec
+import io.kotest.matchers.shouldBe
 
 internal class SpreadsheetIdParserTest : FreeSpec({
     "parse spreadsheet id" {
