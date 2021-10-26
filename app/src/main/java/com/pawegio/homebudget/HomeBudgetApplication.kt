@@ -16,7 +16,7 @@ class HomeBudgetApplication : Application() {
         AndroidThreeTen.init(this)
         startKoin {
             androidContext(this@HomeBudgetApplication)
-            androidLogger(Level.DEBUG)
+            androidLogger(Level.ERROR)
             modules(appModule)
         }
     }

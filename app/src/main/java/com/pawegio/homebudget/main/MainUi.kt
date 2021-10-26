@@ -125,7 +125,7 @@ class MainUi(override val ctx: Context) : Ui {
     }
 
     private val monthlyBudgetProgressBar = view(::ProgressBar) {
-        elevation = dp(4)
+        elevation = dp(4f)
     }
 
     val floatingActionButton = floatingActionButton {

@@ -190,7 +190,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     }
 
     private val progressBar = view(::ProgressBar) {
-        elevation = dp(4)
+        elevation = dp(4f)
     }
 
     private val formLayout = constraintLayout {
