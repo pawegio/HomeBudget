@@ -1,14 +1,20 @@
 package com.pawegio.homebudget.main.transaction
 
 import android.content.Context
+import android.icu.text.DecimalFormatSymbols
+import android.os.Build
+import android.text.InputType
+import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
+import android.view.inputmethod.EditorInfo
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ProgressBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.jakewharton.rxbinding3.view.clicks
+import com.jakewharton.rxbinding3.widget.editorActions
 import com.jakewharton.rxbinding3.widget.itemSelections
 import com.jakewharton.rxbinding3.widget.textChanges
 import com.jakewharton.rxrelay2.PublishRelay
@@ -30,6 +36,7 @@ import splitties.views.dsl.constraintlayout.*
 import splitties.views.dsl.coordinatorlayout.appBarLParams
 import splitties.views.dsl.coordinatorlayout.coordinatorLayout
 import splitties.views.dsl.core.*
+import splitties.views.dsl.material.MaterialComponentsStyles
 import splitties.views.dsl.material.appBarLayout
 import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
@@ -73,7 +80,8 @@ class TransactionUi(override val ctx: Context) : Ui {
     var amount: BigDecimal? = null
         set(value) {
             field = value
-            amountTextView.text = "%.2f".format((value ?: BigDecimal.ZERO).toFloat()).replace('.', ',')
+            amountEditText.setText("%.2f".format((value ?: BigDecimal.ZERO).toFloat()).replace('.', ','))
+            amountEditText.setSelection(amountEditText.text.length)
         }
 
     private val backClicksRelay = PublishRelay.create<Unit>()
@@ -81,6 +89,7 @@ class TransactionUi(override val ctx: Context) : Ui {
     private val dateClicksRelay = PublishRelay.create<LocalDate>()
     private val categorySelectionsRelay = PublishRelay.create<Category>()
     private val subcategorySelectionsRelay = PublishRelay.create<Subcategory>()
+    private val amountChangesRelay = PublishRelay.create<Optional<BigDecimal>>()
     private val amountClicksRelay = PublishRelay.create<Unit>()
     private val addClicksRelay = PublishRelay.create<Unit>()
 
@@ -89,8 +98,11 @@ class TransactionUi(override val ctx: Context) : Ui {
     val dateClicks: Observable<LocalDate> = dateClicksRelay
     val categorySelections: Observable<Category> = categorySelectionsRelay
     val subcategorySelections: Observable<Subcategory> = subcategorySelectionsRelay
+    val amountChanges: Observable<Optional<BigDecimal>> = amountChangesRelay
     val amountClicks: Observable<Unit> = amountClicksRelay
     val addClicks: Observable<Unit> = addClicksRelay
+
+    private val materialStyles = MaterialComponentsStyles(ctx)
 
     private val appBar = appBarLayout(theme = R.style.AppTheme_AppBarOverlay) {
         add(toolbar {
@@ -167,12 +179,38 @@ class TransactionUi(override val ctx: Context) : Ui {
         padding = dip(8)
     }
 
-    private val amountTextView = textView {
+    private val amountEditText = editText {
         isSingleLine = true
-        setBackgroundResource(resourceAttr(R.attr.selectableItemBackground))
-        padding = dip(8)
         gravity = gravityEnd
+        setHint(R.string.amount_hint)
         textSize = 26f
+        val separator = DecimalFormatSymbols.getInstance().decimalSeparator
+        val digitsKeyListener = DigitsKeyListener.getInstance("0123456789$separator")
+        val amountInputType = InputType.TYPE_CLASS_NUMBER or InputType.TYPE_NUMBER_FLAG_DECIMAL
+        if (Build.BRAND == "google") {
+            inputType = amountInputType
+            keyListener = digitsKeyListener
+        } else {
+            keyListener = digitsKeyListener
+            inputType = amountInputType
+        }
+        filters = arrayOf(AmountInputFilter(10, 2))
+        textChanges()
+            .skipInitialValue()
+            .map {
+                it.toString()
+                    .replace(',', '.')
+                    .takeIf(String::isNotEmpty)
+                    ?.let(::BigDecimal).optional
+            }
+            .subscribe(amountChangesRelay)
+        editorActions { it == EditorInfo.IME_ACTION_DONE }
+            .map { }
+            .subscribe(addClicksRelay)
+    }
+
+    private val calculatorButton = materialStyles.button.text {
+        textResource = R.string.calculator
         clicks()
             .subscribe(amountClicksRelay)
     }
@@ -183,7 +221,7 @@ class TransactionUi(override val ctx: Context) : Ui {
         textResource = R.string.currency
     }
 
-    private val addButton = button {
+    private val addButton = materialStyles.button.filled {
         textResource = R.string.add
         clicks()
             .subscribe(addClicksRelay)
@@ -240,7 +278,7 @@ class TransactionUi(override val ctx: Context) : Ui {
             startOfParent(dip(16))
             topMargin = dip(36)
         })
-        add(amountTextView, lParams(matchConstraints, wrapContent) {
+        add(amountEditText, lParams(matchConstraints, wrapContent) {
             alignVerticallyOn(amountImageView)
             startToEndOf(amountImageView, dip(16))
             endToStartOf(currencyTextView, dip(4))
@@ -249,9 +287,13 @@ class TransactionUi(override val ctx: Context) : Ui {
             alignVerticallyOn(amountImageView)
             endOfParent(dip(16))
         })
-        add(addButton, lParams(matchConstraints, wrapContent) {
+        add(calculatorButton, lParams(matchConstraints, wrapContent) {
+            topToBottomOf(amountEditText)
+            endToEndOf(amountEditText)
+        })
+        add(addButton, lParams(matchConstraints, dip(52)) {
             centerHorizontally(dip(16))
-            topToBottomOf(amountImageView, dip(16))
+            topToBottomOf(calculatorButton, dip(8))
         })
     }
 

@@ -49,6 +49,7 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
             ui.noteChanges.map { EnterNote(it.value) },
             ui.categorySelections.map(::SelectCategory),
             ui.subcategorySelections.map(::SelectSubcategory),
+            ui.amountChanges.map { SelectValue(it.value) },
             ui.addClicks.filter { isTransactionReady }.map { SelectAdd }
         ).subscribe(viewModel.transactionActions)
         ui.dateClicks.subscribe(::showDatePicker)
@@ -83,7 +84,7 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 
     override fun onValueEntered(requestCode: Int, value: BigDecimal?) {
         if (requestCode == CALC_DIALOG_REQUEST_CODE) {
-            viewModel.transactionActions.accept(SelectValue(value))
+            ui.amount = value
         }
     }
 
@@ -92,7 +93,6 @@ class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
             is TransactionState.InFillOut -> {
                 ui.isInProgress = false
                 ui.date = state.selectedDate
-                ui.amount = state.selectedValue
                 isTransactionReady = state.selectedValue != null
             }
             TransactionState.InProgress -> {

@@ -35,6 +35,7 @@
 
     <!-- TRANSACTION -->
     <string name="new_transaction">Nowa transakcja</string>
+    <string name="calculator">Kalkulator</string>
     <string name="add">Dodaj</string>
     <string name="note_hint">Dodaj notatkę</string>
     <string name="amount_hint">0,00</string>
