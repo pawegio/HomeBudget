@@ -21,10 +21,7 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
-import com.pawegio.homebudget.util.Optional
-import com.pawegio.homebudget.util.colorAttr
-import com.pawegio.homebudget.util.optional
-import com.pawegio.homebudget.util.resourceAttr
+import com.pawegio.homebudget.util.*
 import io.reactivex.Observable
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
@@ -77,9 +74,9 @@ class TransactionUi(override val ctx: Context) : Ui {
             dateTextView.text = value?.format(DateTimeFormatter.ofPattern("eeee, d MMMM yyyy"))
         }
 
-    var amount: BigDecimal? = null
+    var amount: BigDecimal?
+        get() = amountEditText.editableText.toString().toBigDecimalOrNull()
         set(value) {
-            field = value
             amountEditText.setText("%.2f".format((value ?: BigDecimal.ZERO).toFloat()).replace('.', ','))
             amountEditText.setSelection(amountEditText.text.length)
         }
@@ -197,12 +194,7 @@ class TransactionUi(override val ctx: Context) : Ui {
         filters = arrayOf(AmountInputFilter(10, 2))
         textChanges()
             .skipInitialValue()
-            .map {
-                it.toString()
-                    .replace(',', '.')
-                    .takeIf(String::isNotEmpty)
-                    ?.let(::BigDecimal).optional
-            }
+            .map { it.toString().toBigDecimalOrNull().optional }
             .subscribe(amountChangesRelay)
         editorActions { it == EditorInfo.IME_ACTION_DONE }
             .map { }

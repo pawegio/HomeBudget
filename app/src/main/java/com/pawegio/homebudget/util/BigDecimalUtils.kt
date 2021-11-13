@@ -12,3 +12,8 @@ val BigDecimal.currencyValue: String
                 .apply { currencySymbol = "zł" }
         }
         .format(this)
+
+fun String.toBigDecimalOrNull(): BigDecimal? =
+    replace(',', '.')
+        .takeIf(String::isNotEmpty)
+        ?.let(::BigDecimal)
