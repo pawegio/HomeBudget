@@ -13,7 +13,7 @@
     <string name="create_spreadsheet">Jak stworzyć własną kopię arkusza?</string>
     <string name="spreadsheet_template">Wersja szablonu:</string>
     <string-array name="templates_array">
-        <item>2021</item>
+        <item>2021/2022</item>
         <item>2020</item>
         <item>2019</item>
     </string-array>
