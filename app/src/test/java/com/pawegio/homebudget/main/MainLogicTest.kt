@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.*
@@ -234,6 +235,14 @@ internal class MainLogicTest : LogicSpec({
 
             "notify user about old year" {
                 verify(toastNotifier).notify(R.string.old_financial_year_warning, "2016")
+            }
+        }
+
+        "on current financial year" - {
+            api.getFinancialYear.resume(2019)
+
+            "do not notify user about old year" {
+                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "2019")
             }
         }
     }

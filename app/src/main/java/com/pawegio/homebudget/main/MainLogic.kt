@@ -32,7 +32,7 @@ suspend fun MainLogic(
     var afterTransaction = false
     coroutineScope {
         launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
-        launch { checkFinancialYear(api, toastNotifier) }
+        launch { checkFinancialYear(api, clock, toastNotifier) }
         loop@ while (isActive) {
             when (actions.awaitFirst()) {
                 Resume -> {
@@ -100,10 +100,14 @@ private suspend fun loadMonth(
 
 private suspend fun checkFinancialYear(
     api: HomeBudgetApi,
+    clock: Clock,
     toastNotifier: ToastNotifier
 ) {
     val year = api.getFinancialYear()
-    toastNotifier.notify(R.string.old_financial_year_warning, year.toString())
+    val currentYear = clock.instant().atZone(ZoneId.systemDefault()).year
+    if (year != currentYear) {
+        toastNotifier.notify(R.string.old_financial_year_warning, year.toString())
+    }
 }
 
 enum class MonthType {
