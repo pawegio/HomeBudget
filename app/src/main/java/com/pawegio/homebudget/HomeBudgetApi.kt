@@ -30,6 +30,7 @@ interface HomeBudgetApi {
     val isSignedIn: Boolean
     suspend fun signIn()
     suspend fun signOut()
+    suspend fun getFinancialYear(): Int?
     suspend fun getMonthlyBudget(month: Month): MonthlyBudget
     suspend fun addTransaction(transaction: Transaction)
 }
@@ -95,6 +96,15 @@ class HomeBudgetApiImpl(
         } finally {
             repository.account = null
         }
+    }
+
+    override suspend fun getFinancialYear(): Int? = withContext(Dispatchers.IO) {
+        val response = sheetsService.spreadsheets().values()
+            .get(checkNotNull(spreadsheetId), "'CAŁY ROK'!D2:E2")
+            .setValueRenderOption("UNFORMATTED_VALUE")
+            .execute()
+        val result = response["values"] as List<List<BigDecimal>>
+        result.firstOrNull()?.firstOrNull()?.toInt()
     }
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {

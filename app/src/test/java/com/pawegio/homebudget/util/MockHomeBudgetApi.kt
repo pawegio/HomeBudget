@@ -12,6 +12,7 @@ class MockHomeBudgetApi : HomeBudgetApi {
 
     val signIn = smokk<Unit>()
     val signOut = smokk<Unit>()
+    val getFinancialYear = smokk<Int?>()
     val getMonthlyBudget = smokk<Month, MonthlyBudget>()
     val addTransaction = smokk<Transaction, Unit>()
 
@@ -26,6 +27,8 @@ class MockHomeBudgetApi : HomeBudgetApi {
     override suspend fun signIn() = signIn.invoke()
 
     override suspend fun signOut() = signOut.invoke()
+
+    override suspend fun getFinancialYear(): Int? = getFinancialYear.invoke()
 
     override suspend fun getMonthlyBudget(month: Month): MonthlyBudget =
         getMonthlyBudget.invoke(month)
