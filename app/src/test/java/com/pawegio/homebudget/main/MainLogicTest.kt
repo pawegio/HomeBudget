@@ -5,7 +5,6 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
-import com.nhaarman.mockitokotlin2.verifyBlocking
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.*
 import io.kotest.matchers.shouldBe
@@ -28,6 +27,7 @@ internal class MainLogicTest : LogicSpec({
         val api = MockHomeBudgetApi()
         val spreadsheetLauncher = mock<SpreadsheetLauncher>()
         var clock = Clock.fixed(Instant.parse("2019-04-01T10:15:00.00Z"), ZoneId.systemDefault())
+        val toastNotifier = mock<ToastNotifier>()
         val navigator = mock<Navigator>()
 
         val logic = logicScope.launch(start = CoroutineStart.LAZY) {
@@ -40,6 +40,7 @@ internal class MainLogicTest : LogicSpec({
                 api,
                 spreadsheetLauncher,
                 clock,
+                toastNotifier,
                 navigator
             )
         }
@@ -70,6 +71,10 @@ internal class MainLogicTest : LogicSpec({
 
         "get monthly budget for current month" {
             api.getMonthlyBudget.invocations shouldBe listOf(Month.APRIL)
+        }
+
+        "get financial year" {
+            api.getFinancialYear.invocations shouldBe 1
         }
 
         "show loader" {
@@ -221,6 +226,14 @@ internal class MainLogicTest : LogicSpec({
                 "navigate to picker screen" {
                     verify(navigator).navigate(NavGraph.Action.toPicker)
                 }
+            }
+        }
+
+        "on old financial year" - {
+            api.getFinancialYear.resume(2016)
+
+            "notify user about old year" {
+                verify(toastNotifier).notify(R.string.old_financial_year_warning, "2016")
             }
         }
     }

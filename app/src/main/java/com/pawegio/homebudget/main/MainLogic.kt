@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.main.MainAction.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
+import com.pawegio.homebudget.util.ToastNotifier
 import io.reactivex.Observable
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
@@ -24,12 +25,14 @@ suspend fun MainLogic(
     api: HomeBudgetApi,
     spreadsheetLauncher: SpreadsheetLauncher,
     clock: Clock,
+    toastNotifier: ToastNotifier,
     navigator: Navigator
 ) {
     var month = clock.instant().atZone(ZoneId.systemDefault()).month
     var afterTransaction = false
     coroutineScope {
         launch { loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator) }
+        launch { checkFinancialYear(api, toastNotifier) }
         loop@ while (isActive) {
             when (actions.awaitFirst()) {
                 Resume -> {
@@ -93,6 +96,14 @@ private suspend fun loadMonth(
     } finally {
         isLoading.value = false
     }
+}
+
+private suspend fun checkFinancialYear(
+    api: HomeBudgetApi,
+    toastNotifier: ToastNotifier
+) {
+    val year = api.getFinancialYear()
+    toastNotifier.notify(R.string.old_financial_year_warning, year.toString())
 }
 
 enum class MonthType {

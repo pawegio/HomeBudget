@@ -24,6 +24,6 @@ val appModule = module {
     viewModel { StartViewModel(get(), get(), get()) }
     viewModel { LoginViewModel(get(), get(), get(), get()) }
     viewModel { PickerViewModel(get(), get(), get()) }
-    viewModel { MainViewModel(get(), get(), get(), get(), get()) }
+    viewModel { MainViewModel(get(), get(), get(), get(), get(), get()) }
     viewModel { parameters -> TransactionViewModel(parameters.get(), get(), get(), get(), get()) }
 }

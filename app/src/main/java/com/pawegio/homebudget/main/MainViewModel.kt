@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.jakewharton.rxrelay2.PublishRelay
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
+import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.launch
 import org.threeten.bp.Clock
 
@@ -12,6 +13,7 @@ class MainViewModel(
     private val api: HomeBudgetApi,
     private val spreadsheetLauncher: SpreadsheetLauncher,
     private val clock: Clock,
+    private val toastNotifier: ToastNotifier,
     private val navigator: Navigator,
 ) : ViewModel() {
     val monthlyBudget: LiveData<MonthlyBudget> get() = _monthlyBudget
@@ -35,6 +37,7 @@ class MainViewModel(
                 api,
                 spreadsheetLauncher,
                 clock,
+                toastNotifier,
                 navigator
             )
         }
