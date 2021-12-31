@@ -245,5 +245,21 @@ internal class MainLogicTest : LogicSpec({
                 verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "2019")
             }
         }
+
+        "on next financial year" - {
+            api.getFinancialYear.resume(2020)
+
+            "do not notify user about old year" {
+                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "2020")
+            }
+        }
+
+        "on financial year not available" - {
+            api.getFinancialYear.resume(null)
+
+            "do not notify user about old year" {
+                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "null")
+            }
+        }
     }
 })

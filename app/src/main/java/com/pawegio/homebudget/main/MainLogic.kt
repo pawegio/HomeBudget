@@ -105,7 +105,7 @@ private suspend fun checkFinancialYear(
 ) {
     val year = api.getFinancialYear()
     val currentYear = clock.instant().atZone(ZoneId.systemDefault()).year
-    if (year != currentYear) {
+    if (year != null && year < currentYear) {
         toastNotifier.notify(R.string.old_financial_year_warning, year.toString())
     }
 }
