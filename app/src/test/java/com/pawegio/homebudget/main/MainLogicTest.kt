@@ -6,6 +6,7 @@ import com.jraska.livedata.test
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.never
 import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.verifyNoMoreInteractions
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.*
 import io.kotest.matchers.shouldBe
@@ -234,7 +235,7 @@ internal class MainLogicTest : LogicSpec({
             api.getFinancialYear.resume(2016)
 
             "notify user about old year" {
-                verify(toastNotifier).notify(R.string.old_financial_year_warning, "2016")
+                verify(toastNotifier).notify(R.string.old_financial_year_warning, 2016)
             }
         }
 
@@ -242,7 +243,7 @@ internal class MainLogicTest : LogicSpec({
             api.getFinancialYear.resume(2019)
 
             "do not notify user about old year" {
-                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "2019")
+                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, 2019)
             }
         }
 
@@ -250,7 +251,7 @@ internal class MainLogicTest : LogicSpec({
             api.getFinancialYear.resume(2020)
 
             "do not notify user about old year" {
-                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "2020")
+                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, 2020)
             }
         }
 
@@ -258,7 +259,7 @@ internal class MainLogicTest : LogicSpec({
             api.getFinancialYear.resume(null)
 
             "do not notify user about old year" {
-                verify(toastNotifier, never()).notify(R.string.old_financial_year_warning, "null")
+                verifyNoMoreInteractions(toastNotifier)
             }
         }
     }

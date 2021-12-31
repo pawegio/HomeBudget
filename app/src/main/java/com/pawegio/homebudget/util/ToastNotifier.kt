@@ -5,7 +5,7 @@ import android.widget.Toast
 
 interface ToastNotifier {
     fun notify(textResId: Int)
-    fun notify(textResId: Int, vararg args: Any)
+    fun notify(textResId: Int, arg: Any)
 }
 
 class ToastNotifierImpl(private val context: Context) : ToastNotifier {
@@ -17,8 +17,9 @@ class ToastNotifierImpl(private val context: Context) : ToastNotifier {
         toast = Toast.makeText(context, textResId, Toast.LENGTH_SHORT).apply { show() }
     }
 
-    override fun notify(textResId: Int, vararg args: Any) {
+    override fun notify(textResId: Int, arg: Any) {
         toast?.cancel()
-        toast = Toast.makeText(context, context.getString(textResId, args), Toast.LENGTH_SHORT).apply { show() }
+        val message = context.getString(textResId, arg.toString())
+        toast = Toast.makeText(context, message, Toast.LENGTH_LONG).apply { show() }
     }
 }
