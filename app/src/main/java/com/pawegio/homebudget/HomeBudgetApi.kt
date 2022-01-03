@@ -99,12 +99,19 @@ class HomeBudgetApiImpl(
     }
 
     override suspend fun getFinancialYear(): Int? = withContext(Dispatchers.IO) {
-        val response = sheetsService.spreadsheets().values()
-            .get(checkNotNull(spreadsheetId), "'CAŁY ROK'!D2:E2")
-            .setValueRenderOption("UNFORMATTED_VALUE")
-            .execute()
-        val result = response["values"] as List<List<BigDecimal>>
-        result.firstOrNull()?.firstOrNull()?.toInt()
+        try {
+            val response = sheetsService.spreadsheets().values()
+                .get(checkNotNull(spreadsheetId), "'CAŁY ROK'!D2:E2")
+                .setValueRenderOption("UNFORMATTED_VALUE")
+                .execute()
+            val result = response["values"] as List<List<BigDecimal>>
+            result.firstOrNull()?.firstOrNull()?.toInt()
+        } catch (e: Exception) {
+            val apiException = HomeBudgetApiException(e)
+            apiException.printStackTrace()
+            FirebaseCrashlytics.getInstance().recordException(apiException)
+            throw apiException
+        }
     }
 
     override suspend fun getMonthlyBudget(month: Month) = withContext(Dispatchers.IO) {

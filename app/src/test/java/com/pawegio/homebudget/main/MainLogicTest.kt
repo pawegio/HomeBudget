@@ -262,5 +262,13 @@ internal class MainLogicTest : LogicSpec({
                 verifyNoMoreInteractions(toastNotifier)
             }
         }
+
+        "on financial year access error" - {
+            api.getFinancialYear.resumeWithException(HomeBudgetApiException())
+
+            "do not notify user about old year" {
+                verifyNoMoreInteractions(toastNotifier)
+            }
+        }
     }
 })
