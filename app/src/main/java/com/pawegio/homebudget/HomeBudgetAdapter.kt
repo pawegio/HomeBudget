@@ -33,7 +33,12 @@ object HomeBudget2020Adapter : HomeBudgetAdapter {
         "B211" to "D221",
         "B223" to "D233",
         "B235" to "D245",
-        "B247" to "D257"
+        "B247" to "D257",
+        "B259" to "D269",
+        "B271" to "D281",
+        "B283" to "D293",
+        "B295" to "D305",
+        "B307" to "D317",
     )
 
     override val incomesFirstRow = 57

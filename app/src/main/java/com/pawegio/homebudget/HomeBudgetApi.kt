@@ -219,7 +219,8 @@ class HomeBudgetApiImpl(
             val planned = ranges[0]["values"] as List<List<BigDecimal>>
             val actual = ranges[1]["values"] as List<List<BigDecimal>>
             val incomes = ranges[2]["values"] as List<List<Any>>
-            val expenses = List(adapter.expensesCategoriesCount) { ranges[it + 3]["values"] as List<List<Any>> }
+            val expenses = List(adapter.expensesCategoriesCount) { ranges[it + 3]["values"] as List<List<Any>>? }
+                .filterNotNull().filter { data -> data[0][0].toString().isNotEmpty() }
             val categories = listOf(createCategory(adapter.incomesFirstRow, incomes, Category.Type.INCOMES)) +
                     expenses.mapIndexed { index, expenses ->
                         createCategory(adapter.expensesFirstRow + 12 * index, expenses, Category.Type.EXPENSES)
