@@ -49,6 +49,7 @@ class MainFragment : Fragment() {
         viewModel.actions.accept(MainAction.Resume)
     }
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_SHEETS_EDIT_PERMISSION) {
@@ -115,13 +116,13 @@ class MainFragment : Fragment() {
 
     private fun tryToAddTransaction() {
         if (!GoogleSignIn.hasPermissions(
-                GoogleSignIn.getLastSignedInAccount(activity),
+                GoogleSignIn.getLastSignedInAccount(requireContext()),
                 Scope(SheetsScopes.SPREADSHEETS)
             )) {
             GoogleSignIn.requestPermissions(
                 this,
                 REQUEST_SHEETS_EDIT_PERMISSION,
-                GoogleSignIn.getLastSignedInAccount(activity),
+                GoogleSignIn.getLastSignedInAccount(requireContext()),
                 Scope(SheetsScopes.SPREADSHEETS)
             )
         } else {

@@ -2,7 +2,7 @@ import java.util.*
 
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    kotlin("android")
     id("kotlin-android-extensions")
     id("com.github.triplet.play") version "3.7.0"
     id("com.google.gms.google-services")
@@ -11,7 +11,7 @@ plugins {
 apply("../gradle/app-version.gradle")
 
 android {
-    compileSdk = 30
+    compileSdk = 32
     defaultConfig {
         applicationId = "com.pawegio.homebudget"
         minSdk = 24
@@ -67,26 +67,25 @@ tasks.withType<Test> {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.1")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.4.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.4.2")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-rx2:1.6.1")
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
     implementation("com.jakewharton.rxrelay2:rxrelay:2.1.1")
     implementation("com.jakewharton.rxbinding3:rxbinding:3.1.0")
     implementation("android.arch.lifecycle:extensions:1.1.1")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.preference:preference-ktx:1.1.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.1")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.core:core-ktx:1.8.0")
+    implementation("androidx.preference:preference-ktx:1.2.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.3.5")
-    implementation("androidx.navigation:navigation-ui-ktx:2.3.5")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.5.0")
+    implementation("androidx.navigation:navigation-ui-ktx:2.5.0")
     implementation("org.koin:koin-core:2.2.2")
     implementation("org.koin:koin-androidx-viewmodel:2.2.2")
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("com.google.android.gms:play-services-auth:19.2.0")
+    implementation("com.google.android.material:material:1.6.1")
+    implementation("com.google.android.gms:play-services-auth:20.2.0")
     implementation("com.google.api-client:google-api-client-android:1.23.0") {
         exclude("org.apache.httpcomponents")
     }
@@ -96,11 +95,12 @@ dependencies {
     implementation("com.github.raquezha:InlineActivityResult:1.0.0-jitpack")
     implementation("com.jakewharton.threetenabp:threetenabp:1.2.1")
     implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
-    implementation("com.google.firebase:firebase-crashlytics:18.2.3")
-    implementation("com.google.firebase:firebase-analytics:19.0.2")
+    implementation("com.google.firebase:firebase-crashlytics:18.2.12")
+    implementation("com.google.firebase:firebase-analytics:21.1.0")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0")
     implementation("com.louiscad.splitties:splitties-alertdialog-appcompat:3.0.0")
     implementation("com.maltaisn:calcdialog:2.2.1")
+    implementation("com.google.guava:guava:27.0.1-android")
 
     testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
