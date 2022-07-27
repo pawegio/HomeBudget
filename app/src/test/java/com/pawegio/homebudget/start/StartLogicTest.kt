@@ -1,6 +1,6 @@
 package com.pawegio.homebudget.start
 
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import com.pawegio.homebudget.HomeBudgetRepository
 import com.pawegio.homebudget.LogicSpec
 import com.pawegio.homebudget.NavGraph

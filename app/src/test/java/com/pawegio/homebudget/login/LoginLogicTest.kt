@@ -1,12 +1,14 @@
 package com.pawegio.homebudget.login
 
 import com.jakewharton.rxrelay2.PublishRelay
-import com.nhaarman.mockitokotlin2.*
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.MockHomeBudgetApi
 import com.pawegio.homebudget.util.ToastNotifier
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.launch
+import org.mockito.kotlin.mock
+import org.mockito.kotlin.never
+import org.mockito.kotlin.verify
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

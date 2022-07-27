@@ -1,7 +1,7 @@
 package com.pawegio.homebudget.picker
 
 import com.jakewharton.rxrelay2.PublishRelay
-import com.nhaarman.mockitokotlin2.*
+import org.mockito.kotlin.*
 import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.HowToLauncher
 import io.kotest.matchers.shouldBe
