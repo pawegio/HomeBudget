@@ -102,7 +102,7 @@ dependencies {
     implementation("com.maltaisn:calcdialog:2.2.1")
     implementation("com.google.guava:guava:27.0.1-android")
 
-    testImplementation("io.kotest:kotest-runner-junit5:4.6.3")
+    testImplementation("io.kotest:kotest-runner-junit5:5.4.0")
     testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.1.1")
     testImplementation("com.github.langara:SMokK:0.0.4")

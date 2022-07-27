@@ -21,17 +21,17 @@ abstract class LogicSpec constructor(body: LogicSpec.() -> Unit) : FreeSpec(body
 
     val logicScope = CoroutineScope(logicCoroutineContext)
 
-    override fun beforeSpec(spec: Spec) {
+    override suspend fun beforeSpec(spec: Spec) {
         super.beforeSpec(spec)
         InstantTaskUtils.beforeTest()
     }
 
-    override fun afterSpec(spec: Spec) {
+    override suspend fun afterSpec(spec: Spec) {
         InstantTaskUtils.afterTest()
         super.afterSpec(spec)
     }
 
-    override fun afterTest(testCase: TestCase, result: TestResult) {
+    override suspend fun afterTest(testCase: TestCase, result: TestResult) {
         logicJob.cancel()
         super.afterTest(testCase, result)
     }
