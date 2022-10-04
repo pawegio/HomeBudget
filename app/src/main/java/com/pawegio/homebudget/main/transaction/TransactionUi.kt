@@ -8,6 +8,7 @@ import android.text.method.DigitsKeyListener
 import android.util.AttributeSet
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import android.widget.ProgressBar
@@ -153,7 +154,13 @@ class TransactionUi(override val ctx: Context) : Ui {
         verticalPadding = dip(8)
         itemSelections().skipInitialValue()
             .map { categories[it] }
-            .doOnNext { subcategories = it.subcategories }
+            .doOnNext { category ->
+                val oldSubcategories = subcategories
+                subcategories = category.subcategories
+                if (oldSubcategories.isNotEmpty()) {
+                    subcategorySpinner.performClick()
+                }
+            }
             .subscribe(categorySelectionsRelay)
     }
 
