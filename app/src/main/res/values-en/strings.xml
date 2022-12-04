@@ -1,0 +1,52 @@
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+    <string name="app_name">Family budget</string>
+
+    <!-- LOGIN -->
+    <string name="sign_in_info">Use account Google, through which you have access to the sheet family budget in Google Docs.</string>
+    <string name="sign_in_error">Sing in error</string>
+    <string name="privacy_policy">Read to <![CDATA[<b><a href="https://docs.google.com/document/d/1vs5tYH70oarsbm7EOnz5Rle43alCRjuJJAlB9IGi5Fs">Privacy policy"</a></b>]]></string>
+
+    <!-- PICKER -->
+    <string name="enter_spreadsheet_url">Input link to sheet family budget Google Docs:</string>
+    <string name="spreadsheet_url_hint">Link to sheet</string>
+    <string name="connect_spreadsheet">Connect to sheet</string>
+    <string name="create_spreadsheet">How create own copy a sheet?</string>
+    <string name="spreadsheet_template">Version Template:</string>
+    <string-array name="templates_array">
+        <item>2021/2022</item>
+        <item>2020</item>
+        <item>2019</item>
+    </string-array>
+
+    <!-- MAIN -->
+    <string name="incomes">Incomes</string>
+    <string name="expenses">Expenses</string>
+    <string name="total">Total</string>
+    <string name="of">z %s</string>
+    <string name="percent">%d%%</string>
+    <string name="load_error_title">Error occured</string>
+    <string name="load_error_message">Failed to fetch budget data from the selected worksheet. Make sure you have selected the correct version of the template.</string>
+    <string name="try_again">Try againg</string>
+    <string name="add_transaction">Add transaction</string>
+    <string name="transaction_added_message">The transaction has been successfully added to your budget.</string>
+    <string name="pick_document">Sheet changes</string>
+    <string name="about_app">About Application</string>
+    <string name="sign_out">Exit from app</string>
+    <string name="old_financial_year_warning">The selected sheet is for the year %s. Link the application with a new sheet for the current year by selecting the option \"Connect to sheet\" in menu.</string>
+
+    <!-- TRANSACTION -->
+    <string name="new_transaction">New transaction</string>
+    <string name="calculator">Calculate</string>
+    <string name="add">Add</string>
+    <string name="note_hint">Additional info</string>
+    <string name="amount_hint">0,00</string>
+    <string name="currency">zł</string>
+    <string name="add_transaction_error_message">Failed to add transaction to budget.</string>
+
+    <!-- ABOUT -->
+    <string name="version">Version</string>
+    <string name="author" tools:ignore="Typos">Autor</string>
+    <string name="me">Paweł Gajda</string>
+    <string name="app_icon">Icon application</string>
+    <string name="app_icon_author"><![CDATA[<b><a href="https://www.flaticon.com/authors/vectors-market" title="Vectors Market">Vectors Market</a>]]></string>
+</resources>
