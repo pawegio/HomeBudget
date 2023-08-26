@@ -16,11 +16,11 @@ import com.pawegio.homebudget.util.createCategory
 import com.pawegio.homebudget.util.createMonthlyBudget
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
-import org.threeten.bp.Instant
-import org.threeten.bp.LocalDate
-import org.threeten.bp.ZoneId
 import java.math.BigDecimal
+import java.time.Clock
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 

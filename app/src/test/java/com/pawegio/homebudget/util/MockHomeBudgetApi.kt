@@ -3,8 +3,8 @@ package com.pawegio.homebudget.util
 import com.pawegio.homebudget.HomeBudgetApi
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.Transaction
-import org.threeten.bp.Month
 import pl.mareklangiewicz.smokk.smokk
+import java.time.Month
 
 class MockHomeBudgetApi : HomeBudgetApi {
 

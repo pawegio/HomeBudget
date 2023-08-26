@@ -12,10 +12,10 @@ import com.pawegio.homebudget.util.*
 import io.kotest.matchers.shouldBe
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
-import org.threeten.bp.Instant
-import org.threeten.bp.Month
-import org.threeten.bp.ZoneId
+import java.time.Clock
+import java.time.Instant
+import java.time.Month
+import java.time.ZoneId
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
