@@ -8,7 +8,7 @@ import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.Navigator
 import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
+import java.time.Clock
 
 class TransactionViewModel(
     private val monthlyBudget: MonthlyBudget,

@@ -1,6 +1,6 @@
 package com.pawegio.homebudget.util
 
-import org.threeten.bp.Month
+import java.time.Month
 
 val Month.polishDisplayName: String
     get() = when (value) {

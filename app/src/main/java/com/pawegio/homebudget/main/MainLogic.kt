@@ -12,9 +12,9 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.rx2.awaitFirst
-import org.threeten.bp.Clock
-import org.threeten.bp.Month
-import org.threeten.bp.ZoneId
+import java.time.Clock
+import java.time.Month
+import java.time.ZoneId
 
 suspend fun MainLogic(
     actions: Observable<MainAction>,

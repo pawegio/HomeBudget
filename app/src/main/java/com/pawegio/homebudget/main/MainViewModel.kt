@@ -6,7 +6,7 @@ import com.pawegio.homebudget.*
 import com.pawegio.homebudget.util.SpreadsheetLauncher
 import com.pawegio.homebudget.util.ToastNotifier
 import kotlinx.coroutines.launch
-import org.threeten.bp.Clock
+import java.time.Clock
 
 class MainViewModel(
     private val repository: HomeBudgetRepository,

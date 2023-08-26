@@ -13,10 +13,10 @@ import com.pawegio.homebudget.main.transaction.TransactionAction.*
 import io.reactivex.Observable
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
-import org.threeten.bp.LocalDate
 import java.math.BigDecimal
 import java.text.DecimalFormat
 import java.text.DecimalFormatSymbols
+import java.time.LocalDate
 
 class TransactionFragment : Fragment(), CalcDialog.CalcDialogCallback {
 

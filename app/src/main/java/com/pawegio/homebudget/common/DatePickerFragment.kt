@@ -9,7 +9,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import com.jakewharton.rxrelay2.PublishRelay
 import io.reactivex.Observable
-import org.threeten.bp.LocalDate
+import java.time.LocalDate
 
 class DatePickerFragment : DialogFragment(), DatePickerDialog.OnDateSetListener {
 

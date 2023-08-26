@@ -5,8 +5,9 @@ import android.util.AttributeSet
 import android.widget.FrameLayout
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.databinding.CategoryViewBinding
 import com.pawegio.homebudget.util.currencyValue
-import kotlinx.android.synthetic.main.category_view.view.*
+import splitties.systemservices.layoutInflater
 import kotlin.math.roundToInt
 
 class CategoryView @JvmOverloads constructor(
@@ -15,28 +16,31 @@ class CategoryView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    private var _binding: CategoryViewBinding? = null
+    private val binding get() = _binding!!
+
     var category: Category? = null
         set(value) {
             field = value
-            categoryNameTextView.text = value?.name
-            categoryValueTextView.text = value?.run {
+            binding.categoryNameTextView.text = value?.name
+            binding.categoryValueTextView.text = value?.run {
                 "${actual.currencyValue} / ${planned.currencyValue}"
             }
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
                 (100.0 * actual.toDouble() / planned.toDouble()).roundToInt()
             }
-            categoryProgressView.text = progress?.let { resources.getString(R.string.percent, it) }
-            subcategoriesLayout.removeAllViews()
+            binding.categoryProgressView.text = progress?.let { resources.getString(R.string.percent, it) }
+            binding.subcategoriesLayout.removeAllViews()
             value?.subcategories
                 ?.filter { it.actual.toDouble() > 0.0 || it.planned.toDouble() > 0.0 }
                 ?.forEach { subcategory ->
-                    subcategoriesLayout.addView(SubcategoryView(context).apply {
+                    binding.subcategoriesLayout.addView(SubcategoryView(context).apply {
                         this.subcategory = subcategory
                     })
                 }
         }
 
     init {
-        inflate(context, R.layout.category_view, this)
+        _binding = CategoryViewBinding.inflate(layoutInflater, this)
     }
 }

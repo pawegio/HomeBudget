@@ -10,7 +10,7 @@ import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
-import org.threeten.bp.Clock
+import java.time.Clock
 
 val appModule = module {
     single<HomeBudgetRepository> { HomeBudgetRepositoryImpl(androidContext()) }

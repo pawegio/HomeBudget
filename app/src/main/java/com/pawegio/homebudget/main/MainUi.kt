@@ -96,7 +96,7 @@ class MainUi(override val ctx: Context) : Ui {
         setColorFilter(colorAttr(R.attr.colorOnPrimary))
     }
 
-    private val monthSummarySurface = inflate<MaterialCardView>(R.layout.month_summary_surface)
+    val monthSummarySurface = inflate<MaterialCardView>(R.layout.month_summary_surface)
 
     private val incomesHeaderView = textView {
         textAppearance = R.style.TextAppearance_MaterialComponents_Headline6

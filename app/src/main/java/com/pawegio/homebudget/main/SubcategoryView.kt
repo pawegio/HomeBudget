@@ -6,8 +6,9 @@ import android.widget.FrameLayout
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
+import com.pawegio.homebudget.databinding.SubcategoryViewBinding
 import com.pawegio.homebudget.util.currencyValue
-import kotlinx.android.synthetic.main.subcategory_view.view.*
+import splitties.systemservices.layoutInflater
 import kotlin.math.roundToInt
 
 class SubcategoryView @JvmOverloads constructor(
@@ -16,21 +17,24 @@ class SubcategoryView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
+    private var _binding: SubcategoryViewBinding? = null
+    private val binding get() = _binding!!
+
     var subcategory: Subcategory? = null
         set(value) {
             field = value
-            subcategoryNameTextView.text = value?.name
-            subcategoryValueTextView.text = value?.run {
+            binding.subcategoryNameTextView.text = value?.name
+            binding.subcategoryValueTextView.text = value?.run {
                 "${actual.currencyValue} / ${planned.currencyValue}"
             }
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
                 (100.0 * actual.toDouble() / planned.toDouble()).roundToInt()
             }
             val exceeded = progress == null || progress > 100
-            subcategoryProgressView.text = progress?.let {
+            binding.subcategoryProgressView.text = progress?.let {
                 resources.getString(R.string.percent, it)
             }
-            subcategoryProgressBar.setProgressColors(
+            binding.subcategoryProgressBar.setProgressColors(
                 context.getColor(R.color.progressBackground),
                 context.getColor(
                     when {
@@ -40,10 +44,10 @@ class SubcategoryView @JvmOverloads constructor(
                     }
                 )
             )
-            subcategoryProgressBar.progress = progress ?: 100
+            binding.subcategoryProgressBar.progress = progress ?: 100
         }
 
     init {
-        inflate(context, R.layout.subcategory_view, this)
+        _binding = SubcategoryViewBinding.inflate(layoutInflater, this)
     }
 }

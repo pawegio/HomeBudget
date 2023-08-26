@@ -24,8 +24,6 @@ import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
 import com.pawegio.homebudget.util.*
 import io.reactivex.Observable
-import org.threeten.bp.LocalDate
-import org.threeten.bp.format.DateTimeFormatter
 import splitties.dimensions.dip
 import splitties.dimensions.dp
 import splitties.views.*
@@ -39,6 +37,8 @@ import splitties.views.dsl.material.appBarLayout
 import splitties.views.dsl.material.contentScrollingWithAppBarLParams
 import splitties.views.dsl.material.defaultLParams
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 class TransactionUi(override val ctx: Context) : Ui {
 

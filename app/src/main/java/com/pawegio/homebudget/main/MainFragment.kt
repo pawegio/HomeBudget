@@ -18,8 +18,8 @@ import com.google.api.services.sheets.v4.SheetsScopes
 import com.pawegio.homebudget.MonthlyBudget
 import com.pawegio.homebudget.NavGraph
 import com.pawegio.homebudget.R
+import com.pawegio.homebudget.databinding.MonthSummarySurfaceBinding
 import com.pawegio.homebudget.util.currencyValue
-import kotlinx.android.synthetic.main.month_summary_surface.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import org.koin.core.parameter.parametersOf
 import splitties.views.onClick
@@ -99,11 +99,13 @@ class MainFragment : Fragment() {
     private fun updateMonthlyBudget(monthlyBudget: MonthlyBudget?) {
         monthlyBudget?.let { (month, plannedIncomes, plannedExpenses, actualIncomes, actualExpenses, categories) ->
             ui.monthHeaderView.text = month
-            incomesTextView.text = actualIncomes.currencyValue
-            plannedIncomesView.text = getString(R.string.of, plannedIncomes.currencyValue)
-            expensesTextView.text = actualExpenses.currencyValue
-            plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
-            totalTextView.text = (actualIncomes - actualExpenses).currencyValue
+            with(MonthSummarySurfaceBinding.bind(ui.monthSummarySurface)) {
+                incomesTextView.text = actualIncomes.currencyValue
+                plannedIncomesView.text = getString(R.string.of, plannedIncomes.currencyValue)
+                expensesTextView.text = actualExpenses.currencyValue
+                plannedExpensesView.text = getString(R.string.of, plannedExpenses.currencyValue)
+                totalTextView.text = (actualIncomes - actualExpenses).currencyValue
+            }
             ui.incomes = categories.first().subcategories
             ui.expenses = categories.drop(1)
         }
