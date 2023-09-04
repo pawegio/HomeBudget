@@ -194,6 +194,14 @@ internal class MainLogicTest : LogicSpec({
                     verify(navigator).navigate(NavGraph.Action.toAbout)
                 }
             }
+
+            "on select faq" - {
+                actions.accept(MainAction.SelectFaq)
+
+                "navigate to faq screen" {
+                    verify(navigator).navigate(NavGraph.Action.toFaq)
+                }
+            }
         }
 
         "on monthly budget load error" - {

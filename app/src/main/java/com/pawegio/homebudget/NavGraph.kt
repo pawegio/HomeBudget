@@ -6,6 +6,7 @@ import androidx.navigation.createGraph
 import androidx.navigation.fragment.dialog
 import androidx.navigation.fragment.fragment
 import com.pawegio.homebudget.about.AboutFragment
+import com.pawegio.homebudget.faq.FaqFragment
 import com.pawegio.homebudget.login.LoginFragment
 import com.pawegio.homebudget.main.LoadErrorFragment
 import com.pawegio.homebudget.main.MainFragment
@@ -24,6 +25,7 @@ object NavGraph {
         const val loadError = 104
         const val about = 105
         const val transaction = 106
+        const val faq = 107
     }
 
     object Action {
@@ -33,6 +35,7 @@ object NavGraph {
         const val toLoadError = 1004
         const val toAbout = 1005
         const val toTransaction = 1006
+        const val toFaq = 1007
     }
 
     object Args {
@@ -48,6 +51,7 @@ fun createNavGraph(navController: NavController) {
         action(NavGraph.Action.toLoadError) { destinationId = NavGraph.Dest.loadError }
         action(NavGraph.Action.toAbout) { destinationId = NavGraph.Dest.about }
         action(NavGraph.Action.toTransaction) { destinationId = NavGraph.Dest.transaction }
+        action(NavGraph.Action.toFaq) { destinationId = NavGraph.Dest.faq }
 
         fragment<StartFragment>(NavGraph.Dest.start)
         fragment<LoginFragment>(NavGraph.Dest.login)
@@ -60,5 +64,6 @@ fun createNavGraph(navController: NavController) {
                 type = NavType.ParcelableType(MonthlyBudget::class.java)
             }
         }
+        fragment<FaqFragment>(NavGraph.Dest.faq)
     }
 }

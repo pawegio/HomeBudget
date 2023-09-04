@@ -31,6 +31,7 @@
     <string name="transaction_added_message">Transakcja została pomyślnie dodana do Twojego budżetu.</string>
     <string name="pick_document">Zmień arkusz</string>
     <string name="about_app">O aplikacji</string>
+    <string name="faq">Pomoc / FAQ</string>
     <string name="sign_out">Wyloguj się</string>
     <string name="old_financial_year_warning">Wybrany arkusz jest na rok %s. Połącz aplikację z nowym arkuszem na aktualny rok, wybierając opcję \"Połącz arkusz\" w menu.</string>
 

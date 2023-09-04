@@ -41,18 +41,22 @@ suspend fun MainLogic(
                         afterTransaction = false
                     }
                 }
+
                 Resume, Refresh, TryAgain -> {
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
+
                 OpenSpreadsheet -> spreadsheetLauncher.launch()
                 SelectPrevMonth -> {
                     month -= 1
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
+
                 SelectNextMonth -> {
                     month += 1
                     loadMonth(month, monthType, monthlyBudget, isLoading, api, navigator)
                 }
+
                 AddTransaction -> {
                     afterTransaction = true
                     navigator.navigate(
@@ -60,6 +64,7 @@ suspend fun MainLogic(
                         NavGraph.Args.monthlyBudget to monthlyBudget.value
                     )
                 }
+
                 PickDocumentAgain -> navigator.navigate(NavGraph.Action.toPicker)
                 SelectAbout -> navigator.navigate(NavGraph.Action.toAbout)
                 SignOut -> {
@@ -69,6 +74,8 @@ suspend fun MainLogic(
                     navigator.navigate(NavGraph.Action.toLogin)
                     break@loop
                 }
+
+                SelectFaq -> navigator.navigate(NavGraph.Action.toFaq)
             }
         }
     }
@@ -124,5 +131,6 @@ sealed class MainAction {
     object AddTransaction : MainAction()
     object PickDocumentAgain : MainAction()
     object SelectAbout : MainAction()
+    object SelectFaq : MainAction()
     object SignOut : MainAction()
 }
