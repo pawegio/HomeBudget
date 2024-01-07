@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.ViewCompositionStrategy
 import androidx.fragment.app.Fragment
 import com.pawegio.homebudget.Navigator
+import com.pawegio.homebudget.theme.HomeBudgetTheme
 import org.koin.android.ext.android.getKoin
 
 class FaqFragment : Fragment() {
@@ -17,7 +18,7 @@ class FaqFragment : Fragment() {
         return ComposeView(requireContext()).apply {
             setViewCompositionStrategy(ViewCompositionStrategy.DisposeOnViewTreeLifecycleDestroyed)
             setContent {
-                MaterialTheme {
+                HomeBudgetTheme {
                     FaqScreen(onBack = { getKoin().get<Navigator>().popBackStack() })
                 }
             }
