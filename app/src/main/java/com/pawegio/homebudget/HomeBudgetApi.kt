@@ -8,13 +8,19 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.Scope
-import com.google.api.client.extensions.android.http.AndroidHttp
 import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
+import com.google.api.client.http.HttpRequestInitializer
+import com.google.api.client.http.javanet.NetHttpTransport
 import com.google.api.client.json.jackson2.JacksonFactory
 import com.google.api.services.sheets.v4.Sheets
 import com.google.api.services.sheets.v4.SheetsScopes
-import com.google.api.services.sheets.v4.model.*
+import com.google.api.services.sheets.v4.model.BatchUpdateSpreadsheetRequest
+import com.google.api.services.sheets.v4.model.CellData
+import com.google.api.services.sheets.v4.model.GridRange
+import com.google.api.services.sheets.v4.model.RepeatCellRequest
+import com.google.api.services.sheets.v4.model.Request
+import com.google.api.services.sheets.v4.model.ValueRange
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.pawegio.homebudget.util.ColumnResolver
 import com.pawegio.homebudget.util.currentActivity
@@ -25,6 +31,7 @@ import kotlinx.coroutines.withContext
 import java.math.BigDecimal
 import java.time.LocalDate
 import java.time.Month
+
 
 interface HomeBudgetApi {
     val isSignedIn: Boolean
@@ -66,11 +73,21 @@ class HomeBudgetApiImpl(
     private val sheetsService by lazy {
         credential.selectedAccount = account?.account?.takeIf { it.name != null } ?: repository.account
         Sheets.Builder(
-            AndroidHttp.newCompatibleTransport(),
+            NetHttpTransport(),
             JacksonFactory.getDefaultInstance(),
             credential
-        ).setApplicationName(USER_AGENT).build()
+        )
+            .setApplicationName(USER_AGENT)
+            .setHttpRequestInitializer(createHttpRequestInitializer(credential))
+            .build()
     }
+
+    private fun createHttpRequestInitializer(requestInitializer: HttpRequestInitializer): HttpRequestInitializer =
+        HttpRequestInitializer { httpRequest ->
+            requestInitializer.initialize(httpRequest)
+            httpRequest.setConnectTimeout(3 * 60_000)
+            httpRequest.setReadTimeout(3 * 60_000)
+        }
 
     private val spreadsheetId get() = repository.spreadsheetId
 

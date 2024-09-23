@@ -105,10 +105,10 @@ dependencies {
     implementation("org.koin:koin-androidx-viewmodel:2.2.2")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.android.gms:play-services-auth:20.6.0")
-    implementation("com.google.api-client:google-api-client-android:1.23.0") {
+    implementation("com.google.api-client:google-api-client-android:2.7.0") {
         exclude("org.apache.httpcomponents")
     }
-    implementation("com.google.apis:google-api-services-sheets:v4-rev581-1.25.0") {
+    implementation("com.google.apis:google-api-services-sheets:v4-rev612-1.25.0") {
         exclude("org.apache.httpcomponents")
     }
     implementation("com.github.raquezha:InlineActivityResult:1.0.0-jitpack")
