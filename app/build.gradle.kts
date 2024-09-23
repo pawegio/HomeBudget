@@ -101,8 +101,8 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
-    implementation("org.koin:koin-core:2.2.2")
-    implementation("org.koin:koin-androidx-viewmodel:2.2.2")
+    implementation("io.insert-koin:koin-core:3.0.1")
+    implementation("io.insert-koin:koin-android:3.0.1")
     implementation("com.google.android.material:material:1.9.0")
     implementation("com.google.android.gms:play-services-auth:20.6.0")
     implementation("com.google.api-client:google-api-client-android:2.7.0") {
@@ -112,7 +112,7 @@ dependencies {
         exclude("org.apache.httpcomponents")
     }
     implementation("com.github.raquezha:InlineActivityResult:1.0.0-jitpack")
-    implementation("com.sasank.roundedhorizontalprogress:roundedhorizontalprogress:1.0.1")
+    implementation("com.github.saisasanksunkavalli:RoundedHorizontalProgressBar:master-SNAPSHOT")
     implementation("com.google.firebase:firebase-crashlytics:18.4.1")
     implementation("com.google.firebase:firebase-analytics:21.3.0")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0")
