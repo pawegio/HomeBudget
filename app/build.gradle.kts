@@ -12,12 +12,12 @@ apply("../gradle/app-version.gradle")
 
 android {
     namespace = "com.pawegio.homebudget"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.pawegio.homebudget"
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
