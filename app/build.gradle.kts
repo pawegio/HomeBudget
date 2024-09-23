@@ -122,7 +122,7 @@ dependencies {
 
     testImplementation("io.kotest:kotest-runner-junit5:5.4.0")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
-    testImplementation("com.jraska.livedata:testing-ktx:1.1.1")
+    testImplementation("com.jraska.livedata:testing-ktx:1.2.0")
     testImplementation("com.github.langara:SMokK:0.0.4")
 }
 
