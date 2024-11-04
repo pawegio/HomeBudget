@@ -3,6 +3,7 @@ package com.pawegio.homebudget.main
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.FrameLayout
+import androidx.compose.ui.res.colorResource
 import com.pawegio.homebudget.Category
 import com.pawegio.homebudget.R
 import com.pawegio.homebudget.Subcategory
@@ -28,23 +29,23 @@ class SubcategoryView @JvmOverloads constructor(
                 "${actual.currencyValue} / ${planned.currencyValue}"
             }
             val progress = value?.takeIf { it.planned.toDouble() > 0.0 }?.run {
-                (100.0 * actual.toDouble() / planned.toDouble()).roundToInt()
+                actual.toDouble() / planned.toDouble()
             }
-            val exceeded = progress == null || progress > 100
-            binding.subcategoryProgressView.text = progress?.let {
+            val exceeded = progress == null || progress > 1
+            val percent = (progress?.times(100.0))?.roundToInt()
+            binding.subcategoryProgressView.text = percent?.let {
                 resources.getString(R.string.percent, it)
             }
-            binding.subcategoryProgressBar.setProgressColors(
-                context.getColor(R.color.progressBackground),
-                context.getColor(
-                    when {
+            binding.subcategoryProgressBar.setContent {
+                RoundedProgressBar(
+                    progress = progress?.toFloat()?.coerceAtMost(1f) ?: 1f,
+                    color = when {
                         exceeded && value?.type == Category.Type.EXPENSES -> R.color.progressExceededNegative
                         exceeded && value?.type == Category.Type.INCOMES -> R.color.progressExceededPositive
                         else -> R.color.progress
-                    }
+                    }.let { colorResource(it) }
                 )
-            )
-            binding.subcategoryProgressBar.progress = progress ?: 100
+            }
         }
 
     init {

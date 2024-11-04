@@ -112,7 +112,6 @@ dependencies {
         exclude("org.apache.httpcomponents")
     }
     implementation("com.github.raquezha:InlineActivityResult:1.0.0-jitpack")
-    implementation("com.github.saisasanksunkavalli:RoundedHorizontalProgressBar:master-SNAPSHOT")
     implementation("com.google.firebase:firebase-crashlytics:18.4.1")
     implementation("com.google.firebase:firebase-analytics:21.3.0")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0")

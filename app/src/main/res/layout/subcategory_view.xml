@@ -43,19 +43,16 @@
             app:layout_constraintTop_toBottomOf="@id/subcategoryNameTextView"
             tools:text="2%" />
 
-        <com.sasank.roundedhorizontalprogress.RoundedHorizontalProgressBar
+        <androidx.compose.ui.platform.ComposeView
             android:id="@+id/subcategoryProgressBar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:minHeight="8dp"
-            app:backgroundColor="@color/progressBackground"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/subcategoryValueTextView"
-            app:progressColor="@color/progress"
-            tools:progress="40" />
+            app:layout_constraintTop_toBottomOf="@id/subcategoryValueTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
