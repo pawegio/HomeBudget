@@ -2,8 +2,6 @@ package com.pawegio.homebudget
 
 import android.content.Context
 import android.content.Intent
-import com.github.florent37.inlineactivityresult.kotlin.InlineActivityResultException
-import com.github.florent37.inlineactivityresult.kotlin.coroutines.startForResult
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
@@ -57,10 +55,6 @@ class HomeBudgetApiImpl(
 
     override val isSignedIn: Boolean get() = account != null
 
-    private val credential by lazy {
-        GoogleAccountCredential.usingOAuth2(context, listOf(SheetsScopes.SPREADSHEETS_READONLY))
-    }
-
     private val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
         .requestEmail()
         .requestScopes(Scope(SheetsScopes.SPREADSHEETS_READONLY))
@@ -70,9 +64,14 @@ class HomeBudgetApiImpl(
 
     private val account get() = GoogleSignIn.getLastSignedInAccount(context)
 
-    private val sheetsService by lazy {
+    private val sheetsService by lazy { createSheetsService(SheetsScopes.SPREADSHEETS_READONLY) }
+
+    private val writeSheetsService by lazy { createSheetsService(SheetsScopes.SPREADSHEETS) }
+
+    private fun createSheetsService(scope: String): Sheets {
+        val credential = GoogleAccountCredential.usingOAuth2(context, listOf(scope))
         credential.selectedAccount = account?.account?.takeIf { it.name != null } ?: repository.account
-        Sheets.Builder(
+        return Sheets.Builder(
             NetHttpTransport(),
             JacksonFactory.getDefaultInstance(),
             credential
@@ -94,12 +93,10 @@ class HomeBudgetApiImpl(
     override suspend fun signIn() {
         if (!isSignedIn) {
             try {
-                val result = currentActivity?.startForResult(signInClient.signInIntent)
-                val signInAccount = GoogleSignIn.getSignedInAccountFromIntent(result?.data).await()
+                val result = (currentActivity as MainActivity).startForResult(signInClient.signInIntent)
+                val signInAccount = GoogleSignIn.getSignedInAccountFromIntent(result.data).await()
                 repository.account = signInAccount.account
             } catch (e: ApiException) {
-                throw HomeBudgetApiException(e)
-            } catch (e: InlineActivityResultException) {
                 throw HomeBudgetApiException(e)
             }
         }
@@ -177,7 +174,7 @@ class HomeBudgetApiImpl(
             else -> throw IllegalStateException("Invalid values: $oldValues")
         }
         val body = ValueRange().setValues(listOf(listOf(newTransactions)))
-        sheetsService.spreadsheets().values()
+        writeSheetsService.spreadsheets().values()
             .update(spreadsheetId, range, body)
             .setValueInputOption("USER_ENTERED")
             .execute()
@@ -218,7 +215,7 @@ class HomeBudgetApiImpl(
                 .setCell(CellData().setNote(newNote))
                 .setFields("note")
         )
-        sheetsService.spreadsheets()
+        writeSheetsService.spreadsheets()
             .batchUpdate(spreadsheetId, BatchUpdateSpreadsheetRequest().setRequests(listOf(addNoteRequest)))
             .execute()
     }
@@ -265,10 +262,11 @@ class HomeBudgetApiImpl(
     private suspend fun <T> recoverAndRetry(intent: Intent, block: suspend () -> T): T =
         try {
             withContext(Dispatchers.Main) {
-                currentActivity?.startForResult(intent)
+                val result = (currentActivity as MainActivity).startForResult(intent)
+                check(result.resultCode == android.app.Activity.RESULT_OK) { "Authorization canceled" }
             }
             block()
-        } catch (e: InlineActivityResultException) {
+        } catch (e: IllegalStateException) {
             throw HomeBudgetApiException(e)
         }
 

@@ -4,14 +4,15 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:8.3.2")
-        classpath("com.google.gms:google-services:4.4.1")
-        classpath("com.google.firebase:firebase-crashlytics-gradle:2.9.9")
+        classpath("com.android.tools.build:gradle:9.4.0")
+        classpath("com.google.gms:google-services:4.5.0")
+        classpath("com.google.firebase:firebase-crashlytics-gradle:3.0.8")
     }
 }
 
 plugins {
-    kotlin("android") version "1.8.22" apply false
+    id("org.jetbrains.kotlin.plugin.compose") version "2.4.10" apply false
+    id("org.jetbrains.kotlin.plugin.parcelize") version "2.4.10" apply false
 }
 
 allprojects {
@@ -22,6 +23,6 @@ allprojects {
     }
 }
 
-task<Delete>("clean") {
-    delete(rootProject.buildDir)
+tasks.register<Delete>("clean") {
+    delete(layout.buildDirectory)
 }

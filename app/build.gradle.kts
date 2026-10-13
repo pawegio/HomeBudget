@@ -2,9 +2,9 @@ import java.util.*
 
 plugins {
     id("com.android.application")
-    kotlin("android")
-    id("kotlin-parcelize")
-    id("com.github.triplet.play") version "3.7.0"
+    id("org.jetbrains.kotlin.plugin.parcelize")
+    id("org.jetbrains.kotlin.plugin.compose")
+    id("com.github.triplet.play") version "4.0.0"
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
@@ -12,12 +12,12 @@ apply("../gradle/app-version.gradle")
 
 android {
     namespace = "com.pawegio.homebudget"
-    compileSdk = 34
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.pawegio.homebudget"
         minSdk = 26
-        targetSdk = 34
+        targetSdk = 37
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -53,22 +53,21 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
 
-    kotlinOptions {
-        jvmTarget = "1.8"
-        freeCompilerArgs = listOf(
-            "-Xopt-in=kotlin.contracts.ExperimentalContracts",
-            "-Xopt-in=splitties.experimental.InternalSplittiesApi",
-            "-Xopt-in=splitties.experimental.ExperimentalSplittiesApi"
-        )
-    }
-
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         compose = true
     }
 
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.8"
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            "-opt-in=kotlin.contracts.ExperimentalContracts",
+            "-opt-in=splitties.experimental.InternalSplittiesApi",
+            "-opt-in=splitties.experimental.ExperimentalSplittiesApi"
+        )
     }
 }
 
@@ -111,7 +110,6 @@ dependencies {
     implementation("com.google.apis:google-api-services-sheets:v4-rev612-1.25.0") {
         exclude("org.apache.httpcomponents")
     }
-    implementation("com.github.raquezha:InlineActivityResult:1.0.0-jitpack")
     implementation("com.google.firebase:firebase-crashlytics:18.4.1")
     implementation("com.google.firebase:firebase-analytics:21.3.0")
     implementation("com.louiscad.splitties:splitties-fun-pack-android-material-components-with-views-dsl:3.0.0")
@@ -119,7 +117,7 @@ dependencies {
     implementation("com.maltaisn:calcdialog:2.2.1")
     implementation("com.google.guava:guava:27.0.1-android")
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.4.0")
+    testImplementation("io.kotest:kotest-runner-junit5:6.2.3")
     testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
     testImplementation("com.jraska.livedata:testing-ktx:1.2.0")
     testImplementation("com.github.langara:SMokK:0.0.4")

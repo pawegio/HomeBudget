@@ -5,7 +5,7 @@ import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.Spec
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.core.test.TestCase
-import io.kotest.core.test.TestResult
+import io.kotest.engine.test.TestResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
